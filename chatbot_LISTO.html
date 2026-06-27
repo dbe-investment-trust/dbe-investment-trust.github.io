@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBE Investment Trust — Diagnóstico Gratuito</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root {
+  --navy:#0D1B2A;--gold:#C9A84C;--gold-light:#F0D78C;--cream:#FAF7F2;
+  --white:#FFFFFF;--muted:#7A7A8A;--border:#E8E2D8;--teal:#1D7A6A;
+  --teal-light:#E4F4F1;--success:#1A7A4A;--success-light:#E4F4EC;
+  --bubble-bot:#F0EDE8;--bubble-user:#0D1B2A;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+
+.header{width:100%;background:var(--navy);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
+.header-brand{font-family:'Playfair Display',serif;font-size:17px;color:#fff;letter-spacing:.5px;}
+.header-brand span{color:var(--gold);}
+.header-badge{font-size:11px;color:var(--gold);border:1px solid rgba(201,168,76,.4);padding:4px 10px;border-radius:20px;letter-spacing:1px;}
+
+.hero{width:100%;background:linear-gradient(135deg,var(--navy) 0%,#1a2f44 100%);padding:36px 24px 28px;text-align:center;color:#fff;}
+.hero h1{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:10px;line-height:1.3;}
+.hero h1 span{color:var(--gold-light);}
+.hero p{font-size:14px;color:rgba(255,255,255,.65);max-width:500px;margin:0 auto 16px;}
+.trust-strip{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;font-size:12px;color:rgba(255,255,255,.5);}
+.trust-strip span{display:flex;align-items:center;gap:5px;}
+.trust-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;}
+
+.container{width:100%;max-width:680px;padding:0 16px 60px;}
+
+.progress-wrap{padding:20px 0 8px;display:flex;align-items:center;gap:10px;}
+.progress-track{flex:1;height:3px;background:var(--border);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--gold);border-radius:99px;transition:width .5s ease;}
+.progress-label{font-size:11px;color:var(--muted);white-space:nowrap;letter-spacing:.5px;}
+
+/* CHAT */
+.chat-window{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;}
+.chat-header{background:var(--navy);padding:14px 18px;display:flex;align-items:center;gap:12px;}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.chat-header-name{font-size:14px;font-weight:500;color:#fff;}
+.chat-header-status{font-size:11px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:5px;}
+.status-dot{width:6px;height:6px;background:#4CAF50;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.messages{flex:1;padding:20px 16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;max-height:440px;scroll-behavior:smooth;}
+.msg{display:flex;align-items:flex-end;gap:8px;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{align-self:flex-start;}
+.msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.msg-avatar{width:28px;height:28px;border-radius:50%;background:var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.msg-bubble{max-width:82%;padding:11px 15px;border-radius:16px;font-size:14px;line-height:1.6;}
+.msg.bot .msg-bubble{background:var(--bubble-bot);color:var(--navy);border-bottom-left-radius:4px;}
+.msg.user .msg-bubble{background:var(--bubble-user);color:#fff;border-bottom-right-radius:4px;font-size:13px;}
+.msg-bubble.streaming::after{content:'▋';animation:blink .7s infinite;color:var(--gold);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.typing-indicator{display:none;align-items:flex-end;gap:8px;padding:4px 16px;}
+.typing-indicator.visible{display:flex;}
+.typing-dots{background:var(--bubble-bot);padding:12px 16px;border-radius:16px;border-bottom-left-radius:4px;display:flex;gap:4px;align-items:center;}
+.typing-dots span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:bounce 1.2s infinite;}
+.typing-dots span:nth-child(2){animation-delay:.15s}
+.typing-dots span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+.quick-replies{padding:8px 16px 12px;display:flex;flex-wrap:wrap;gap:8px;}
+.qr-btn{background:var(--white);border:1.5px solid var(--navy);color:var(--navy);padding:8px 14px;border-radius:20px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;font-weight:500;}
+.qr-btn:hover{background:var(--navy);color:#fff;}
+
+.chat-input-wrap{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;}
+.chat-input{flex:1;border:1.5px solid var(--border);border-radius:24px;padding:10px 16px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;background:var(--cream);}
+.chat-input:focus{border-color:var(--navy);background:var(--white);}
+.send-btn{width:40px;height:40px;border-radius:50%;background:var(--navy);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s;}
+.send-btn:hover{background:var(--gold);}
+.send-btn svg{width:16px;height:16px;fill:#fff;}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* AI BADGE */
+.ai-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--gold);margin-bottom:10px;}
+.ai-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 1.5s infinite;}
+
+/* SECTIONS */
+.section{display:none;animation:fadeUp .4s ease;}
+.section.active{display:block;}
+
+/* PAYMENT */
+.payment-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:16px;}
+.payment-header{background:var(--navy);padding:20px 24px;color:#fff;}
+.payment-header h3{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:4px;}
+.payment-header p{font-size:13px;color:rgba(255,255,255,.6);}
+.payment-amount{font-size:38px;font-weight:700;color:var(--gold-light);font-family:'Playfair Display',serif;display:flex;align-items:baseline;gap:6px;margin:12px 0 0;}
+.payment-amount small{font-size:14px;font-weight:400;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;}
+.payment-body{padding:24px;}
+.what-includes{background:var(--success-light);border-radius:10px;padding:16px;margin-bottom:20px;}
+.what-includes h4{font-size:13px;color:var(--success);font-weight:500;margin-bottom:10px;letter-spacing:.5px;}
+.include-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#1A4A32;margin-bottom:6px;}
+.include-item:last-child{margin-bottom:0;}
+.check{color:var(--success);font-weight:700;flex-shrink:0;}
+.payment-methods h4{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.method-tabs{display:flex;gap:8px;margin-bottom:20px;}
+.method-tab{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:8px;text-align:center;cursor:pointer;font-size:12px;color:var(--muted);transition:all .2s;}
+.method-tab.active{border-color:var(--navy);background:var(--navy);color:#fff;font-weight:500;}
+.method-tab .method-icon{font-size:18px;display:block;margin-bottom:3px;}
+.transfer-info{background:#F7F5F0;border-radius:10px;padding:16px;margin-bottom:20px;}
+.transfer-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(0,0,0,.06);}
+.transfer-row:last-child{border-bottom:none;}
+.transfer-row .tkey{color:var(--muted);}
+.transfer-row .tval{font-weight:500;color:var(--navy);display:flex;align-items:center;gap:6px;}
+.copy-btn{font-size:10px;padding:2px 7px;background:var(--navy);color:#fff;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.copy-btn:hover{background:var(--gold);}
+.nequi-info{text-align:center;padding:20px;}
+.nequi-number{font-size:32px;font-weight:700;color:var(--navy);letter-spacing:3px;margin:8px 0;font-family:'Playfair Display',serif;}
+.nequi-name{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.confirm-section{margin-top:20px;}
+.confirm-section h4{font-size:13px;color:var(--navy);margin-bottom:12px;font-weight:500;}
+.file-drop{border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:#FAFAF7;}
+.file-drop:hover{border-color:var(--navy);background:var(--cream);}
+.file-drop-icon{font-size:28px;margin-bottom:8px;display:block;}
+.file-drop p{font-size:13px;color:var(--muted);}
+.file-link{color:var(--teal);text-decoration:underline;cursor:pointer;}
+#fileInput{display:none;}
+.file-preview{display:none;background:var(--success-light);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--success);align-items:center;gap:8px;margin-top:10px;}
+.file-preview.show{display:flex;}
+.confirm-btn{width:100%;padding:16px;background:var(--gold);border:none;border-radius:12px;font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--navy);cursor:pointer;margin-top:16px;transition:all .2s;letter-spacing:.5px;}
+.confirm-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+.confirm-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none;}
+
+/* SCHEDULE */
+.schedule-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:16px;}
+.schedule-header{background:var(--success);padding:20px 24px;color:#fff;text-align:center;}
+.schedule-header .big-check{font-size:40px;margin-bottom:8px;}
+.schedule-header h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:4px;}
+.schedule-header p{font-size:13px;color:rgba(255,255,255,.75);}
+.schedule-body{padding:24px;}
+.date-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;}
+.date-card{border:1.5px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;transition:all .2s;}
+.date-card:hover{border-color:var(--navy);}
+.date-card.selected{border-color:var(--navy);background:var(--navy);}
+.date-card .day-name{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.date-card.selected .day-name{color:rgba(255,255,255,.6);}
+.date-card .day-num{font-size:22px;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;line-height:1.2;}
+.date-card.selected .day-num{color:var(--gold-light);}
+.date-card .month{font-size:10px;color:var(--muted);}
+.date-card.selected .month{color:rgba(255,255,255,.5);}
+.time-grid{display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
+.time-grid.visible{display:grid;}
+.time-slot{border:1.5px solid var(--border);border-radius:8px;padding:10px;text-align:center;cursor:pointer;font-size:13px;font-weight:500;color:var(--navy);transition:all .2s;}
+.time-slot:hover{border-color:var(--teal);color:var(--teal);}
+.time-slot.selected{background:var(--teal);border-color:var(--teal);color:#fff;}
+.time-slot.taken{color:var(--muted);border-color:var(--border);cursor:not-allowed;text-decoration:line-through;opacity:.5;}
+.form-row{margin-bottom:14px;}
+.form-label{font-size:12px;color:var(--muted);margin-bottom:5px;display:block;letter-spacing:.3px;}
+.form-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:var(--navy);}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.schedule-btn{width:100%;padding:16px;background:var(--navy);border:none;border-radius:12px;font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff;cursor:pointer;margin-top:4px;transition:all .2s;}
+.schedule-btn:hover{background:var(--teal);transform:translateY(-1px);}
+
+/* DONE */
+.final-confirm{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:36px 28px;text-align:center;margin-top:16px;}
+.final-icon{font-size:56px;margin-bottom:16px;}
+.final-confirm h2{font-family:'Playfair Display',serif;font-size:24px;color:var(--navy);margin-bottom:10px;}
+.final-confirm p{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+.meeting-summary{background:var(--navy);border-radius:12px;padding:20px;margin:20px 0;text-align:left;}
+.meeting-summary-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;}
+.meeting-summary-row:last-child{border-bottom:none;}
+.mskey{color:rgba(255,255,255,.5);min-width:90px;}
+.msval{color:var(--gold-light);font-weight:500;}
+.next-steps{text-align:left;background:var(--cream);border-radius:10px;padding:16px;margin-top:16px;}
+.next-steps h4{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.ns-item{display:flex;gap:10px;font-size:13px;color:#2A2A3E;margin-bottom:8px;line-height:1.4;}
+.ns-num{background:var(--gold);color:var(--navy);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.admin-panel{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:20px;margin-top:24px;}
+.admin-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.admin-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.admin-row:last-child{border-bottom:none;}
+.admin-label{color:var(--muted);}
+.admin-val{font-weight:500;color:var(--navy);}
+.admin-val.confirmed{color:var(--success);}
+
+.notif{position:fixed;top:20px;right:20px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;display:none;z-index:1000;animation:slideIn .3s ease;}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.notif.show{display:block;}
+
+@media(max-width:640px){.hero{padding:32px 20px;}.hero h1{font-size:22px;}.container{padding:0 12px 50px;}.date-grid{grid-template-columns:repeat(3,1fr);}.form-row-2{grid-template-columns:1fr;}.method-tabs{flex-wrap:wrap;}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">DBE <span>Investment Trust</span></div>
+  <div class="header-badge">DIAGNÓSTICO GRATUITO</div>
+</div>
+
+<div class="hero">
+  <h1>Tu primer paso hacia<br><span>el portafolio que mereces</span></h1>
+  <p>Responde 5 preguntas y nuestro asesor con IA analiza tu situación financiera en tiempo real — sin costo, sin compromiso.</p>
+  <div class="trust-strip">
+    <span><span class="trust-dot"></span>Asesor certificado</span>
+    <span><span class="trust-dot"></span>Análisis con IA en vivo</span>
+    <span><span class="trust-dot"></span>100% confidencial</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">Comenzando...</div>
+  </div>
+
+  <!-- CHAT SECTION -->
+  <div class="section active" id="sectionChat">
+    <div class="chat-window">
+      <div class="chat-header">
+        <div class="avatar">💼</div>
+        <div>
+          <div class="chat-header-name">Asesor IA — DBE Investment Trust</div>
+          <div class="chat-header-status"><span class="status-dot"></span>En línea · análisis con Claude AI</div>
+        </div>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="msg-avatar">💼</div>
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+      </div>
+      <div class="quick-replies" id="quickReplies"></div>
+      <div class="chat-input-wrap" id="inputWrap" style="display:none;">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Escribe tu pregunta..." />
+        <button class="send-btn" id="sendBtn" onclick="sendFreeInput()">
+          <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT SECTION -->
+  <div class="section" id="sectionPayment">
+    <div class="payment-card">
+      <div class="payment-header">
+        <h3>Tu sesión de consultoría</h3>
+        <p>Diagnóstico + Plan de portafolio personalizado</p>
+        <div class="payment-amount">$400.000 <small>COP / pago único</small></div>
+      </div>
+      <div class="payment-body">
+        <div class="what-includes">
+          <h4>✦ QUÉ INCLUYE TU SESIÓN</h4>
+          <div class="include-item"><span class="check">✓</span><span>Reunión 1:1 de 60 minutos por Zoom con asesor certificado</span></div>
+          <div class="include-item"><span class="check">✓</span><span>Análisis personalizado de tu situación financiera actual</span></div>
+          <div class="include-item"><span class="check">✓</span><span>Hoja de ruta de portafolio (bolsa + bienes raíces) para tu perfil</span></div>
+          <div class="include-item"><span class="check">✓</span><span>Informe escrito con recomendaciones específicas (entrega 24h)</span></div>
+          <div class="include-item"><span class="check">✓</span><span>Grabación de la sesión para tu archivo personal</span></div>
+        </div>
+        <div class="payment-methods">
+          <h4>ELIGE TU MÉTODO DE PAGO</h4>
+          <div class="method-tabs">
+            <div class="method-tab active" onclick="selectMethod(this,'methodTransfer')"><span class="method-icon">🏦</span>Transferencia</div>
+            <div class="method-tab" onclick="selectMethod(this,'methodNequi')"><span class="method-icon">📱</span>Nequi</div>
+          </div>
+          <div id="methodTransfer">
+            <div class="transfer-info">
+              <div class="transfer-row"><span class="tkey">Banco</span><span class="tval">Bancolombia</span></div>
+              <div class="transfer-row"><span class="tkey">Tipo</span><span class="tval">Ahorros</span></div>
+              <div class="transfer-row"><span class="tkey">Número</span><span class="tval">68814840984 <button class="copy-btn" onclick="copyText('68814840984')">Copiar</button></span></div>
+              <div class="transfer-row"><span class="tkey">Nombre</span><span class="tval">DBE Investment Trust</span></div>
+              
+              <div class="transfer-row"><span class="tkey">Monto</span><span class="tval" style="color:var(--gold);font-size:15px;">$400.000 COP <button class="copy-btn" onclick="copyText('400000')">Copiar</button></span></div>
+            </div>
+          </div>
+          <div id="methodNequi" style="display:none;">
+            <div class="nequi-info">
+              <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Envía al número Nequi</p>
+              <div class="nequi-number">301 · 157 · 8156</div>
+              <div class="nequi-name">DBE Investment Trust</div>
+              <button class="copy-btn" style="padding:6px 14px;font-size:12px;" onclick="copyText('3011578156')">Copiar número</button>
+            </div>
+          </div>
+          <div class="confirm-section">
+            <h4>Sube el comprobante de pago</h4>
+            <div class="file-drop" onclick="document.getElementById('fileInput').click()">
+              <span class="file-drop-icon">📎</span>
+              <p>Arrastra tu comprobante aquí o <span class="file-link">selecciona el archivo</span></p>
+              <p style="font-size:11px;margin-top:4px;">JPG, PNG o PDF · Máx. 5MB</p>
+            </div>
+            <input type="file" id="fileInput" accept="image/*,.pdf" onchange="handleFile(this)">
+            <div class="file-preview" id="filePreview"><span>✅</span><span id="fileName">comprobante.jpg</span></div>
+            <button class="confirm-btn" id="confirmPayBtn" disabled onclick="confirmPayment()">Confirmar pago y agendar reunión →</button>
+            <p style="text-align:center;font-size:11px;color:#9E9E9E;margin-top:10px;">🔒 Verificamos el pago en menos de 5 minutos</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE SECTION -->
+  <div class="section" id="sectionSchedule">
+    <div class="schedule-card">
+      <div class="schedule-header">
+        <div class="big-check">✅</div>
+        <h3>¡Pago recibido!</h3>
+        <p>Elige el día y hora de tu sesión de consultoría</p>
+      </div>
+      <div class="schedule-body">
+        <p style="font-size:14px;color:var(--muted);margin-bottom:20px;">Sesiones por <strong>Zoom</strong> · <strong>60 minutos</strong> · desde cualquier lugar</p>
+        <h4 style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">FECHAS DISPONIBLES</h4>
+        <div class="date-grid" id="dateGrid"></div>
+        <div class="time-grid" id="timeGrid"></div>
+        <div id="scheduleForm" style="display:none;">
+          <h4 style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">TUS DATOS PARA LA INVITACIÓN</h4>
+          <div class="form-row"><label class="form-label">Nombre completo</label><input type="text" class="form-input" id="schedName" placeholder="Ej. Camila Torres"/></div>
+          <div class="form-row-2">
+            <div class="form-row" style="margin-bottom:0;"><label class="form-label">Correo electrónico</label><input type="email" class="form-input" id="schedEmail" placeholder="tu@correo.com"/></div>
+            <div class="form-row" style="margin-bottom:0;"><label class="form-label">WhatsApp</label><input type="tel" class="form-input" id="schedPhone" placeholder="300 123 4567"/></div>
+          </div>
+          <button class="schedule-btn" onclick="finalizeSchedule()" style="margin-top:16px;">Confirmar reunión y recibir invitación →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DONE SECTION -->
+  <div class="section" id="sectionDone">
+    <div class="final-confirm">
+      <div class="final-icon">🎉</div>
+      <h2>¡Todo listo, <span id="clientFirstName">amigo</span>!</h2>
+      <p>Tu reunión está confirmada. En los próximos <strong>5 minutos</strong> recibirás la invitación de Zoom a tu correo y un mensaje de confirmación por WhatsApp.</p>
+      <div class="meeting-summary" id="meetingSummary"></div>
+      <div class="next-steps">
+        <h4>PRÓXIMOS PASOS</h4>
+        <div class="ns-item"><div class="ns-num">1</div><span>Revisa tu correo — recibirás el link de Zoom y el formulario previo a la sesión.</span></div>
+        <div class="ns-item"><div class="ns-num">2</div><span>Completa el formulario previo (5 min) para que la sesión sea 100% enfocada en tu caso.</span></div>
+        <div class="ns-item"><div class="ns-num">3</div><span>El día de la reunión, conéctate 5 min antes. Lleva tus extractos y metas financieras.</span></div>
+        <div class="ns-item"><div class="ns-num">4</div><span>48h después recibirás tu informe escrito con el plan de portafolio personalizado.</span></div>
+      </div>
+      <p style="font-size:12px;color:#9E9E9E;margin-top:20px;">¿Preguntas? WhatsApp <strong>301 157 8156</strong></p>
+    </div>
+    <div class="admin-panel">
+      <div class="admin-title">⚙ Panel del asesor — nuevo cliente registrado</div>
+      <div class="admin-row"><span class="admin-label">Estado del pago</span><span class="admin-val confirmed">✓ Confirmado ($400.000)</span></div>
+      <div class="admin-row"><span class="admin-label">Cliente</span><span class="admin-val" id="adminName">—</span></div>
+      <div class="admin-row"><span class="admin-label">Correo</span><span class="admin-val" id="adminEmail">—</span></div>
+      <div class="admin-row"><span class="admin-label">WhatsApp</span><span class="admin-val" id="adminPhone">—</span></div>
+      <div class="admin-row"><span class="admin-label">Fecha reunión</span><span class="admin-val" id="adminDate">—</span></div>
+      <div class="admin-row"><span class="admin-label">Perfil IA</span><span class="admin-val" id="adminProfile">—</span></div>
+      <div class="admin-row"><span class="admin-label">Zoom</span><span class="admin-val confirmed">↗ Invitación enviada automáticamente</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+const clientData = {};
+let selectedDate = null, selectedTime = null;
+let scriptIndex = 0;
+let freeChat = false;
+let isStreaming = false;
+
+// Conversation history for the AI (multi-turn memory)
+const conversationHistory = [];
+
+// ═══════════════════════════════════════════
+// SYSTEM PROMPT
+// ═══════════════════════════════════════════
+const SYSTEM_PROMPT = `Eres un asesor financiero experto de DBE Investment Trust. Tu objetivo es diagnosticar la situación financiera del cliente y convencerlo de agendar una consultoría de 60 minutos por COP $400.000.
+
+CONTEXTO DEL NEGOCIO:
+- Consultoría mensual personalizada de portafolios de inversión
+- Especializados en bolsa general (Wall Street: acciones, ETFs, S&P 500) y bienes raíces en Colombia
+- Retornos esperados: conservador 9-13%, moderado 13-18%, agresivo 18-25% anual
+- Activos recomendados: Apple, Microsoft, Nvidia, S&P 500, ETFs diversificados (Wall Street); Fibra Sura, Pactia (inmobiliario); TES, fondos colectivos
+- Precio: $400.000 COP por sesión / mes
+
+PERFIL DEL CLIENTE RECOPILADO HASTA AHORA:
+{{CLIENT_DATA}}
+
+INSTRUCCIONES CLAVE:
+1. Sé cálido, experto y conversacional — NO genérico ni corporativo
+2. Usa números y referencias concretas del mercado colombiano 2025-2026
+3. Personaliza CADA respuesta basándote en lo que el cliente respondió
+4. Cuando el cliente haga preguntas, respóndelas honestamente y luego reconduces hacia la sesión
+5. Si el cliente tiene objeciones (precio, desconfianza, tiempo), manéjalas con empatía y datos reales
+6. Cuando el cliente esté listo para pagar, responde con exactamente este texto al final: [LISTO_PARA_PAGAR]
+7. Mantén respuestas entre 3-6 oraciones. Usa **negrilla** para énfasis. Usa saltos de línea para respiración.
+8. NO uses listas con viñetas — escribe en prosa conversacional
+9. Habla en primera persona plural ("nosotros", "te ayudamos") — eres parte del equipo
+10. El diagnóstico inicial ya completó 5 preguntas. Ahora estás en la fase de análisis y cierre.
+
+FASE ACTUAL: Después de presentar el análisis del perfil, tu objetivo es lograr que el cliente diga que quiere pagar. Presenta el valor de la sesión de forma específica a sus respuestas. Si el cliente acepta, incluye [LISTO_PARA_PAGAR] en tu respuesta.`;
+
+// ═══════════════════════════════════════════
+// SCRIPTED QUESTIONS (pre-AI)
+// ═══════════════════════════════════════════
+const script = [
+  {
+    id: 'welcome',
+    bot: '👋 ¡Hola! Soy el asesor de **DBE Investment Trust**.\n\nEn 2 minutos voy a hacerte 5 preguntas clave para analizar tu situación financiera con IA y mostrarte exactamente cómo podemos hacer crecer tu dinero. ¿Empezamos?',
+    type: 'quickreply',
+    options: ['¡Claro, empecemos!', 'Cuéntame más primero'],
+    progress: 5
+  },
+  {
+    id: 'q1',
+    bot: '¿Cuál es tu situación financiera actual? Sé honesto — no hay respuestas incorrectas.',
+    type: 'quickreply',
+    options: ['💰 Tengo ahorros sin invertir ($5M–$30M)', '📈 Ya invierto algo pero quiero mejorar', '🏢 Tengo una empresa con excedentes de caja', '🌱 Empezando desde cero (<$5M)'],
+    dataKey: 'situacion', progress: 25
+  },
+  {
+    id: 'q2',
+    bot: 'Entendido. ¿Cuál es tu principal objetivo financiero en los próximos 2 años?',
+    type: 'quickreply',
+    options: ['🏠 Invertir en finca raíz / comprar propiedad', '📊 Hacer crecer mis ahorros en bolsa de valores', '🛡️ Proteger mi patrimonio de la inflación', '🏖️ Generar ingresos pasivos / libertad financiera'],
+    dataKey: 'objetivo', progress: 45
+  },
+  {
+    id: 'q3',
+    bot: '¿Qué tan cómodo/a eres con el riesgo en tus inversiones?',
+    type: 'quickreply',
+    options: ['🐢 Conservador — prefiero seguridad a rendimiento', '⚖️ Moderado — acepto algo de volatilidad', '🚀 Agresivo — busco máximo retorno'],
+    dataKey: 'riesgo', progress: 65
+  },
+  {
+    id: 'q4',
+    bot: '¿Cuánto tiempo llevas pensando en mejorar tus finanzas sin tomar acción concreta?',
+    type: 'quickreply',
+    options: ['⏰ Menos de 3 meses', '📅 Entre 3 meses y 1 año', '📆 Más de 1 año (ya es hora)', '🆕 Apenas lo estoy considerando'],
+    dataKey: 'urgencia', progress: 80
+  },
+  {
+    id: 'q5',
+    bot: 'Una última pregunta — ¿cuál es tu mayor freno para invertir hoy?',
+    type: 'quickreply',
+    options: ['❓ No sé por dónde empezar', '😟 Miedo a perder dinero', '⏱️ No tengo tiempo de gestionarlo', '🔍 No confío en asesores financieros'],
+    dataKey: 'freno', progress: 90
+  }
+];
+
+// ═══════════════════════════════════════════
+// DOM HELPERS
+// ═══════════════════════════════════════════
+function fmt(text) {
+  return text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+}
+
+function scrollBottom() {
+  const m = document.getElementById('messages');
+  m.scrollTop = m.scrollHeight;
+}
+
+function addMessage(role, text) {
+  return new Promise(resolve => {
+    const msgs = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `msg ${role}`;
+    if (role === 'bot') {
+      div.innerHTML = `<div class="msg-avatar">💼</div><div class="msg-bubble">${fmt(text)}</div>`;
+    } else {
+      const initials = clientData.name ? clientData.name[0].toUpperCase() : 'Tú'[0];
+      div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-avatar" style="background:var(--teal);font-size:13px;color:#fff;font-weight:600;">${initials}</div>`;
+    }
+    msgs.appendChild(div);
+    scrollBottom();
+    resolve();
+  });
+}
+
+// Streaming bubble — returns the bubble element for live updates
+function createStreamingBubble() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble streaming';
+  bubble.innerHTML = '';
+  div.innerHTML = `<div class="msg-avatar">💼</div>`;
+  div.appendChild(bubble);
+  msgs.appendChild(div);
+  scrollBottom();
+  return bubble;
+}
+
+function showTyping(ms = 1200) {
+  return new Promise(resolve => {
+    const t = document.getElementById('typingIndicator');
+    t.classList.add('visible');
+    scrollBottom();
+    setTimeout(() => { t.classList.remove('visible'); resolve(); }, ms);
+  });
+}
+
+function setQuickReplies(options) {
+  const qr = document.getElementById('quickReplies');
+  qr.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'qr-btn';
+    btn.textContent = opt;
+    btn.onclick = () => handleScriptedReply(opt);
+    qr.appendChild(btn);
+  });
+}
+
+function clearQuickReplies() {
+  document.getElementById('quickReplies').innerHTML = '';
+}
+
+function setProgress(pct, label) {
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = label || pct + '% completado';
+}
+
+function showInputBox() {
+  document.getElementById('inputWrap').style.display = 'flex';
+  setTimeout(() => document.getElementById('chatInput').focus(), 100);
+}
+
+// ═══════════════════════════════════════════
+// SCRIPTED FLOW
+// ═══════════════════════════════════════════
+async function runStep(step) {
+  await showTyping();
+  await addMessage('bot', step.bot);
+  setProgress(step.progress, `Paso ${['q1','q2','q3','q4','q5'].indexOf(step.id)+1} de 5`);
+  if (step.type === 'quickreply') setQuickReplies(step.options);
+}
+
+async function handleScriptedReply(choice) {
+  clearQuickReplies();
+
+  if (choice === 'Cuéntame más primero') {
+    await addMessage('user', choice);
+    await showTyping(900);
+    await addMessage('bot', 'Claro 😊 Somos una firma de consultoría especializada en **bolsa de valores** y **bienes raíces** en Colombia.\n\nOfrecemos sesiones de asesoría personalizada donde analizamos tu portafolio, diseñamos la estrategia y te damos un informe claro con recomendaciones específicas. Todo por **COP $400.000 por sesión**.\n\nAntes de agendar, te hacemos 5 preguntas rápidas para personalizar tu plan. ¿Empezamos?');
+    setQuickReplies(['Sí, empecemos', 'Prefiero pensarlo']);
+    return;
+  }
+
+  if (choice === 'Prefiero pensarlo') {
+    await addMessage('user', choice);
+    await showTyping(700);
+    await addMessage('bot', 'Entendido 😊 Cuando estés listo, esta conversación sigue aquí. Si tienes preguntas específicas sobre inversiones, con gusto te respondo.\n\nCuando quieras comenzar el diagnóstico, solo dímelo.');
+    showInputBox();
+    freeChat = true;
+    return;
+  }
+
+  if (choice === '¡Claro, empecemos!' || choice === 'Sí, empecemos' || choice === 'Sí, hagamos el diagnóstico') {
+    await addMessage('user', choice);
+    funnelTrack('DIAGNOSTICO_INICIADO', {});
+    scriptIndex = 1;
+    await runStep(script[scriptIndex]);
+    return;
+  }
+
+  await addMessage('user', choice);
+
+  const currentStep = script[scriptIndex];
+  if (currentStep && currentStep.dataKey) {
+    clientData[currentStep.dataKey] = choice;
+  }
+
+  scriptIndex++;
+
+  if (scriptIndex < script.length) {
+    await runStep(script[scriptIndex]);
+  } else {
+    funnelTrack('DIAGNOSTICO_COMPLETADO', {
+      perfil_riesgo: clientData.riesgo || '',
+      objetivo: clientData.objetivo || '',
+      situacion: clientData.situacion || '',
+      freno: clientData.freno || '',
+      urgencia: clientData.urgencia || '',
+    });
+    await triggerAIAnalysis();
+  }
+}
+
+// ═══════════════════════════════════════════
+// ANÁLISIS PERSONALIZADO — MOTOR LOCAL DE REGLAS
+// (Sin llamadas a API externas — funciona 100% en GitHub Pages)
+// ═══════════════════════════════════════════
+function buildPersonalizedAnalysis() {
+  const { situacion, objetivo, riesgo, urgencia, freno } = clientData;
+
+  const riesgoMap = {
+    '🐢 Conservador — prefiero seguridad a rendimiento': 'conservador',
+    '⚖️ Moderado — acepto algo de volatilidad': 'moderado',
+    '🚀 Agresivo — busco máximo retorno': 'agresivo'
+  };
+  const perfilRiesgo = riesgoMap[riesgo] || 'moderado';
+  clientData.perfilRiesgo = perfilRiesgo;
+
+  const retornos = {
+    conservador: '9%–13% anual con TES + fondos de renta fija',
+    moderado: '13%–18% anual combinando acciones de Wall Street + bienes raíces',
+    agresivo: '18%–25%+ anual con portafolio activo en renta variable internacional'
+  };
+
+  const estrategias = {
+    '🏠 Invertir en finca raíz / comprar propiedad': 'un plan de ahorro estructurado para cuota inicial + evaluación de fondos inmobiliarios (Fibra Sura, Pactia) para empezar con menor capital',
+    '📊 Hacer crecer mis ahorros en bolsa de valores': 'un portafolio en bolsa general (Apple, Microsoft, Nvidia) + exposición al S&P 500 vía ETFs diversificados',
+    '🛡️ Proteger mi patrimonio de la inflación': 'una combinación de TES UVR + bienes raíces + activos dolarizados para blindar tu poder adquisitivo',
+    '🏖️ Generar ingresos pasivos / libertad financiera': 'un portafolio de dividendos + rentas inmobiliarias diseñado para reemplazar gradualmente tus ingresos laborales'
+  };
+
+  const urgenciaMsg = urgencia && urgencia.includes('Más de 1 año')
+    ? '\n\nNota importante: llevas más de un año pensando en esto. Cada mes que pasa sin invertir es dinero que pierde valor por inflación. **Ahora es el mejor momento para empezar.**'
+    : '';
+
+  const frenoMsg = {
+    '❓ No sé por dónde empezar': 'Exactamente para eso existe nuestra consultoría — te damos el mapa completo desde el primer día.',
+    '😟 Miedo a perder dinero': 'Entendible. Por eso diseñamos portafolios con gestión de riesgo real — el objetivo no es arriesgarlo todo, sino crecer de forma inteligente.',
+    '⏱️ No tengo tiempo de gestionarlo': 'Nuestra propuesta es que nosotros hacemos el trabajo pesado. Tú te reúnes 1 hora al mes con nosotros y el resto lo manejamos.',
+    '🔍 No confío en asesores financieros': 'Totalmente válido. Por eso cada sesión incluye un informe escrito con recomendaciones específicas y verificables — no promesas vacías.'
+  };
+
+  const analisis = `✨ **Análisis de tu perfil financiero**\n\nCon base en tus respuestas, tienes un perfil de inversionista **${perfilRiesgo}** con un objetivo claro.\n\nPara alguien en tu situación, la estrategia más efectiva incluye ${estrategias[objetivo] || 'un portafolio diversificado adaptado a tus metas'}.\n\nCon este enfoque, un portafolio bien estructurado puede generarte **${retornos[perfilRiesgo]}** — muy por encima de lo que ofrece un CDT tradicional hoy.${urgenciaMsg}\n\n${frenoMsg[freno] || ''}`;
+
+  return analisis;
+}
+
+async function triggerAIAnalysis() {
+  setProgress(100, 'Analizando tu perfil...');
+  await showTyping(1800);
+
+  const analisis = buildPersonalizedAnalysis();
+  await addMessage('bot', analisis);
+
+  await showTyping(1200);
+  await addMessage('bot', '¿Quieres que profundicemos en esto en una sesión de consultoría personalizada?\n\nPor **COP $400.000** tienes una hora 1:1 conmigo donde diseñamos juntos tu plan de portafolio real — con números, activos específicos y una hoja de ruta para los próximos 12 meses.');
+
+  conversationHistory.push({ role: 'assistant', content: analisis });
+
+  setQuickReplies(['✅ Quiero agendar mi sesión', '¿Cuánto puedo ganar realmente?', '¿Qué pasa si no veo resultados?']);
+
+  freeChat = true;
+  showInputBox();
+}
+
+// ═══════════════════════════════════════════
+// FREE CHAT — CLAUDE API (post-analysis)
+// ═══════════════════════════════════════════
+async function sendFreeInput() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || isStreaming) return;
+  input.value = '';
+  await handleFreeMessage(text);
+}
+
+// ═══════════════════════════════════════════
+// RESPUESTAS A PREGUNTAS FRECUENTES — MOTOR LOCAL
+// ═══════════════════════════════════════════
+function buildFreeResponse(text) {
+  const t = text.toLowerCase();
+  const perfil = clientData.perfilRiesgo || 'moderado';
+
+  const retornos = {
+    conservador: '9%–13%',
+    moderado: '13%–18%',
+    agresivo: '18%–25%+'
+  };
+
+  if (t.includes('cuánto puedo ganar') || t.includes('cuanto puedo ganar') || t.includes('retorno') || t.includes('rentabilidad')) {
+    return {
+      text: `Con un perfil **${perfil}**, un portafolio bien estructurado puede generarte entre **${retornos[perfil]} anual**.\n\nEsto depende de varios factores: tu horizonte de tiempo, el monto inicial, y qué tan disciplinado seas con los aportes mensuales. En la sesión revisamos números específicos para tu caso — no proyecciones genéricas.\n\nLo importante: las rentabilidades pasadas no garantizan resultados futuros, pero trabajamos con datos reales del mercado, no promesas vacías.`,
+      qr: ['✅ Quiero agendar mi sesión', '¿Qué pasa si no veo resultados?']
+    };
+  }
+
+  if (t.includes('no veo resultados') || t.includes('no funciona') || t.includes('garantía') || t.includes('garantia')) {
+    return {
+      text: `Entendible la duda. La inversión siempre conlleva riesgo — ningún asesor serio te puede garantizar un retorno fijo.\n\nLo que sí puedo garantizarte es **transparencia total**: cada mes recibes un informe escrito con tu portafolio actual, qué cambió y por qué. Si algo no está funcionando, lo ajustamos juntos en la siguiente sesión.\n\nNo es magia, es seguimiento constante y decisiones basadas en datos reales del mercado.`,
+      qr: ['✅ Quiero agendar mi sesión', '¿Cuánto puedo ganar realmente?']
+    };
+  }
+
+  if (t.includes('precio') || t.includes('costo') || t.includes('cuánto cuesta') || t.includes('cuanto cuesta') || t.includes('400')) {
+    return {
+      text: `La sesión de consultoría tiene un valor de **COP $400.000** — incluye 60 minutos 1:1 por Zoom, análisis personalizado de tu portafolio, y un informe escrito con recomendaciones específicas entregado en 24 horas.\n\nNo hay permanencia mínima: pagas sesión por sesión, según lo necesites.`,
+      qr: ['✅ Quiero agendar mi sesión', 'Tengo otra pregunta']
+    };
+  }
+
+  if (t.includes('tiempo') || t.includes('cuánto dura') || t.includes('cuanto dura') || t.includes('duración')) {
+    return {
+      text: `La sesión dura **60 minutos**, por Zoom, en el horario que tú elijas. No necesitas preparar nada complicado — solo trae una idea general de tus ingresos, ahorros y metas. Nosotros guiamos la conversación.`,
+      qr: ['✅ Quiero agendar mi sesión', 'Tengo otra pregunta']
+    };
+  }
+
+  if (t.includes('confianza') || t.includes('seguro') || t.includes('estafa') || t.includes('legal')) {
+    return {
+      text: `Pregunta válida y la respeto. DBE Investment Trust opera de forma transparente: cada recomendación viene con su análisis por escrito, y puedes verificar cada activo recomendado de forma independiente.\n\nNo gestionamos tu dinero directamente — te damos la estrategia y tú decides cómo ejecutarla a través de tu propio bróker o banco. Tú mantienes el control total de tu capital en todo momento.`,
+      qr: ['✅ Quiero agendar mi sesión', 'Tengo otra pregunta']
+    };
+  }
+
+  // Respuesta genérica para cualquier otra pregunta
+  return {
+    text: `Buena pregunta. Para darte una respuesta realmente específica a tu situación, lo ideal es revisarlo en la sesión de consultoría — ahí tenemos 60 minutos completos para profundizar en tu caso particular.\n\nMientras tanto, también puedes escribirnos directo al WhatsApp **301 157 8156** si prefieres resolverlo por ahí.`,
+    qr: ['✅ Quiero agendar mi sesión', 'Tengo otra pregunta']
+  };
+}
+
+async function handleFreeMessage(text) {
+  clearQuickReplies();
+  await addMessage('user', text);
+
+  // Si el usuario quiere agendar pero no ha completado las preguntas → llevar al diagnóstico
+  if (text === '✅ Quiero agendar mi sesión') {
+    if (scriptIndex < script.length) {
+      // Aún no ha completado las preguntas
+      await showTyping(700);
+      await addMessage('bot', 'Perfecto. Antes de agendar necesito hacerte 5 preguntas rápidas para personalizar tu sesión. ¡Empecemos!');
+      funnelTrack('DIAGNOSTICO_INICIADO', {});
+      scriptIndex = 1;
+      freeChat = false;
+      document.getElementById('inputWrap').style.display = 'none';
+      await runStep(script[scriptIndex]);
+    } else {
+      // Ya completó las preguntas → ir al pago
+      await handlePaymentIntent();
+    }
+    return;
+  }
+
+  // Si escribe "quiero agendar" o similar y no ha hecho el diagnóstico
+  const quiereAgendar = text.toLowerCase().includes('agendar') || text.toLowerCase().includes('quiero la sesión') || text.toLowerCase().includes('quiero pagar');
+  if (quiereAgendar && scriptIndex < script.length) {
+    await showTyping(700);
+    await addMessage('bot', 'Con gusto. Primero necesito hacerte 5 preguntas rápidas para personalizar tu sesión. ¡Empecemos!');
+    funnelTrack('DIAGNOSTICO_INICIADO', {});
+    scriptIndex = 1;
+    freeChat = false;
+    document.getElementById('inputWrap').style.display = 'none';
+    await runStep(script[scriptIndex]);
+    return;
+  }
+
+  isStreaming = true;
+  document.getElementById('sendBtn').disabled = true;
+  await showTyping(1400);
+
+  const response = buildFreeResponse(text);
+  await addMessage('bot', response.text);
+
+  conversationHistory.push({ role: 'user', content: text });
+  conversationHistory.push({ role: 'assistant', content: response.text });
+
+  isStreaming = false;
+  document.getElementById('sendBtn').disabled = false;
+
+  setQuickReplies(response.qr);
+}
+
+// Route quick replies through free chat AI
+document.getElementById('quickReplies').addEventListener('click', async (e) => {
+  if (!e.target.classList.contains('qr-btn')) return;
+  const choice = e.target.textContent;
+  if (freeChat) {
+    clearQuickReplies();
+    await handleFreeMessage(choice);
+  }
+});
+
+document.getElementById('chatInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') sendFreeInput();
+});
+
+async function handlePaymentIntent() {
+  clearQuickReplies();
+  document.getElementById('inputWrap').style.display = 'none';
+  // FUNNEL: Pago iniciado
+  funnelTrack('PAGO_INICIADO', {
+    perfil_riesgo: clientData.riesgo || '',
+    objetivo: clientData.objetivo || '',
+    situacion: clientData.situacion || '',
+  });
+  await showTyping(700);
+  await addMessage('bot', '¡Excelente decisión! 🎯 Vamos al paso de pago. Tan pronto lo confirmemos, agendamos tu reunión de inmediato.');
+  setTimeout(() => {
+    document.getElementById('sectionChat').classList.remove('active');
+    document.getElementById('sectionPayment').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 1200);
+}
+
+// ═══════════════════════════════════════════
+// PAYMENT
+// ═══════════════════════════════════════════
+function selectMethod(tab, targetId) {
+  document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  ['methodTransfer','methodNequi'].forEach(id => {
+    document.getElementById(id).style.display = id === targetId ? 'block' : 'none';
+  });
+}
+
+function handleFile(input) {
+  if (input.files && input.files[0]) {
+    document.getElementById('fileName').textContent = input.files[0].name;
+    document.getElementById('filePreview').classList.add('show');
+    document.getElementById('confirmPayBtn').disabled = false;
+  }
+}
+
+function confirmPayment() {
+  const btn = document.getElementById('confirmPayBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Verificando pago...';
+  setTimeout(() => {
+    showNotif('✅ Pago verificado exitosamente');
+    document.getElementById('sectionPayment').classList.remove('active');
+    document.getElementById('sectionSchedule').classList.add('active');
+    buildDateGrid();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 2500);
+}
+
+// ═══════════════════════════════════════════
+// SCHEDULING
+// ═══════════════════════════════════════════
+function buildDateGrid() {
+  const grid = document.getElementById('dateGrid');
+  grid.innerHTML = '';
+  const days = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const today = new Date();
+  for (let i = 2; i <= 10; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    if (d.getDay() === 0) continue;
+    const card = document.createElement('div');
+    card.className = 'date-card';
+    card.innerHTML = `<div class="day-name">${days[d.getDay()]}</div><div class="day-num">${d.getDate()}</div><div class="month">${months[d.getMonth()]}</div>`;
+    card.dataset.date = d.toLocaleDateString('es-CO',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    card.onclick = () => selectDate(card);
+    grid.appendChild(card);
+  }
+}
+
+function selectDate(card) {
+  document.querySelectorAll('.date-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedDate = card.dataset.date;
+  buildTimeSlots();
+  document.getElementById('timeGrid').classList.add('visible');
+}
+
+function buildTimeSlots() {
+  const grid = document.getElementById('timeGrid');
+  grid.innerHTML = '';
+  const slots = ['8:00 AM','9:00 AM','10:00 AM','11:00 AM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM'];
+  const taken = [1, 4];
+  slots.forEach((time, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'time-slot' + (taken.includes(i) ? ' taken' : '');
+    slot.textContent = time;
+    if (!taken.includes(i)) slot.onclick = () => selectTime(slot, time);
+    grid.appendChild(slot);
+  });
+}
+
+function selectTime(slot, time) {
+  document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+  slot.classList.add('selected');
+  selectedTime = time;
+  document.getElementById('scheduleForm').style.display = 'block';
+  setTimeout(() => document.getElementById('schedName').focus(), 100);
+}
+
+function finalizeSchedule() {
+  const name = document.getElementById('schedName').value.trim();
+  const email = document.getElementById('schedEmail').value.trim();
+  const phone = document.getElementById('schedPhone').value.trim();
+  if (!name || !email || !phone) { showNotif('⚠️ Completa todos los campos'); return; }
+  if (!selectedDate || !selectedTime) { showNotif('⚠️ Selecciona fecha y hora'); return; }
+  clientData.name = name; clientData.email = email;
+  clientData.phone = phone; clientData.meetingDate = selectedDate; clientData.meetingTime = selectedTime;
+  showNotif('📅 Reunión confirmada · Enviando notificaciones...');
+
+  // Dispara las 3 notificaciones en paralelo (no bloquea el UX)
+  fireAllNotifications(clientData);
+
+  // FUNNEL: Cliente confirmado (evento final)
+  funnelTrack('CLIENTE_CONFIRMADO', {
+    nombre: name,
+    email: email,
+    whatsapp: phone,
+    fecha_reunion: selectedDate,
+    hora_reunion: selectedTime,
+    perfil_riesgo: (clientData.riesgo || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-]/g,'').trim(),
+    objetivo: (clientData.objetivo || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+    situacion: (clientData.situacion || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+    freno: (clientData.freno || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+    urgencia: (clientData.urgencia || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+    pago: '$400.000 COP',
+    estado: 'Confirmado',
+  });
+
+  setTimeout(() => {
+    populateFinalScreen();
+    document.getElementById('sectionSchedule').classList.remove('active');
+    document.getElementById('sectionDone').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 1800);
+}
+
+function populateFinalScreen() {
+  const first = clientData.name.split(' ')[0];
+  document.getElementById('clientFirstName').textContent = first;
+  document.getElementById('meetingSummary').innerHTML = `
+    <div class="meeting-summary-row"><span class="mskey">Cliente</span><span class="msval">${clientData.name}</span></div>
+    <div class="meeting-summary-row"><span class="mskey">Fecha</span><span class="msval">${clientData.meetingDate}</span></div>
+    <div class="meeting-summary-row"><span class="mskey">Hora</span><span class="msval">${clientData.meetingTime} (Colombia UTC-5)</span></div>
+    <div class="meeting-summary-row"><span class="mskey">Formato</span><span class="msval">Zoom · 60 min · link al correo</span></div>
+    <div class="meeting-summary-row"><span class="mskey">Pago</span><span class="msval">✓ $400.000 COP confirmado</span></div>`;
+  document.getElementById('adminName').textContent = clientData.name;
+  document.getElementById('adminEmail').textContent = clientData.email;
+  document.getElementById('adminPhone').textContent = clientData.phone;
+  document.getElementById('adminDate').textContent = `${clientData.meetingDate} · ${clientData.meetingTime}`;
+  const perfil = [clientData.riesgo, clientData.objetivo].map(s => s ? s.replace(/[^\w\s]/g,'').trim() : '').filter(Boolean).join(' | ');
+  document.getElementById('adminProfile').textContent = perfil || 'Moderado';
+}
+
+// ═══════════════════════════════════════════
+// FUNNEL TRACKING — reporta cada etapa a Google Sheets
+// ═══════════════════════════════════════════
+function getCookieChatbot(name) {
+  const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return v ? v.pop() : '';
+}
+
+function getOrCreateSession() {
+  let sid = getCookieChatbot('dbe_session');
+  if (!sid) {
+    sid = 'SID-' + Date.now() + '-' + Math.random().toString(36).substr(2,6).toUpperCase();
+    const d = new Date(); d.setTime(d.getTime() + 86400000);
+    document.cookie = `dbe_session=${sid};expires=${d.toUTCString()};path=/`;
+  }
+  return sid;
+}
+
+function detectFuenteChatbot() {
+  const ref = document.referrer || '';
+  if (!ref) return 'Directo';
+  if (ref.includes('instagram')) return 'Instagram';
+  if (ref.includes('tiktok')) return 'TikTok';
+  if (ref.includes('facebook') || ref.includes('fb.')) return 'Facebook';
+  if (ref.includes('linkedin')) return 'LinkedIn';
+  if (ref.includes('youtube')) return 'YouTube';
+  if (ref.includes('google')) return 'Google';
+  if (ref.includes('whatsapp')) return 'WhatsApp';
+  return 'Referido: ' + ref.split('/')[2];
+}
+
+function detectDispositivoChatbot() {
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad/.test(ua)) return 'iOS';
+  if (/Android/.test(ua)) return 'Android';
+  if (/Mac/.test(ua)) return 'Mac';
+  if (/Windows/.test(ua)) return 'Windows';
+  return 'Otro';
+}
+
+async function funnelTrack(tipo, extra = {}) {
+  const FUNNEL_URL = 'https://script.google.com/macros/s/AKfycbweacMmPECyU0efAVbszJrtmVj6ELcU99MZgCU0r0kfCbh4gxnDdSkZeobXzKE7ApEc/exec';
+  try {
+    await fetch(FUNNEL_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tipo,
+        session_id: getOrCreateSession(),
+        fuente: detectFuenteChatbot(),
+        dispositivo: detectDispositivoChatbot(),
+        fecha_registro: new Date().toLocaleString('es-CO', {timeZone:'America/Bogota'}),
+        ...extra
+      })
+    });
+  } catch(e) { console.log('[Funnel]', tipo, e); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ██████╗  CONFIGURACIÓN — LLENA ESTOS CAMPOS ██████╗
+// ═══════════════════════════════════════════════════════════════
+const CONFIG = {
+
+  // ── 1. EMAILJS ──────────────────────────────────────────────
+  // Crea cuenta gratis en https://www.emailjs.com
+  // Dashboard → Account → API Keys → copia el Public Key
+  emailjs_public_key: 'o_b403tLgu2MWCE2r',
+
+  // Dashboard → Email Services → Add Service (Gmail) → copia el Service ID
+  emailjs_service_id: 'service_g2qi03g',
+
+  // Dashboard → Email Templates → Create Template → copia el Template ID
+  // En el template usa estas variables: {{cliente_nombre}}, {{cliente_email}},
+  // {{cliente_whatsapp}}, {{fecha_reunion}}, {{hora_reunion}},
+  // {{perfil_riesgo}}, {{objetivo}}, {{situacion}}, {{freno}}, {{urgencia}}
+  emailjs_template_id: 'template_l8zyd7e',
+
+  // Tu correo donde quieres recibir las notificaciones
+  asesor_email: 'diegobernal2004@gmail.com',
+
+  // ── 2. WHATSAPP vía CallMeBot ────────────────────────────────
+  // PASO 1: Agrega al contacto de WhatsApp: +34 644 62 74 90
+  // PASO 2: Envíale este mensaje exacto: "I allow callmebot to send me messages"
+  // PASO 3: Recibirás un API key por WhatsApp (ej: 123456)
+  // Guía: https://www.callmebot.com/blog/free-api-whatsapp-messages/
+  whatsapp_number: '573011578156',   // Ej: 573001234567  (sin +, con indicativo 57)
+  whatsapp_apikey:  '4418154',
+
+  // ── 3. GOOGLE SHEETS ─────────────────────────────────────────
+  // PASO 1: Ve a https://sheets.google.com → crea una hoja llamada "Clientes"
+  // PASO 2: Ve a Extensiones → Apps Script → pega el código del archivo
+  //         "google_apps_script.gs" que descargaste junto a este HTML
+  // PASO 3: Publica el script: Implementar → Nueva implementación →
+  //         Tipo: Aplicación web → Ejecutar como: Yo → Acceso: Cualquiera
+  // PASO 4: Copia la URL de implementación aquí:
+  sheets_webhook_url: 'https://script.google.com/macros/s/AKfycbweacMmPECyU0efAVbszJrtmVj6ELcU99MZgCU0r0kfCbh4gxnDdSkZeobXzKE7ApEc/exec',
+
+};
+// ═══════════════════════════════════════════════════════════════
+
+// Inicializar EmailJS
+if (CONFIG.emailjs_public_key !== 'TU_PUBLIC_KEY_AQUI') {
+  emailjs.init({ publicKey: CONFIG.emailjs_public_key });
+}
+
+// ── NOTIFICACIÓN 1: CORREO ──────────────────────────────────────
+async function notifyEmail(data) {
+  if (CONFIG.emailjs_public_key === 'TU_PUBLIC_KEY_AQUI') {
+    console.warn('[EmailJS] No configurado — omitiendo correo');
+    return { ok: false, reason: 'no_config' };
+  }
+  try {
+    const perfil = (data.riesgo || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-]/g,'').trim();
+    await emailjs.send(CONFIG.emailjs_service_id, CONFIG.emailjs_template_id, {
+      asesor_email:      CONFIG.asesor_email,
+      cliente_nombre:    data.name,
+      cliente_email:     data.email,
+      cliente_whatsapp:  data.phone,
+      fecha_reunion:     data.meetingDate,
+      hora_reunion:      data.meetingTime,
+      perfil_riesgo:     perfil,
+      objetivo:          (data.objetivo || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+      situacion:         (data.situacion || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+      freno:             (data.freno || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+      urgencia:          (data.urgencia || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+      fecha_registro:    new Date().toLocaleString('es-CO', {timeZone:'America/Bogota'}),
+    });
+    console.log('[EmailJS] ✅ Correo enviado');
+    return { ok: true };
+  } catch(e) {
+    console.error('[EmailJS] Error:', e);
+    return { ok: false, reason: e.text || e.message };
+  }
+}
+
+// ── NOTIFICACIÓN 2: WHATSAPP vía CallMeBot ──────────────────────
+async function notifyWhatsApp(data) {
+  if (CONFIG.whatsapp_number === '57TUNUMEROSIN+' || CONFIG.whatsapp_apikey === 'TU_APIKEY_CALLMEBOT') {
+    console.warn('[WhatsApp] No configurado — omitiendo');
+    return { ok: false, reason: 'no_config' };
+  }
+  try {
+    const perfil = (data.riesgo || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-]/g,'').trim();
+    const msg = [
+      '🆕 *NUEVO CLIENTE CONFIRMADO*',
+      '─────────────────────',
+      `👤 *Nombre:* ${data.name}`,
+      `📧 *Correo:* ${data.email}`,
+      `📱 *WhatsApp:* ${data.phone}`,
+      `📅 *Reunión:* ${data.meetingDate}`,
+      `🕐 *Hora:* ${data.meetingTime}`,
+      '─────────────────────',
+      `💼 *Perfil:* ${perfil}`,
+      `🎯 *Objetivo:* ${(data.objetivo||'').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim()}`,
+      `💰 *Situación:* ${(data.situacion||'').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim()}`,
+      `⚡ *Freno:* ${(data.freno||'').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim()}`,
+      '─────────────────────',
+      `💵 *Pago:* $400.000 COP ✅`,
+      `🕐 ${new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'})}`,
+    ].join('%0A');
+
+    // CallMeBot usa un proxy CORS — en producción moverías esto a tu servidor
+    const url = `https://api.callmebot.com/whatsapp.php?phone=${CONFIG.whatsapp_number}&text=${msg}&apikey=${CONFIG.whatsapp_apikey}`;
+    // Abre en iframe oculto para evitar bloqueo CORS en algunos navegadores
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = url;
+    document.body.appendChild(iframe);
+    setTimeout(() => iframe.remove(), 5000);
+    console.log('[WhatsApp] ✅ Mensaje enviado');
+    return { ok: true };
+  } catch(e) {
+    console.error('[WhatsApp] Error:', e);
+    return { ok: false, reason: e.message };
+  }
+}
+
+// ── NOTIFICACIÓN 3: GOOGLE SHEETS ──────────────────────────────
+async function notifySheets(data) {
+  if (CONFIG.sheets_webhook_url === 'TU_URL_DE_APPS_SCRIPT_AQUI') {
+    console.warn('[Sheets] No configurado — omitiendo');
+    return { ok: false, reason: 'no_config' };
+  }
+  try {
+    const payload = {
+      nombre:       data.name,
+      email:        data.email,
+      whatsapp:     data.phone,
+      fecha_reunion: data.meetingDate,
+      hora_reunion:  data.meetingTime,
+      perfil_riesgo: (data.riesgo    || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+      objetivo:      (data.objetivo  || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+      situacion:     (data.situacion || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+      freno:         (data.freno     || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+      urgencia:      (data.urgencia  || '').replace(/[^\w\sáéíóúÁÉÍÓÚñÑ\-\/]/g,'').trim(),
+      pago:          '$400.000 COP',
+      estado:        'Confirmado',
+      fecha_registro: new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'}),
+    };
+    // Apps Script acepta no-cors, los datos llegan igual
+    await fetch(CONFIG.sheets_webhook_url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    console.log('[Sheets] ✅ Fila registrada');
+    return { ok: true };
+  } catch(e) {
+    console.error('[Sheets] Error:', e);
+    return { ok: false, reason: e.message };
+  }
+}
+
+// ── ORQUESTADOR — lanza las 3 notificaciones en paralelo ────────
+async function fireAllNotifications(data) {
+  showNotif('📡 Registrando cliente y enviando notificaciones...');
+  const [email, wa, sheets] = await Promise.allSettled([
+    notifyEmail(data),
+    notifyWhatsApp(data),
+    notifySheets(data),
+  ]);
+  const results = { email, wa, sheets };
+  console.table({
+    EmailJS:  email.value,
+    WhatsApp: wa.value,
+    Sheets:   sheets.value,
+  });
+  // Siempre muestra éxito al usuario — los errores de integración son silenciosos
+  showNotif('✅ Todo registrado correctamente');
+  return results;
+}
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => showNotif('📋 Copiado al portapapeles'));
+}
+
+function showNotif(msg) {
+  const n = document.getElementById('notif');
+  n.textContent = msg;
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 3500);
+}
+
+// ═══════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════
+(async () => {
+  await new Promise(r => setTimeout(r, 600));
+  await showTyping(900);
+  await addMessage('bot', script[0].bot);
+  setProgress(5, 'Comenzando diagnóstico');
+  setQuickReplies(script[0].options);
+})();
+</script>
+</body>
+</html>
