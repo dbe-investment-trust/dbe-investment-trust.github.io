@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="vIMfylS88X_-bbMqzBHP2MjfRpSb_7m3Efe72469xT8" />
+<title>DBE Investment Trust — Consultoría de Portafolios Colombia</title>
+<meta name="description" content="Firma de consultoría de inversiones especializada en bolsa de valores y bienes raíces en Colombia. Portafolios personalizados para personas y empresas.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D1B2A;
+  --navy2: #162234;
+  --gold: #C9A84C;
+  --gold-light: #F0D78C;
+  --cream: #FAF7F2;
+  --white: #FFFFFF;
+  --muted: #7A7A8A;
+  --border: #E8E2D8;
+  --teal: #1D7A6A;
+  --success-light: #E4F4EC;
+  --success: #1A7A4A;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--navy); line-height: 1.7; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(13,27,42,0.97);
+  backdrop-filter: blur(10px);
+  padding: 0 40px;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(201,168,76,.15);
+}
+.nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; color: #fff; letter-spacing: .5px; text-decoration: none;
+}
+.nav-brand span { color: var(--gold); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { font-size: 13px; color: rgba(255,255,255,.6); text-decoration: none; letter-spacing: .5px; transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.nav-cta {
+  background: var(--gold); color: var(--navy);
+  padding: 9px 20px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; text-decoration: none;
+  transition: background .2s;
+}
+.nav-cta:hover { background: var(--gold-light); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  padding: 100px 40px 60px;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 80% 50%, rgba(201,168,76,.07) 0%, transparent 70%),
+              radial-gradient(ellipse 50% 40% at 20% 80%, rgba(29,122,106,.08) 0%, transparent 60%);
+}
+.hero-grid {
+  position: absolute; inset: 0; opacity: .04;
+  background-image: linear-gradient(rgba(201,168,76,.5) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(201,168,76,.5) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-inner { max-width: 780px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 28px;
+  border: 1px solid rgba(201,168,76,.3); padding: 6px 16px; border-radius: 20px;
+}
+.hero-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 58px);
+  color: #fff; line-height: 1.15; margin-bottom: 24px;
+  letter-spacing: -.5px;
+}
+.hero h1 em { color: var(--gold-light); font-style: italic; }
+.hero-sub {
+  font-size: 17px; color: rgba(255,255,255,.6);
+  max-width: 520px; margin: 0 auto 40px; line-height: 1.7;
+}
+.hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--gold); color: var(--navy);
+  padding: 14px 28px; border-radius: 10px;
+  font-size: 15px; font-weight: 600; text-decoration: none;
+  transition: all .2s; letter-spacing: .3px;
+}
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+.btn-outline {
+  border: 1.5px solid rgba(255,255,255,.25); color: rgba(255,255,255,.8);
+  padding: 14px 28px; border-radius: 10px;
+  font-size: 15px; text-decoration: none;
+  transition: all .2s;
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+.hero-stats {
+  display: flex; justify-content: center; gap: 48px;
+  margin-top: 64px; flex-wrap: wrap;
+  padding-top: 40px; border-top: 1px solid rgba(255,255,255,.08);
+}
+.stat-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 34px; color: var(--gold-light); display: block; line-height: 1;
+}
+.stat-label { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 6px; letter-spacing: .5px; }
+
+/* SECTIONS */
+section { padding: 96px 40px; }
+.section-inner { max-width: 1000px; margin: 0 auto; }
+.eyebrow {
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 14px; display: block;
+}
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 3.5vw, 40px);
+  color: var(--navy); line-height: 1.2; margin-bottom: 16px;
+}
+.section-sub { font-size: 16px; color: var(--muted); max-width: 560px; margin-bottom: 48px; line-height: 1.7; }
+
+/* SERVICIOS */
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.service-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 16px; padding: 32px;
+  transition: transform .2s, box-shadow .2s;
+}
+.service-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(13,27,42,.08); }
+.service-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--navy); display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 20px;
+}
+.service-card h3 { font-size: 17px; font-weight: 500; margin-bottom: 10px; color: var(--navy); }
+.service-card p { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
+.service-return {
+  display: inline-block; background: var(--success-light);
+  color: var(--success); font-size: 12px; font-weight: 600;
+  padding: 4px 12px; border-radius: 20px; letter-spacing: .3px;
+}
+
+/* CÓMO FUNCIONA */
+.how-bg { background: var(--navy); }
+.how-bg h2 { color: #fff; }
+.how-bg .eyebrow { color: var(--gold); }
+.how-bg .section-sub { color: rgba(255,255,255,.5); }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2px; margin-top: 48px; }
+.step {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.07);
+  padding: 32px 28px; position: relative;
+}
+.step:first-child { border-radius: 16px 0 0 16px; }
+.step:last-child { border-radius: 0 16px 16px 0; }
+.step-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px; color: rgba(201,168,76,.15);
+  line-height: 1; margin-bottom: 16px; display: block;
+}
+.step h3 { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 8px; }
+.step p { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.6; }
+
+/* PORTAFOLIOS */
+.portfolios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.port-card {
+  border-radius: 16px; overflow: hidden;
+  border: 1px solid var(--border);
+}
+.port-header { padding: 24px; }
+.port-header.conservador { background: #1D4A3A; }
+.port-header.moderado { background: var(--navy); }
+.port-header.agresivo { background: #3A1D1D; }
+.port-badge { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 8px; display: block; }
+.port-name { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; margin-bottom: 4px; }
+.port-return { font-size: 28px; font-weight: 700; color: var(--gold-light); font-family: 'Playfair Display', serif; }
+.port-return small { font-size: 13px; color: rgba(255,255,255,.4); font-family: 'DM Sans', sans-serif; font-weight: 400; }
+.port-body { background: var(--white); padding: 24px; }
+.port-item { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.port-item:last-child { border-bottom: none; }
+.port-item .pi-key { color: var(--muted); }
+.port-item .pi-val { font-weight: 500; color: var(--navy); }
+
+/* PRECIO */
+.price-center { text-align: center; }
+.price-card {
+  background: var(--navy); border-radius: 20px;
+  padding: 48px 40px; max-width: 480px; margin: 0 auto;
+  position: relative; overflow: hidden;
+}
+.price-card::before {
+  content: ''; position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px; border-radius: 50%;
+  border: 1px solid rgba(201,168,76,.12);
+}
+.price-amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px; color: var(--gold-light); line-height: 1;
+  margin: 16px 0 4px;
+}
+.price-period { font-size: 14px; color: rgba(255,255,255,.4); margin-bottom: 32px; }
+.price-features { list-style: none; margin-bottom: 32px; text-align: left; }
+.price-features li {
+  display: flex; gap: 10px; font-size: 14px; color: rgba(255,255,255,.7);
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.price-features li:last-child { border-bottom: none; }
+.price-features .pf-check { color: var(--gold); font-weight: 700; flex-shrink: 0; }
+.price-btn {
+  display: block; width: 100%; padding: 16px;
+  background: var(--gold); color: var(--navy);
+  border-radius: 12px; font-size: 16px; font-weight: 700;
+  text-decoration: none; text-align: center;
+  font-family: 'Playfair Display', serif;
+  transition: all .2s; letter-spacing: .3px;
+}
+.price-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+/* TESTIMONIOS */
+.testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.testi-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; padding: 28px;
+}
+.testi-stars { color: var(--gold); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+.testi-text { font-size: 14px; color: #2A2A3E; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--navy); display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 16px; color: var(--gold);
+}
+.testi-name { font-size: 13px; font-weight: 500; color: var(--navy); }
+.testi-role { font-size: 12px; color: var(--muted); }
+
+/* CONTACTO */
+.contact-bg { background: var(--navy); }
+.contact-bg h2 { color: #fff; }
+.contact-bg .eyebrow { color: var(--gold); }
+.contact-bg .section-sub { color: rgba(255,255,255,.5); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.contact-item { display: flex; gap: 14px; margin-bottom: 24px; }
+.contact-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.contact-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 4px; }
+.contact-val { font-size: 15px; color: rgba(255,255,255,.85); font-weight: 500; }
+.contact-form { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 32px; }
+.cf-label { font-size: 12px; color: rgba(255,255,255,.4); margin-bottom: 6px; display: block; }
+.cf-input {
+  width: 100%; padding: 12px 14px; margin-bottom: 14px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px; color: #fff; font-size: 14px; font-family: 'DM Sans', sans-serif;
+  outline: none; transition: border-color .2s;
+}
+.cf-input:focus { border-color: var(--gold); }
+.cf-input::placeholder { color: rgba(255,255,255,.25); }
+.cf-btn {
+  width: 100%; padding: 14px; background: var(--gold); border: none;
+  border-radius: 10px; color: var(--navy); font-size: 15px; font-weight: 700;
+  font-family: 'Playfair Display', serif; cursor: pointer; transition: all .2s;
+}
+.cf-btn:hover { background: var(--gold-light); }
+
+/* FOOTER */
+footer {
+  background: #080F18; padding: 32px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-brand { font-family: 'Playfair Display', serif; font-size: 16px; color: rgba(255,255,255,.4); }
+.footer-brand span { color: var(--gold); }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,.25); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 12px; color: rgba(255,255,255,.3); text-decoration: none; }
+.footer-links a:hover { color: var(--gold); }
+
+@media(max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  section { padding: 64px 20px; }
+  .hero { padding: 100px 20px 60px; }
+  .hero-stats { gap: 32px; }
+  .portfolios { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; gap: 12px; }
+  .step:first-child,.step:last-child { border-radius: 12px; }
+  footer { flex-direction: column; text-align: center; padding: 28px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">DBE<span>Investment</span></a>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#portafolios">Portafolios</a></li>
+    <li><a href="#precio">Precio</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="chatbot_LISTO.html" class="nav-cta">Agendar sesión</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-dot"></span>Consultoría de inversiones · Colombia</div>
+    <h1>Tu dinero trabajando<br>con <em>estrategia real</em></h1>
+    <p class="hero-sub">Asesoría personalizada de portafolios de bolsa de valores y bienes raíces. Un plan diseñado para tu situación, no para las masas.</p>
+    <div class="hero-btns">
+      <a href="chatbot_LISTO.html" class="btn-primary">Agenda tu primera sesión →</a>
+      <a href="#servicios" class="btn-outline">Conoce el servicio</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <span class="stat-val">13–25%</span>
+        <div class="stat-label">Retorno anual esperado</div>
+      </div>
+      <div>
+        <span class="stat-val">60 min</span>
+        <div class="stat-label">Sesión personalizada mensual</div>
+      </div>
+      <div>
+        <span class="stat-val">$400K</span>
+        <div class="stat-label">COP por sesión</div>
+      </div>
+      <div>
+        <span class="stat-val">Wall St + RE</span>
+        <div class="stat-label">Bolsa + Bienes Raíces</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="section-inner">
+    <span class="eyebrow">Nuestros servicios</span>
+    <h2>Inversiones que se adaptan<br>a tu vida, no al revés</h2>
+    <p class="section-sub">Trabajamos con personas y empresas que quieren construir patrimonio de forma inteligente, con acompañamiento real y resultados verificables.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>Portafolio de bolsa de valores</h3>
+        <p>Selección de acciones en bolsa general con análisis fundamental. Apple, Microsoft, Nvidia, S&P 500 y exposición a los mercados de Wall Street vía ETFs.</p>
+        <span class="service-return">↑ 15–22% anual estimado</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏘️</div>
+        <h3>Inversión en bienes raíces</h3>
+        <p>Estrategia de finca raíz adaptada a tu capital: desde fondos inmobiliarios (Fibra Sura, Pactia) hasta propiedades para renta corta y larga.</p>
+        <span class="service-return">↑ 6–14% anual estimado</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚖️</div>
+        <h3>Portafolio mixto balanceado</h3>
+        <p>Combinación de renta fija (TES, fondos colectivos), acciones y activos inmobiliarios según tu perfil de riesgo y horizonte de inversión.</p>
+        <span class="service-return">↑ 12–18% anual estimado</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏢</div>
+        <h3>Consultoría para empresas</h3>
+        <p>Gestión de excedentes de caja corporativos. Optimización financiera para PYMES que quieren que su liquidez trabaje, no que duerma en el banco.</p>
+        <span class="service-return">↑ Plan desde $800K/mes</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="how-bg">
+  <div class="section-inner">
+    <span class="eyebrow">Cómo funciona</span>
+    <h2>De cero a portafolio<br>en 4 pasos</h2>
+    <p class="section-sub">Un proceso claro, sin tecnicismos innecesarios. Tú traes tus metas, nosotros traemos la estrategia.</p>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <h3>Reserva tu sesión</h3>
+        <p>Agenda tu consultoría inicial. Analizamos tu situación financiera, tus metas y tu perfil de riesgo desde el primer minuto.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <h3>Sesión de consultoría</h3>
+        <p>60 minutos 1:1 por Zoom donde diseñamos juntos tu estrategia de portafolio personalizada.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <h3>Informe escrito</h3>
+        <p>En 48 horas recibes tu plan completo con activos específicos, distribución recomendada y proyecciones.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <h3>Seguimiento mensual</h3>
+        <p>Revisamos y ajustamos tu portafolio cada mes según el mercado y el avance hacia tus metas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTAFOLIOS -->
+<section id="portafolios">
+  <div class="section-inner">
+    <span class="eyebrow">Modelos de portafolio</span>
+    <h2>Un perfil para cada<br>tipo de inversionista</h2>
+    <p class="section-sub">Diseñamos tu portafolio según tu tolerancia al riesgo y tus objetivos. Estas son referencias orientativas — tu plan será 100% personalizado.</p>
+    <div class="portfolios">
+      <div class="port-card">
+        <div class="port-header conservador">
+          <span class="port-badge">Perfil conservador</span>
+          <div class="port-name">Patrimonio Seguro</div>
+          <div class="port-return">9–13% <small>anual</small></div>
+        </div>
+        <div class="port-body">
+          <div class="port-item"><span class="pi-key">TES / Renta fija</span><span class="pi-val">50%</span></div>
+          <div class="port-item"><span class="pi-key">Fondos colectivos</span><span class="pi-val">30%</span></div>
+          <div class="port-item"><span class="pi-key">Inmobiliario (Fibra)</span><span class="pi-val">20%</span></div>
+          <div class="port-item"><span class="pi-key">Riesgo</span><span class="pi-val">Bajo</span></div>
+        </div>
+      </div>
+      <div class="port-card">
+        <div class="port-header moderado">
+          <span class="port-badge">Perfil moderado</span>
+          <div class="port-name">Crecimiento Balanceado</div>
+          <div class="port-return">13–18% <small>anual</small></div>
+        </div>
+        <div class="port-body">
+          <div class="port-item"><span class="pi-key">Acciones Wall Street</span><span class="pi-val">40%</span></div>
+          <div class="port-item"><span class="pi-key">Bienes raíces</span><span class="pi-val">30%</span></div>
+          <div class="port-item"><span class="pi-key">Renta fija</span><span class="pi-val">30%</span></div>
+          <div class="port-item"><span class="pi-key">Riesgo</span><span class="pi-val">Medio</span></div>
+        </div>
+      </div>
+      <div class="port-card">
+        <div class="port-header agresivo">
+          <span class="port-badge">Perfil agresivo</span>
+          <div class="port-name">Máximo Potencial</div>
+          <div class="port-return">18–25% <small>anual</small></div>
+        </div>
+        <div class="port-body">
+          <div class="port-item"><span class="pi-key">Acciones Wall Street + ETFs</span><span class="pi-val">60%</span></div>
+          <div class="port-item"><span class="pi-key">Bienes raíces</span><span class="pi-val">30%</span></div>
+          <div class="port-item"><span class="pi-key">Liquidez</span><span class="pi-val">10%</span></div>
+          <div class="port-item"><span class="pi-key">Riesgo</span><span class="pi-val">Alto</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRECIO -->
+<section id="precio" style="background:var(--cream);">
+  <div class="section-inner price-center">
+    <span class="eyebrow">Inversión en tu asesoría</span>
+    <h2>Un precio justo por<br>asesoría de verdad</h2>
+    <p class="section-sub" style="margin:0 auto 48px;">Sin comisiones ocultas, sin conflictos de interés. Pagamos por tu tiempo, no por los productos que te vendemos.</p>
+    <div class="price-card">
+      <span class="eyebrow" style="color:var(--gold);">Consultoría mensual</span>
+      <div class="price-amount">$400.000</div>
+      <div class="price-period">COP por sesión · sin permanencia mínima</div>
+      <ul class="price-features">
+        <li><span class="pf-check">✓</span>Reunión 1:1 de 60 min por Zoom</li>
+        <li><span class="pf-check">✓</span>Análisis personalizado de tu portafolio</li>
+        <li><span class="pf-check">✓</span>Informe escrito con recomendaciones (24h)</li>
+        <li><span class="pf-check">✓</span>Estrategia de bolsa + bienes raíces</li>
+        <li><span class="pf-check">✓</span>Grabación de la sesión</li>
+        <li><span class="pf-check">✓</span>Soporte por WhatsApp entre sesiones</li>
+      </ul>
+      <a href="chatbot_LISTO.html" class="price-btn">Agenda tu sesión ahora →</a>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:20px;">Las rentabilidades pasadas no garantizan resultados futuros. Toda inversión conlleva riesgos.</p>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" class="contact-bg">
+  <div class="section-inner">
+    <span class="eyebrow">Contáctanos</span>
+    <h2>¿Tienes preguntas?<br>Hablemos</h2>
+    <p class="section-sub">Escríbenos directamente o agenda tu sesión de consultoría. Respondemos en menos de 2 horas.</p>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-item">
+          <span class="contact-icon">📱</span>
+          <div>
+            <div class="contact-label">WhatsApp</div>
+            <div class="contact-val">+57 301 157 8156</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📧</span>
+          <div>
+            <div class="contact-label">Correo</div>
+            <div class="contact-val">diegobernal2004@gmail.com</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📍</span>
+          <div>
+            <div class="contact-label">Ubicación</div>
+            <div class="contact-val">Colombia · Sesiones online</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🕐</span>
+          <div>
+            <div class="contact-label">Horario de atención</div>
+            <div class="contact-val">Lun–Vie · 8am – 6pm</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form">
+        <label class="cf-label">Nombre completo</label>
+        <input type="text" class="cf-input" placeholder="Tu nombre">
+        <label class="cf-label">Correo electrónico</label>
+        <input type="email" class="cf-input" placeholder="tu@correo.com">
+        <label class="cf-label">¿En qué te podemos ayudar?</label>
+        <textarea class="cf-input" rows="3" placeholder="Cuéntanos tu situación brevemente..."></textarea>
+        <button class="cf-btn" onclick="alert('Mensaje enviado. Te contactaremos pronto.')">Enviar mensaje →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">DBE <span>Investment Trust</span></div>
+  <div class="footer-copy">© 2026 DBE Investment Trust · Colombia · Todos los derechos reservados</div>
+  <div class="footer-links">
+    <a href="#" onclick="document.getElementById('modalPrivacidad').style.display='flex';return false;">Política de privacidad</a>
+    <a href="#" onclick="document.getElementById('modalTerminos').style.display='flex';return false;">Términos y condiciones</a>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- MODAL: TÉRMINOS Y CONDICIONES -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="modalTerminos" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:16px;max-width:660px;width:100%;max-height:85vh;overflow-y:auto;padding:36px;position:relative;">
+    <button onclick="document.getElementById('modalTerminos').style.display='none'" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#7A7A8A;">✕</button>
+    <h2 style="font-family:'Playfair Display',serif;font-size:22px;color:#0D1B2A;margin-bottom:6px;">Términos y Condiciones</h2>
+    <p style="font-size:12px;color:#9E9E9E;margin-bottom:24px;">Última actualización: junio de 2026</p>
+
+    <h3 style="font-size:14px;font-weight:600;color:#0D1B2A;margin:16px 0 6px;">1. Naturaleza del servicio</h3>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;">DBE Investment Trust presta servicios de <strong>consultoría, educación y asesoría financiera</strong> en materia de inversiones en bolsa de valores (mercados nacionales e internacionales) y bienes raíces. Los servicios se prestan mediante sesiones de consultoría individual y/o grupal, entrega de informes escritos y seguimiento de portafolios.</p>
+
+    <h3 style="font-size:14px;font-weight:600;color:#0D1B2A;margin:16px 0 6px;">2. Exoneración de responsabilidad — Mercados financieros</h3>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;"><strong>DBE Investment Trust no garantiza rentabilidades, retornos mínimos, ni la preservación del capital invertido.</strong> Toda inversión en mercados financieros (bolsa de valores, ETFs, acciones, fondos, derivados u otros instrumentos) conlleva riesgos inherentes, incluyendo la posibilidad de pérdida parcial o total del capital.</p>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;">Las recomendaciones de inversión emitidas por DBE Investment Trust se basan en análisis financiero y condiciones de mercado vigentes al momento de la consultoría. <strong>DBE Investment Trust no se hace responsable por pérdidas o perjuicios económicos</strong> que el cliente pueda sufrir como consecuencia de:</p>
+    <ul style="font-size:13px;color:#444;line-height:1.8;padding-left:20px;margin-bottom:12px;">
+      <li>Variaciones adversas en los mercados financieros nacionales o internacionales.</li>
+      <li>Decisiones de inversión tomadas por el cliente basadas total o parcialmente en las recomendaciones recibidas.</li>
+      <li>Cambios en condiciones macroeconómicas, geopolíticas, regulatorias o de cualquier otra índole.</li>
+      <li>Resultados pasados de activos o portafolios, los cuales no garantizan resultados futuros.</li>
+      <li>Errores u omisiones del cliente al ejecutar las estrategias recomendadas.</li>
+    </ul>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;">El cliente entiende y acepta expresamente que la asesoría financiera no constituye una garantía de resultado y que DBE Investment Trust actúa como consultor independiente, sin gestionar directamente los recursos del cliente.</p>
+
+    <h3 style="font-size:14px;font-weight:600;color:#0D1B2A;margin:16px 0 6px;">3. Pagos y cancelaciones</h3>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;">El pago de la sesión de consultoría por valor de <strong>COP $400.000</strong> debe realizarse con antelación a la reunión. Una vez confirmado el pago, el cliente podrá agendar su sesión. En caso de cancelación por parte del cliente con menos de 24 horas de anticipación, no habrá lugar a devolución. DBE Investment Trust se reserva el derecho de reprogramar sesiones por causas de fuerza mayor.</p>
+
+    <h3 style="font-size:14px;font-weight:600;color:#0D1B2A;margin:16px 0 6px;">4. Confidencialidad</h3>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;">DBE Investment Trust tratará la información financiera del cliente con estricta confidencialidad y no la compartirá con terceros sin su consentimiento expreso, salvo requerimiento legal de autoridad competente.</p>
+
+    <h3 style="font-size:14px;font-weight:600;color:#0D1B2A;margin:16px 0 6px;">5. Ley aplicable</h3>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;">Estos términos se rigen por las leyes de la República de Colombia. Cualquier controversia será resuelta en la ciudad de Bogotá D.C., Colombia.</p>
+
+    <p style="font-size:12px;color:#9E9E9E;margin-top:20px;border-top:1px solid #eee;padding-top:16px;">Al contratar los servicios de DBE Investment Trust, el cliente declara haber leído, entendido y aceptado estos términos y condiciones en su totalidad.</p>
+    <button onclick="document.getElementById('modalTerminos').style.display='none'" style="width:100%;margin-top:16px;padding:12px;background:#0D1B2A;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;">Entendido, cerrar</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- MODAL: POLÍTICA DE PRIVACIDAD -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="modalPrivacidad" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:16px;max-width:660px;width:100%;max-height:85vh;overflow-y:auto;padding:36px;position:relative;">
+    <button onclick="document.getElementById('modalPrivacidad').style.display='none'" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#7A7A8A;">✕</button>
+    <h2 style="font-family:'Playfair Display',serif;font-size:22px;color:#0D1B2A;margin-bottom:6px;">Política de Privacidad y Cookies</h2>
+    <p style="font-size:12px;color:#9E9E9E;margin-bottom:24px;">Última actualización: junio de 2026</p>
+
+    <h3 style="font-size:14px;font-weight:600;color:#0D1B2A;margin:16px 0 6px;">1. Responsable del tratamiento</h3>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;"><strong>DBE Investment Trust</strong>, con correo de contacto diegobernal2004@gmail.com, es responsable del tratamiento de los datos personales recopilados a través de este sitio web y del chatbot de agendamiento.</p>
+
+    <h3 style="font-size:14px;font-weight:600;color:#0D1B2A;margin:16px 0 6px;">2. Datos que recopilamos</h3>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:8px;">Recopilamos los siguientes datos de los visitantes y potenciales clientes:</p>
+    <ul style="font-size:13px;color:#444;line-height:1.8;padding-left:20px;margin-bottom:12px;">
+      <li><strong>Datos de identificación:</strong> nombre completo.</li>
+      <li><strong>Datos de contacto:</strong> correo electrónico y número de WhatsApp.</li>
+      <li><strong>Datos financieros básicos:</strong> situación financiera general, objetivos de inversión y perfil de riesgo (declarados por el usuario en el chatbot de diagnóstico).</li>
+      <li><strong>Datos de navegación:</strong> información técnica del dispositivo y navegador (cookies de funcionamiento y analíticas).</li>
+      <li><strong>Datos de agendamiento:</strong> fecha y hora de la sesión de consultoría solicitada.</li>
+    </ul>
+
+    <h3 style="font-size:14px;font-weight:600;color:#0D1B2A;margin:16px 0 6px;">3. Finalidad del tratamiento</h3>
+    <ul style="font-size:13px;color:#444;line-height:1.8;padding-left:20px;margin-bottom:12px;">
+      <li>Gestionar el agendamiento y prestación del servicio de consultoría financiera.</li>
+      <li>Enviar confirmaciones, recordatorios y comunicaciones relacionadas con el servicio contratado.</li>
+      <li>Contactar a potenciales clientes que hayan expresado interés en nuestros servicios.</li>
+      <li>Mejorar nuestros servicios y personalizar la experiencia del usuario.</li>
+      <li>Cumplir obligaciones legales aplicables.</li>
+    </ul>
+
+    <h3 style="font-size:14px;font-weight:600;color:#0D1B2A;margin:16px 0 6px;">4. Política de cookies</h3>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:8px;">Este sitio web utiliza cookies para mejorar la experiencia del usuario. Al continuar navegando, aceptas su uso. Tipos de cookies que usamos:</p>
+    <ul style="font-size:13px;color:#444;line-height:1.8;padding-left:20px;margin-bottom:12px;">
+      <li><strong>Cookies técnicas (necesarias):</strong> permiten el funcionamiento básico del sitio. No pueden desactivarse.</li>
+      <li><strong>Cookies analíticas:</strong> nos permiten medir visitas y comportamiento de navegación para mejorar el servicio.</li>
+    </ul>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;">Puedes configurar tu navegador para rechazar cookies, aunque esto puede afectar el funcionamiento del sitio.</p>
+
+    <h3 style="font-size:14px;font-weight:600;color:#0D1B2A;margin:16px 0 6px;">5. Conservación y derechos</h3>
+    <p style="font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;">Los datos se conservarán mientras sean necesarios para la prestación del servicio o hasta que el titular solicite su eliminación. Puedes ejercer tus derechos de acceso, rectificación, cancelación u oposición escribiendo a <strong>diegobernal2004@gmail.com</strong>.</p>
+
+    <p style="font-size:12px;color:#9E9E9E;margin-top:20px;border-top:1px solid #eee;padding-top:16px;">Esta política se rige por la Ley 1581 de 2012 (Habeas Data) y el Decreto 1377 de 2013 de la República de Colombia.</p>
+    <button onclick="document.getElementById('modalPrivacidad').style.display='none'" style="width:100%;margin-top:16px;padding:12px;background:#0D1B2A;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;">Entendido, cerrar</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- BANNER DE COOKIES -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#0D1B2A;color:#fff;padding:16px 24px;z-index:9998;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:2px solid rgba(201,168,76,.4);">
+  <p style="font-size:13px;color:rgba(255,255,255,.8);margin:0;flex:1;min-width:280px;">
+    🍪 Usamos cookies para mejorar tu experiencia y recopilar información de navegación. Al continuar, aceptas nuestra
+    <a href="#" onclick="document.getElementById('cookieBanner').style.display='none';document.getElementById('modalPrivacidad').style.display='flex';return false;" style="color:#C9A84C;text-decoration:underline;">política de privacidad</a>.
+  </p>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="acceptCookies()" style="background:#C9A84C;color:#0D1B2A;border:none;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Aceptar</button>
+    <button onclick="document.getElementById('cookieBanner').style.display='none'" style="background:transparent;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);padding:9px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">Rechazar</button>
+  </div>
+</div>
+
+<script>
+// ── COOKIES Y CAPTURA DE VISITANTES ──────────────────
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbweacMmPECyU0efAVbszJrtmVj6ELcU99MZgCU0r0kfCbh4gxnDdSkZeobXzKE7ApEc/exec';
+
+function setCookie(name, val, days) {
+  const d = new Date(); d.setTime(d.getTime() + days*24*60*60*1000);
+  document.cookie = `${name}=${val};expires=${d.toUTCString()};path=/`;
+}
+function getCookie(name) {
+  const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return v ? v.pop() : '';
+}
+
+// Genera o recupera el Session ID del visitante
+function getSessionId() {
+  let sid = getCookie('dbe_session');
+  if (!sid) {
+    sid = 'SID-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+    setCookie('dbe_session', sid, 1); // dura 1 día
+  }
+  return sid;
+}
+
+// Detecta la fuente de tráfico
+function detectFuente() {
+  const ref = document.referrer || '';
+  const params = new URLSearchParams(window.location.search);
+  const utm = params.get('utm_source') || params.get('utm_medium') || '';
+
+  if (utm) return 'UTM: ' + utm;
+  if (!ref) return 'Directo';
+  if (ref.includes('instagram')) return 'Instagram';
+  if (ref.includes('tiktok')) return 'TikTok';
+  if (ref.includes('facebook') || ref.includes('fb.')) return 'Facebook';
+  if (ref.includes('twitter') || ref.includes('t.co')) return 'Twitter/X';
+  if (ref.includes('linkedin')) return 'LinkedIn';
+  if (ref.includes('youtube')) return 'YouTube';
+  if (ref.includes('google')) return 'Google';
+  if (ref.includes('whatsapp')) return 'WhatsApp';
+  return 'Otro: ' + ref.split('/')[2];
+}
+
+// Detecta tipo de dispositivo
+function detectDispositivo() {
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/.test(ua)) return 'iOS';
+  if (/Android/.test(ua)) return 'Android';
+  if (/Mac/.test(ua)) return 'Mac';
+  if (/Windows/.test(ua)) return 'Windows';
+  return 'Otro';
+}
+
+// Envía cualquier evento al funnel
+async function trackEvent(tipo, extra = {}) {
+  try {
+    const payload = {
+      tipo,
+      session_id: getSessionId(),
+      fuente: detectFuente(),
+      dispositivo: detectDispositivo(),
+      fecha_registro: new Date().toLocaleString('es-CO', {timeZone:'America/Bogota'}),
+      ...extra
+    };
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch(e) { console.log('Funnel tracking error:', e); }
+}
+
+function acceptCookies() {
+  setCookie('dbe_cookies_accepted', 'true', 365);
+  document.getElementById('cookieBanner').style.display = 'none';
+  trackEvent('VISITANTE', { nombre: '(visitante anónimo)', estado: 'Visitante web' });
+}
+
+// Mostrar banner si no ha aceptado cookies
+window.addEventListener('load', () => {
+  if (!getCookie('dbe_cookies_accepted')) {
+    document.getElementById('cookieBanner').style.display = 'flex';
+  } else {
+    trackEvent('VISITANTE', { nombre: '(visitante recurrente)', estado: 'Visitante web' });
+  }
+});
+
+// Exponer trackEvent globalmente para que el chatbot también pueda usarlo
+window.dbeTrack = trackEvent;
+window.dbeSessionId = getSessionId;
+window.dbeFuente = detectFuente;
+
+// Cerrar modales al hacer clic fuera
+['modalTerminos','modalPrivacidad'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+});
+</script>
+</body>
+</html>
