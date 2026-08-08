@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="vIMfylS88X_-bbMqzBHP2MjfRpSb_7m3Efe72469xT8" />
+<title>DBE Investment Trust — El ecosistema financiero que transforma tu dinero</title>
+<meta name="description" content="DBE Financial Club: suscríbete por $24.900/mes y accede a análisis, señales y educación financiera de alto valor. Cuando estés listo, da el salto a la consultoría 1:1.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0D1B2A;--navy2:#162234;--gold:#C9A84C;--gold-light:#F0D78C;
+  --cream:#FAF7F2;--white:#FFFFFF;--muted:#7A7A8A;--border:#E8E2D8;
+  --teal:#1D7A6A;--teal-light:#E4F4F1;--success:#1A7A4A;--success-light:#E4F4EC;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);line-height:1.7;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(13,27,42,.97);backdrop-filter:blur(12px);
+  padding:0 48px;height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(201,168,76,.12);}
+.nav-brand{font-family:'Playfair Display',serif;font-size:18px;color:#fff;text-decoration:none;letter-spacing:.3px;}
+.nav-brand span{color:var(--gold);}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-size:13px;color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-cta{background:var(--gold);color:var(--navy);padding:9px 22px;
+  border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s;}
+.nav-cta:hover{background:var(--gold-light);}
+
+/* ── HERO ── */
+.hero{min-height:100vh;background:var(--navy);display:flex;align-items:center;
+  padding:100px 48px 80px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 70% at 90% 40%,rgba(201,168,76,.06) 0%,transparent 65%),
+             radial-gradient(ellipse 60% 50% at 10% 80%,rgba(29,122,106,.06) 0%,transparent 60%);}
+.hero-grid-lines{position:absolute;inset:0;opacity:.025;
+  background-image:linear-gradient(rgba(201,168,76,1) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(201,168,76,1) 1px,transparent 1px);
+  background-size:80px 80px;}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:1;}
+.hero-left{}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(201,168,76,.3);border-radius:30px;
+  padding:6px 16px;margin-bottom:28px;}
+.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
+.hero-eyebrow span{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(38px,4.5vw,58px);
+  color:#fff;line-height:1.1;margin-bottom:20px;letter-spacing:-.5px;}
+.hero h1 em{color:var(--gold-light);font-style:italic;}
+.hero-sub{font-size:17px;color:rgba(255,255,255,.55);line-height:1.75;
+  max-width:460px;margin-bottom:36px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-gold{background:var(--gold);color:var(--navy);padding:15px 28px;
+  border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;
+  transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);}
+.btn-ghost{border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.75);
+  padding:15px 24px;border-radius:10px;font-size:15px;text-decoration:none;transition:all .2s;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+/* Hero right — club card */
+.hero-card{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);
+  border-radius:20px;padding:36px;backdrop-filter:blur(10px);}
+.hero-card-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;display:block;}
+.hero-price{font-family:'Playfair Display',serif;font-size:52px;color:var(--gold-light);
+  line-height:1;margin-bottom:4px;}
+.hero-price-sub{font-size:13px;color:rgba(255,255,255,.35);margin-bottom:24px;letter-spacing:.3px;}
+.hero-features{list-style:none;margin-bottom:24px;}
+.hero-features li{font-size:13px;color:rgba(255,255,255,.65);padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);display:flex;gap:8px;}
+.hero-features li:last-child{border-bottom:none;}
+.hf-check{color:var(--gold);flex-shrink:0;}
+.hero-cta-btn{display:block;width:100%;padding:15px;background:var(--gold);
+  color:var(--navy);border-radius:10px;font-size:15px;font-weight:700;
+  text-align:center;text-decoration:none;font-family:'Playfair Display',serif;
+  transition:all .2s;letter-spacing:.3px;}
+.hero-cta-btn:hover{background:var(--gold-light);}
+.hero-cta-note{font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:10px;}
+/* Stats strip */
+.stats-strip{background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.06);
+  padding:24px 48px;display:flex;justify-content:center;gap:64px;flex-wrap:wrap;}
+.stat-item{text-align:center;}
+.stat-val{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold-light);display:block;line-height:1;}
+.stat-label{font-size:11px;color:rgba(255,255,255,.35);margin-top:4px;letter-spacing:.5px;}
+
+/* ── SECTIONS ── */
+section{padding:96px 48px;}
+.section-inner{max-width:1000px;margin:0 auto;}
+.eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;display:block;}
+h2{font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,40px);
+  color:var(--navy);line-height:1.2;margin-bottom:16px;}
+.section-sub{font-size:16px;color:var(--muted);max-width:560px;margin-bottom:48px;line-height:1.7;}
+.gold-bar{width:32px;height:2.5px;background:var(--gold);border-radius:2px;margin-bottom:16px;}
+
+/* ── QUE ES EL CLUB ── */
+.club-intro{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+.club-intro-visual{background:var(--navy);border-radius:20px;padding:40px;position:relative;overflow:hidden;}
+.club-intro-visual::before{content:'';position:absolute;right:-40px;top:-40px;
+  width:180px;height:180px;border-radius:50%;border:1px solid rgba(201,168,76,.1);}
+.club-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.club-stat{background:rgba(255,255,255,.05);border-radius:12px;padding:20px;border:1px solid rgba(201,168,76,.1);}
+.club-stat-val{font-family:'Playfair Display',serif;font-size:32px;color:var(--gold-light);display:block;line-height:1;}
+.club-stat-label{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;line-height:1.4;}
+
+/* ── BENEFICIOS ── */
+.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+.benefit-card{background:var(--white);border:1px solid var(--border);border-radius:16px;
+  padding:28px;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;}
+.benefit-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);}
+.benefit-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(13,27,42,.08);}
+.benefit-icon{width:44px;height:44px;border-radius:10px;background:var(--navy);
+  display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px;}
+.benefit-card h3{font-size:15px;font-weight:500;margin-bottom:8px;color:var(--navy);}
+.benefit-card p{font-size:13px;color:var(--muted);line-height:1.65;}
+.benefit-freq{display:inline-block;background:var(--success-light);color:var(--success);
+  font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:10px;letter-spacing:.5px;}
+
+/* ── PRECIO ── */
+.pricing-dark{background:var(--navy);}
+.pricing-dark h2{color:#fff;}
+.pricing-dark .section-sub{color:rgba(255,255,255,.5);}
+.pricing-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:40px;}
+.p-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;padding:32px;}
+.p-card.featured{background:rgba(201,168,76,.08);border-color:var(--gold);}
+.p-card-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.4);margin-bottom:12px;display:block;}
+.p-card.featured .p-card-label{color:var(--gold);}
+.p-card-amount{font-family:'Playfair Display',serif;font-size:44px;
+  color:var(--gold-light);line-height:1;margin-bottom:4px;}
+.p-card-period{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:24px;}
+.p-card ul{list-style:none;margin-bottom:24px;}
+.p-card li{font-size:13px;color:rgba(255,255,255,.6);padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);display:flex;gap:8px;align-items:flex-start;}
+.p-card li:last-child{border-bottom:none;}
+.li-gold{color:var(--gold);flex-shrink:0;font-weight:700;}
+.p-btn{display:block;padding:14px;border-radius:10px;font-size:14px;
+  font-weight:600;text-align:center;text-decoration:none;transition:all .2s;font-family:'DM Sans',sans-serif;}
+.p-btn.gold{background:var(--gold);color:var(--navy);}
+.p-btn.gold:hover{background:var(--gold-light);}
+.p-btn.outline{border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);}
+.p-btn.outline:hover{border-color:var(--gold);color:var(--gold);}
+.p-note{font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:8px;}
+
+/* ── ECOSISTEMA / ESCALERA ── */
+.ecosystem-wrap{max-width:680px;margin:48px auto 0;display:flex;flex-direction:column;gap:4px;}
+.eco-step{border-radius:12px;padding:20px 24px;display:flex;align-items:center;gap:20px;}
+.eco-num{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
+.eco-text{flex:1;}
+.eco-text strong{color:#fff;font-size:15px;display:block;margin-bottom:3px;}
+.eco-text span{font-size:12px;color:rgba(255,255,255,.45);}
+.eco-price{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold-light);flex-shrink:0;}
+.eco-arrow{text-align:center;color:rgba(201,168,76,.4);font-size:18px;margin:2px 0;}
+
+/* ── CONSULTORÍA 1:1 ── */
+.consult-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-top:40px;}
+.consult-features{list-style:none;}
+.consult-features li{display:flex;gap:14px;padding:16px 0;
+  border-bottom:1px solid var(--border);align-items:flex-start;}
+.consult-features li:last-child{border-bottom:none;}
+.cf-icon{width:36px;height:36px;border-radius:8px;background:var(--navy);
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px;}
+.cf-text strong{font-size:14px;color:var(--navy);display:block;margin-bottom:3px;}
+.cf-text span{font-size:13px;color:var(--muted);}
+.consult-cta-box{background:var(--navy);border-radius:20px;padding:36px;position:sticky;top:88px;}
+.consult-cta-box h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold-light);
+  margin-bottom:8px;}
+.consult-cta-box p{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:24px;line-height:1.6;}
+.consult-price{font-family:'Playfair Display',serif;font-size:40px;color:var(--gold-light);
+  line-height:1;margin-bottom:4px;}
+.consult-price-note{font-size:12px;color:rgba(255,255,255,.3);margin-bottom:24px;}
+.consult-discount{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);
+  border-radius:8px;padding:12px 16px;margin-bottom:20px;}
+.consult-discount p{font-size:12px;color:var(--gold);margin:0;line-height:1.5;}
+.consult-cta-btn{display:block;width:100%;padding:15px;background:var(--gold);
+  color:var(--navy);border-radius:10px;font-size:15px;font-weight:700;
+  text-align:center;text-decoration:none;font-family:'Playfair Display',serif;
+  transition:all .2s;margin-bottom:8px;}
+.consult-cta-btn:hover{background:var(--gold-light);}
+.consult-note{font-size:11px;color:rgba(255,255,255,.25);text-align:center;}
+.member-badge{display:inline-flex;align-items:center;gap:6px;
+  background:var(--success-light);border-radius:20px;padding:4px 12px;margin-bottom:16px;}
+.member-badge span{font-size:11px;color:var(--success);font-weight:500;}
+
+/* ── CONTACTO ── */
+.contact-dark{background:var(--navy);}
+.contact-dark h2{color:#fff;}
+.contact-dark .section-sub{color:rgba(255,255,255,.5);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.contact-item{display:flex;gap:16px;margin-bottom:24px;}
+.contact-item-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+.contact-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.35);margin-bottom:3px;display:block;}
+.contact-val{font-size:15px;color:rgba(255,255,255,.8);font-weight:500;}
+.contact-form{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:28px;}
+.cf-label{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:5px;display:block;letter-spacing:.3px;}
+.cf-input{width:100%;padding:11px 14px;margin-bottom:14px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:8px;color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:border-color .2s;}
+.cf-input:focus{border-color:var(--gold);}
+.cf-input::placeholder{color:rgba(255,255,255,.25);}
+.cf-btn{width:100%;padding:14px;background:var(--gold);border:none;
+  border-radius:10px;color:var(--navy);font-size:15px;font-weight:700;
+  font-family:'Playfair Display',serif;cursor:pointer;transition:all .2s;}
+.cf-btn:hover{background:var(--gold-light);}
+
+/* ── FOOTER ── */
+footer{background:#080F18;padding:32px 48px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-brand{font-family:'Playfair Display',serif;font-size:16px;color:rgba(255,255,255,.35);}
+.footer-brand span{color:var(--gold);}
+.footer-copy{font-size:11px;color:rgba(255,255,255,.2);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-links a{font-size:12px;color:rgba(255,255,255,.3);text-decoration:none;}
+.footer-links a:hover{color:var(--gold);}
+
+/* MODALS */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);
+  z-index:9999;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:#fff;border-radius:16px;max-width:660px;width:100%;
+  max-height:85vh;overflow-y:auto;padding:36px;position:relative;}
+.modal-close{position:absolute;top:16px;right:16px;background:none;
+  border:none;font-size:22px;cursor:pointer;color:var(--muted);}
+.modal-box h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:6px;}
+.modal-date{font-size:12px;color:#9E9E9E;margin-bottom:24px;}
+.modal-box h3{font-size:14px;font-weight:600;color:var(--navy);margin:16px 0 6px;}
+.modal-box p{font-size:13px;color:#444;line-height:1.7;margin-bottom:12px;}
+.modal-box ul{font-size:13px;color:#444;line-height:1.8;padding-left:20px;margin-bottom:12px;}
+.modal-confirm{width:100%;margin-top:16px;padding:12px;background:var(--navy);
+  color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* COOKIE */
+#cookieBanner{display:none;position:fixed;bottom:0;left:0;right:0;
+  background:var(--navy);color:#fff;padding:16px 24px;z-index:9998;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;border-top:2px solid rgba(201,168,76,.4);}
+#cookieBanner p{font-size:13px;color:rgba(255,255,255,.8);margin:0;flex:1;min-width:280px;}
+.cookie-btns{display:flex;gap:10px;flex-shrink:0;}
+.cookie-accept{background:var(--gold);color:var(--navy);border:none;
+  padding:9px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;}
+.cookie-reject{background:transparent;color:rgba(255,255,255,.5);
+  border:1px solid rgba(255,255,255,.2);padding:9px 14px;border-radius:8px;
+  font-size:13px;cursor:pointer;}
+
+@media(max-width:768px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  section{padding:64px 20px;}
+  .hero{padding:100px 20px 60px;}
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-card{display:none;}
+  .stats-strip{gap:32px;padding:24px 20px;}
+  .club-intro{grid-template-columns:1fr;}
+  .consult-grid{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  footer{flex-direction:column;text-align:center;padding:28px 20px;}
+  .pricing-cards{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">DBE <span>Investment Trust</span></a>
+  <ul class="nav-links">
+    <li><a href="#club">El Club</a></li>
+    <li><a href="#beneficios">Beneficios</a></li>
+    <li><a href="#consultoria">Consultoría 1:1</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#precio" class="nav-cta">Unirme — $24.900/mes</a>
+</nav>
+
+<!-- HERO -->
+<div style="background:var(--navy);">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
+          <span>DBE Financial Club · Ecosistema financiero</span>
+        </div>
+        <h1>Tu dinero merece<br>una <em>estrategia real</em></h1>
+        <p class="hero-sub">Análisis, señales de inversión y educación financiera de alto valor — por menos de lo que gastas en streaming. Cuando estés listo, el siguiente nivel te espera.</p>
+        <div class="hero-btns">
+          <a href="#precio" class="btn-gold">Unirme al Club →</a>
+          <a href="#club" class="btn-ghost">¿Cómo funciona?</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <span class="hero-card-label">DBE Financial Club</span>
+        <div class="hero-price">$24.900</div>
+        <div class="hero-price-sub">COP / mes · débito automático · cancela cuando quieras</div>
+        <ul class="hero-features">
+          <li><span class="hf-check">✓</span> Análisis de mercado semanal</li>
+          <li><span class="hf-check">✓</span> Señales de inversión 2-3x/semana</li>
+          <li><span class="hf-check">✓</span> Clases grabadas de finanzas</li>
+          <li><span class="hf-check">✓</span> Newsletter quincenal exclusivo</li>
+          <li><span class="hf-check">✓</span> Comunidad privada exclusiva de miembros</li>
+          <li><span class="hf-check">✓</span> Acceso a consultoría 1:1 con 20% dcto</li>
+        </ul>
+        <a href="https://checkout.wompi.co/l/SOXiPI" target="_blank" class="hero-cta-btn">
+          Quiero unirme al Club
+        </a>
+        <p class="hero-cta-note">Sin permanencia mínima · Acceso inmediato</p>
+      </div>
+    </div>
+  </section>
+  <div class="stats-strip">
+    <div class="stat-item"><span class="stat-val">$24.900</span><div class="stat-label">COP / mes</div></div>
+    <div class="stat-item"><span class="stat-val">13–25%</span><div class="stat-label">Retorno anual portafolio</div></div>
+    <div class="stat-item"><span class="stat-val">Wall St + RE</span><div class="stat-label">Bolsa + Bienes Raíces</div></div>
+    <div class="stat-item"><span class="stat-val">100%</span><div class="stat-label">Digital · Desde Colombia</div></div>
+  </div>
+</div>
+
+<!-- QUE ES EL CLUB -->
+<section id="club">
+  <div class="section-inner">
+    <div class="club-intro">
+      <div>
+        <span class="eyebrow">Qué es el Club</span>
+        <div class="gold-bar"></div>
+        <h2>El primer paso hacia tu libertad financiera</h2>
+        <p style="font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:20px;">
+          El DBE Financial Club es tu comunidad de finanzas personales de alto valor. Cada semana recibes análisis reales, señales de inversión concretas y clases que te enseñan lo que nadie te explicó sobre el dinero.
+        </p>
+        <p style="font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:28px;">
+          No es teoría. No es motivación. Es información accionable para que empieces a tomar mejores decisiones financieras desde hoy — y cuando estés listo, el acceso a consultoría personalizada 1:1 ya está dentro del ecosistema.
+        </p>
+        <a href="#precio" class="btn-gold">Comenzar por $24.900/mes →</a>
+      </div>
+      <div class="club-intro-visual">
+        <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:block;">El ecosistema DBE</span>
+        <div class="club-stat-grid">
+          <div class="club-stat">
+            <span class="club-stat-val">4+</span>
+            <span class="club-stat-label">Contenidos por semana</span>
+          </div>
+          <div class="club-stat">
+            <span class="club-stat-val">20%</span>
+            <span class="club-stat-label">Descuento en consultoría 1:1</span>
+          </div>
+          <div class="club-stat">
+            <span class="club-stat-val">Wall St</span>
+            <span class="club-stat-label">Bolsa + Bienes Raíces</span>
+          </div>
+          <div class="club-stat">
+            <span class="club-stat-val">24/7</span>
+            <span class="club-stat-label">Comunidad activa</span>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);">
+          <p style="font-size:12px;color:rgba(255,255,255,.35);line-height:1.6;font-style:italic;">
+            "El club es la puerta de entrada al ecosistema DBE. Aprende, crece y cuando estés listo, da el salto a la consultoría personalizada."
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section id="beneficios" style="background:var(--white);padding-top:0;">
+  <div class="section-inner">
+    <span class="eyebrow">Contenido del club</span>
+    <div class="gold-bar"></div>
+    <h2>Todo lo que recibes<br>con tu membresía</h2>
+    <p class="section-sub">Contenido educativo, analítico y accionable — diseñado para que entiendas los mercados y tomes mejores decisiones.</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">📊</div>
+        <h3>Análisis de mercado semanal</h3>
+        <p>Qué pasó en Wall Street, Colombia y bienes raíces. Qué subió, qué bajó y por qué importa para tu portafolio.</p>
+        <span class="benefit-freq">Cada lunes</span>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🎯</div>
+        <h3>Señales de inversión</h3>
+        <p>Alertas sobre oportunidades concretas en acciones, ETFs y finca raíz. Con análisis de riesgo y retorno para cada señal.</p>
+        <span class="benefit-freq">2-3 veces / semana</span>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🎓</div>
+        <h3>Clases grabadas</h3>
+        <p>Videos cortos (10-15 min) sobre conceptos clave: diversificación, análisis fundamental, bienes raíces y protección de patrimonio.</p>
+        <span class="benefit-freq">Nuevo cada semana</span>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📰</div>
+        <h3>Newsletter exclusivo</h3>
+        <p>Noticias económicas relevantes para Colombia, explicadas en lenguaje simple y con perspectiva accionable.</p>
+        <span class="benefit-freq">Cada 15 días</span>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">💬</div>
+        <h3>Comunidad privada</h3>
+        <p>Comunidad privada exclusiva para miembros donde compartimos análisis en tiempo real y respondemos preguntas.</p>
+        <span class="benefit-freq">Acceso permanente</span>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⭐</div>
+        <h3>Acceso a consultoría 1:1</h3>
+        <p>Como miembro del club tienes acceso exclusivo a consultoría personalizada con un 20% de descuento en tu primera sesión.</p>
+        <span class="benefit-freq">Disponible desde el día 1</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRECIO -->
+<section id="precio" class="pricing-dark">
+  <div class="section-inner">
+    <span class="eyebrow" style="color:var(--gold);">Elige tu nivel</span>
+    <div class="gold-bar"></div>
+    <h2>El ecosistema completo</h2>
+    <p class="section-sub">Empieza por el club. Cuando estés listo para el siguiente nivel, la consultoría ya está esperándote dentro del ecosistema.</p>
+
+    <!-- Escalera de valor -->
+    <div class="ecosystem-wrap">
+      <div class="eco-step" style="background:var(--teal);">
+        <div class="eco-num">1</div>
+        <div class="eco-text">
+          <strong>DBE Financial Club</strong>
+          <span>Educación · Análisis · Señales · Comunidad — la entrada al ecosistema</span>
+        </div>
+        <div class="eco-price">$24.900/mes</div>
+      </div>
+      <div class="eco-arrow">↓</div>
+      <div class="eco-step" style="background:#1A5C8A;width:90%;margin:0 auto;">
+        <div class="eco-num">2</div>
+        <div class="eco-text">
+          <strong>Primera consultoría (exclusivo miembros)</strong>
+          <span>Diagnóstico + plan de portafolio personalizado · 20% de descuento</span>
+        </div>
+        <div class="eco-price">$320.000</div>
+      </div>
+      <div class="eco-arrow">↓</div>
+      <div class="eco-step" style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);width:80%;margin:0 auto;">
+        <div class="eco-num">3</div>
+        <div class="eco-text">
+          <strong>Consultoría mensual activa</strong>
+          <span>Seguimiento, ajuste de portafolio e informes mensuales personalizados</span>
+        </div>
+        <div class="eco-price">$400.000/mes</div>
+      </div>
+    </div>
+
+    <div class="pricing-cards" style="margin-top:48px;">
+      <div class="p-card featured">
+        <span class="p-card-label">⭐ Empieza aquí</span>
+        <div class="p-card-amount">$24.900</div>
+        <div class="p-card-period">COP / mes · débito automático</div>
+        <ul>
+          <li><span class="li-gold">✓</span> Análisis de mercado semanal</li>
+          <li><span class="li-gold">✓</span> Señales de inversión (2-3/semana)</li>
+          <li><span class="li-gold">✓</span> Clases grabadas de finanzas</li>
+          <li><span class="li-gold">✓</span> Newsletter quincenal exclusivo</li>
+          <li><span class="li-gold">✓</span> Comunidad privada de miembros</li>
+          <li><span class="li-gold">✓</span> 20% dcto en primera consultoría</li>
+        </ul>
+        <a href="https://checkout.wompi.co/l/SOXiPI" target="_blank" class="p-btn gold">Unirme al Club →</a>
+        <p class="p-note">Sin permanencia · Cancela cuando quieras</p>
+      </div>
+      <div class="p-card">
+        <span class="p-card-label">Solo para miembros del Club</span>
+        <div class="p-card-amount">$320.000</div>
+        <div class="p-card-period">COP · primera sesión con 20% dcto</div>
+        <ul>
+          <li><span class="li-gold">✓</span> Todo lo del Club incluido</li>
+          <li><span class="li-gold">✓</span> Sesión 1:1 de 60 min por Meet</li>
+          <li><span class="li-gold">✓</span> Plan de portafolio personalizado</li>
+          <li><span class="li-gold">✓</span> Informe escrito en 24h</li>
+          <li><span class="li-gold">✓</span> Soporte directo con el asesor</li>
+          <li><span class="li-gold">✓</span> Renovación mensual a $400.000</li>
+        </ul>
+        <a href="chatbot_LISTO.html" class="p-btn outline">Agendar consultoría →</a>
+        <p class="p-note">Disponible una vez eres miembro del Club</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONSULTORIA 1:1 -->
+<section id="consultoria">
+  <div class="section-inner">
+    <span class="eyebrow">El siguiente nivel</span>
+    <div class="gold-bar"></div>
+    <h2>Consultoría 1:1<br>para miembros del Club</h2>
+    <p class="section-sub">Cuando el contenido del club te haya dado la base, el siguiente paso es un plan diseñado exclusivamente para tu situación, metas y perfil de riesgo.</p>
+    <div class="consult-grid">
+      <ul class="consult-features">
+        <li>
+          <div class="cf-icon">📅</div>
+          <div class="cf-text">
+            <strong>Sesión de 60 minutos por Google Meet</strong>
+            <span>Reunión personalizada donde analizamos tu situación financiera actual y diseñamos tu estrategia de portafolio.</span>
+          </div>
+        </li>
+        <li>
+          <div class="cf-icon">📊</div>
+          <div class="cf-text">
+            <strong>Plan de portafolio personalizado</strong>
+            <span>Estrategia específica con activos concretos en bolsa (Wall Street) y bienes raíces según tu perfil de riesgo.</span>
+          </div>
+        </li>
+        <li>
+          <div class="cf-icon">📝</div>
+          <div class="cf-text">
+            <strong>Informe escrito en 48 horas</strong>
+            <span>Documento completo con tu plan, distribución de activos, retorno esperado y hoja de ruta a 12 meses.</span>
+          </div>
+        </li>
+        <li>
+          <div class="cf-icon">🔄</div>
+          <div class="cf-text">
+            <strong>Seguimiento mensual activo</strong>
+            <span>Revisión y ajuste del portafolio cada mes según el comportamiento del mercado y tus avances.</span>
+          </div>
+        </li>
+        <li>
+          <div class="cf-icon">💬</div>
+          <div class="cf-text">
+            <strong>Soporte directo con el asesor</strong>
+            <span>Acceso directo al asesor entre sesiones para preguntas urgentes o alertas del mercado.</span>
+          </div>
+        </li>
+      </ul>
+      <div class="consult-cta-box">
+        <div class="member-badge">
+          <span>⭐ Exclusivo miembros del Club</span>
+        </div>
+        <h3>Consultoría<br>personalizada</h3>
+        <p>Diseñada para miembros del DBE Financial Club que están listos para el siguiente nivel.</p>
+        <div class="consult-price">$320.000</div>
+        <div class="consult-price-note">COP · primera sesión · 20% dcto por ser miembro</div>
+        <div class="consult-discount">
+          <p>Precio regular $400.000 · Como miembro del Club pagas $320.000 en tu primera sesión.</p>
+        </div>
+        <a href="chatbot_LISTO.html" class="consult-cta-btn">Agendar mi consultoría →</a>
+        <p class="consult-note">Debes ser miembro activo del Club para acceder</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" class="contact-dark">
+  <div class="section-inner">
+    <span class="eyebrow" style="color:var(--gold);">Contáctanos</span>
+    <div class="gold-bar"></div>
+    <h2>¿Tienes preguntas?</h2>
+    <p class="section-sub">Escríbenos directamente. Respondemos en menos de 2 horas.</p>
+    <div class="contact-grid">
+      <div>
+        
+        <div class="contact-item">
+          <span class="contact-item-icon">📧</span>
+          <div><span class="contact-label">Correo</span><span class="contact-val">diegobernal2004@gmail.com</span></div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-icon">🌐</span>
+          <div><span class="contact-label">Sitio web</span><span class="contact-val">dbe-investment-trust.github.io</span></div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-icon">🕐</span>
+          <div><span class="contact-label">Atención</span><span class="contact-val">Lun–Vie · 8am – 6pm</span></div>
+        </div>
+      </div>
+      <div class="contact-form">
+        <label class="cf-label">Nombre completo</label>
+        <input type="text" class="cf-input" placeholder="Tu nombre">
+        <label class="cf-label">Correo electrónico</label>
+        <input type="email" class="cf-input" placeholder="tu@correo.com">
+        <label class="cf-label">¿En qué te podemos ayudar?</label>
+        <textarea class="cf-input" rows="3" placeholder="Cuéntanos..."></textarea>
+        <button class="cf-btn" onclick="alert('Mensaje enviado. Te contactaremos pronto.')">Enviar mensaje →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">DBE <span>Investment Trust</span></div>
+  <div class="footer-copy">© 2026 DBE Investment Trust · Colombia · Todos los derechos reservados</div>
+  <div class="footer-links">
+    <a href="#" onclick="document.getElementById('modalPrivacidad').style.display='flex';return false;">Política de privacidad</a>
+    <a href="#" onclick="document.getElementById('modalTerminos').style.display='flex';return false;">Términos y condiciones</a>
+  </div>
+</footer>
+
+<!-- MODAL TÉRMINOS -->
+<div id="modalTerminos" class="modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('modalTerminos').style.display='none'">✕</button>
+    <h2>Términos y Condiciones</h2>
+    <p class="modal-date">Última actualización: junio de 2026</p>
+    <h3>1. Naturaleza del servicio</h3>
+    <p>DBE Investment Trust presta servicios de consultoría, educación y asesoría financiera en materia de inversiones en bolsa de valores y bienes raíces. Los servicios se prestan mediante el DBE Financial Club (suscripción mensual) y sesiones de consultoría individual.</p>
+    <h3>2. Exoneración de responsabilidad — Mercados financieros</h3>
+    <p><strong>DBE Investment Trust no garantiza rentabilidades, retornos mínimos, ni la preservación del capital invertido.</strong> Toda inversión en mercados financieros conlleva riesgos inherentes, incluyendo la posibilidad de pérdida parcial o total del capital.</p>
+    <p>Las recomendaciones emitidas se basan en análisis financiero vigente al momento de la consultoría. <strong>DBE Investment Trust no se hace responsable por pérdidas</strong> derivadas de variaciones en los mercados, decisiones del cliente, cambios macroeconómicos o resultados pasados que no garantizan resultados futuros.</p>
+    <h3>3. Suscripción DBE Financial Club</h3>
+    <p>La suscripción de $24.900 COP/mes se cobra automáticamente cada mes. El cliente puede cancelar en cualquier momento sin penalización, manteniendo el acceso hasta el final del período pagado.</p>
+    <h3>4. Pagos y cancelaciones — Consultoría</h3>
+    <p>El pago de $400.000 COP por sesión debe realizarse con antelación. Cancelaciones con menos de 24 horas no tienen devolución. DBE Investment Trust puede reprogramar por fuerza mayor.</p>
+    <h3>5. Ley aplicable</h3>
+    <p>Estos términos se rigen por las leyes de la República de Colombia. Controversias se resolverán en Bogotá D.C.</p>
+    <button class="modal-confirm" onclick="document.getElementById('modalTerminos').style.display='none'">Entendido, cerrar</button>
+  </div>
+</div>
+
+<!-- MODAL PRIVACIDAD -->
+<div id="modalPrivacidad" class="modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('modalPrivacidad').style.display='none'">✕</button>
+    <h2>Política de Privacidad y Cookies</h2>
+    <p class="modal-date">Última actualización: junio de 2026</p>
+    <h3>1. Responsable del tratamiento</h3>
+    <p>DBE Investment Trust, con correo diegobernal2004@gmail.com, es responsable del tratamiento de los datos personales recopilados.</p>
+    <h3>2. Datos que recopilamos</h3>
+    <ul>
+      <li>Datos de identificación: nombre completo</li>
+      <li>Datos de contacto: correo electrónico</li>
+      <li>Datos financieros básicos: situación, objetivos y perfil de riesgo</li>
+      <li>Datos de navegación: cookies de funcionamiento y analíticas</li>
+    </ul>
+    <h3>3. Finalidad</h3>
+    <p>Gestión del servicio, envío de comunicaciones relacionadas, contacto con potenciales clientes y mejora del servicio.</p>
+    <h3>4. Cookies</h3>
+    <p>Usamos cookies técnicas (necesarias) y analíticas. Al continuar navegando, aceptas su uso. Puedes configurar tu navegador para rechazarlas.</p>
+    <h3>5. Derechos</h3>
+    <p>Puedes ejercer tus derechos de acceso, rectificación y cancelación escribiendo a diegobernal2004@gmail.com. Rige la Ley 1581 de 2012 de Colombia.</p>
+    <button class="modal-confirm" onclick="document.getElementById('modalPrivacidad').style.display='none'">Entendido, cerrar</button>
+  </div>
+</div>
+
+<!-- BANNER COOKIES -->
+<div id="cookieBanner">
+  <p>Usamos cookies para mejorar tu experiencia. Al continuar, aceptas nuestra <a href="#" onclick="document.getElementById('modalPrivacidad').style.display='flex';return false;" style="color:var(--gold);">política de privacidad</a>.</p>
+  <div class="cookie-btns">
+    <button class="cookie-accept" onclick="acceptCookies()">Aceptar</button>
+    <button class="cookie-reject" onclick="document.getElementById('cookieBanner').style.display='none'">Rechazar</button>
+  </div>
+</div>
+
+<script>
+// Cerrar modales al hacer clic fuera
+['modalTerminos','modalPrivacidad'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+});
+
+// Cookies
+function setCookie(n,v,d){const dt=new Date();dt.setTime(dt.getTime()+d*86400000);document.cookie=n+'='+v+';expires='+dt.toUTCString()+';path=/';}
+function getCookie(n){const v=document.cookie.match('(^|;)\\s*'+n+'\\s*=\\s*([^;]+)');return v?v.pop():'';}
+
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbxP66bSeUEIbvxkMnt6AsKECFWoFi2N5qdbAGKwxISnsbAjzFZPSuSfqpLxdgWA53EG/exec';
+
+function getOrCreateSession(){
+  let sid=getCookie('dbe_session');
+  if(!sid){sid='SID-'+Date.now()+'-'+Math.random().toString(36).substr(2,6).toUpperCase();
+  const d=new Date();d.setTime(d.getTime()+86400000);
+  document.cookie='dbe_session='+sid+';expires='+d.toUTCString()+';path=/';}
+  return sid;
+}
+function detectFuente(){
+  const ref=document.referrer||'';
+  if(!ref)return'Directo';
+  if(ref.includes('instagram'))return'Instagram';
+  if(ref.includes('tiktok'))return'TikTok';
+  if(ref.includes('facebook')||ref.includes('fb.'))return'Facebook';
+  if(ref.includes('linkedin'))return'LinkedIn';
+  if(ref.includes('youtube'))return'YouTube';
+  if(ref.includes('google'))return'Google';
+  return'Referido: '+ref.split('/')[2];
+}
+function detectDispositivo(){
+  const ua=navigator.userAgent;
+  if(/iPhone|iPad/.test(ua))return'iOS';
+  if(/Android/.test(ua))return'Android';
+  if(/Mac/.test(ua))return'Mac';
+  if(/Windows/.test(ua))return'Windows';
+  return'Otro';
+}
+async function trackEvent(tipo,extra={}){
+  try{
+    await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({tipo,session_id:getOrCreateSession(),
+        fuente:detectFuente(),dispositivo:detectDispositivo(),
+        fecha_registro:new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'}),
+        ...extra})});
+  }catch(e){console.log('Track error:',e);}
+}
+function acceptCookies(){
+  setCookie('dbe_cookies_accepted','true',365);
+  document.getElementById('cookieBanner').style.display='none';
+  trackEvent('VISITANTE',{nombre:'(visitante anonimo)',estado:'Visitante web'});
+}
+window.addEventListener('load',()=>{
+  if(!getCookie('dbe_cookies_accepted')){
+    document.getElementById('cookieBanner').style.display='flex';
+  } else {
+    trackEvent('VISITANTE',{nombre:'(visitante recurrente)',estado:'Visitante web'});
+  }
+});
+window.dbeTrack=trackEvent;
+window.dbeSessionId=getOrCreateSession;
+window.dbeFuente=detectFuente;
+</script>
+
+<!-- ── DIBIE FLOATING BUTTON ──────────────────────────────── -->
+<div id="dibieFloat" style="position:fixed;bottom:28px;right:28px;z-index:9000;display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+
+  <!-- Tooltip bubble -->
+  <div id="dibieTip" style="background:var(--navy);color:#fff;padding:12px 16px;border-radius:12px 12px 0 12px;
+    font-size:13px;max-width:220px;line-height:1.5;box-shadow:0 8px 32px rgba(13,27,42,.25);
+    display:none;border:1px solid rgba(201,168,76,.2);">
+    <strong style="color:var(--gold-light);">Hola, soy Dibie 👋</strong><br>
+    <span style="color:rgba(255,255,255,.7);">Tu agente financiero IA. ¿En qué te ayudo?</span>
+    <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+      <a href="chatbot_LISTO.html" style="background:var(--gold);color:var(--navy);padding:6px 12px;
+        border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;white-space:nowrap;">
+        Hablar con Dibie →
+      </a>
+      <button onclick="closeDibie()" style="background:transparent;border:1px solid rgba(255,255,255,.2);
+        color:rgba(255,255,255,.5);padding:6px 10px;border-radius:6px;font-size:11px;cursor:pointer;">
+        Cerrar
+      </button>
+    </div>
+  </div>
+
+  <!-- Main button -->
+  <button onclick="toggleDibie()" id="dibieBtn"
+    style="width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;
+    box-shadow:0 8px 32px rgba(13,27,42,.35);transition:transform .2s;
+    background:linear-gradient(135deg,#0D1B2A,#1D3050);padding:0;overflow:hidden;position:relative;">
+    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="60" height="60" fill="url(#fbGrad)"/>
+      <defs><linearGradient id="fbGrad" x1="0" y1="0" x2="60" y2="60">
+        <stop offset="0%" stop-color="#0D1B2A"/>
+        <stop offset="100%" stop-color="#162234"/>
+      </linearGradient></defs>
+      <circle cx="30" cy="24" r="11" fill="#C9A84C"/>
+      <circle cx="26.5" cy="22.5" r="1.8" fill="#0D1B2A"/>
+      <circle cx="33.5" cy="22.5" r="1.8" fill="#0D1B2A"/>
+      <path d="M26.5 27 Q30 30 33.5 27" stroke="#0D1B2A" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      <path d="M18 46 Q18 37 30 37 Q42 37 42 46" fill="#C9A84C" opacity="0.75"/>
+    </svg>
+    <!-- Pulse ring -->
+    <span style="position:absolute;top:-4px;right:-4px;width:16px;height:16px;
+      background:var(--gold);border-radius:50%;border:2px solid #fff;
+      font-size:9px;font-weight:700;color:var(--navy);
+      display:flex;align-items:center;justify-content:center;">IA</span>
+  </button>
+
+</div>
+
+<!-- ── DIBIE INLINE BUTTONS (en cada sección) ──────────────── -->
+<!-- Se inyectan via JS para no duplicar código HTML -->
+
+<script>
+function toggleDibie() {
+  const tip = document.getElementById('dibieTip');
+  const btn = document.getElementById('dibieBtn');
+  const isOpen = tip.style.display !== 'none';
+  tip.style.display = isOpen ? 'none' : 'block';
+  btn.style.transform = isOpen ? 'scale(1)' : 'scale(0.95)';
+  if (!isOpen) {
+    // Auto-hide after 8 seconds
+    setTimeout(() => { tip.style.display = 'none'; btn.style.transform = 'scale(1)'; }, 8000);
+  }
+}
+function closeDibie() {
+  document.getElementById('dibieTip').style.display = 'none';
+  document.getElementById('dibieBtn').style.transform = 'scale(1)';
+}
+
+// Show tooltip automatically after 6 seconds on first visit
+const dibieShown = sessionStorage.getItem('dibieShown');
+if (!dibieShown) {
+  setTimeout(() => {
+    document.getElementById('dibieTip').style.display = 'block';
+    sessionStorage.setItem('dibieShown', '1');
+    setTimeout(() => { document.getElementById('dibieTip').style.display = 'none'; }, 8000);
+  }, 6000);
+}
+
+// Inject contextual Dibie buttons into each section
+document.addEventListener('DOMContentLoaded', () => {
+
+  const btns = [
+    {
+      selector: '#club .section-inner',
+      msg: '¿Tienes dudas sobre el club?',
+      label: 'Pregúntale a Dibie →',
+      param: 'club'
+    },
+    {
+      selector: '#beneficios .section-inner',
+      msg: '¿Quieres saber más del contenido?',
+      label: 'Pregúntale a Dibie →',
+      param: 'club'
+    },
+    {
+      selector: '#precio .section-inner',
+      msg: '¿Dudas sobre el precio o cómo funciona?',
+      label: 'Habla con Dibie →',
+      param: 'precio'
+    },
+    {
+      selector: '#consultoria .section-inner',
+      msg: '¿Listo para agendar tu consultoría?',
+      label: 'Agendar con Dibie →',
+      param: 'consultoria'
+    },
+  ];
+
+  btns.forEach(({selector, msg, label, param}) => {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;align-items:center;gap:12px;margin-top:28px;padding:14px 18px;background:rgba(13,27,42,.04);border:1px solid var(--border);border-radius:10px;';
+    wrap.innerHTML = `
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="flex-shrink:0;">
+        <rect width="32" height="32" rx="8" fill="#0D1B2A"/>
+        <circle cx="16" cy="12" r="5.5" fill="#C9A84C"/>
+        <circle cx="14" cy="11" r="1.1" fill="#0D1B2A"/>
+        <circle cx="18" cy="11" r="1.1" fill="#0D1B2A"/>
+        <path d="M14 13.5 Q16 15.5 18 13.5" stroke="#0D1B2A" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+        <path d="M9 26 Q9 20 16 20 Q23 20 23 26" fill="#C9A84C" opacity="0.75"/>
+      </svg>
+      <div style="flex:1;">
+        <div style="font-size:12px;color:var(--muted);">${msg}</div>
+        <div style="font-size:11px;color:var(--gold);margin-top:1px;">Dibie · Agente IA disponible ahora</div>
+      </div>
+      <a href="chatbot_LISTO.html?from=${param}" style="background:var(--navy);color:#fff;padding:9px 16px;
+        border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap;
+        transition:background .2s;" onmouseover="this.style.background='#C9A84C';this.style.color='#0D1B2A'"
+        onmouseout="this.style.background='#0D1B2A';this.style.color='#fff'">${label}</a>
+    `;
+    el.appendChild(wrap);
+  });
+
+});
+</script>
+
+</body>
+</html>
