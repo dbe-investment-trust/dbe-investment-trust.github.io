@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBE Financial Club — Área de Miembros</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://www.paypal.com/sdk/js?client-id=BAAqWy8VHMAewVjmWhKyc6HIFGEOMyUBez3okpGALxwUD_c1c6ywG0zHiccQGPfwUpfwnZ19B45nspD0Vc&components=buttons&intent=capture" data-sdk-integration-source="button-factory"></script>
+<style>
+:root{--navy:#0D1B2A;--navy2:#162234;--gold:#C9A84C;--gold-light:#F0D78C;--cream:#FAF7F2;--white:#FFFFFF;--muted:#7A7A8A;--border:#E8E2D8;--teal:#1D7A6A;--success:#1A7A4A;--success-light:#E4F4EC;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--navy);line-height:1.7;}
+
+/* NAV */
+nav{background:var(--navy);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,168,76,.15);}
+.nav-brand{font-family:"Playfair Display",serif;font-size:17px;color:#fff;}
+.nav-brand span{color:var(--gold);}
+.nav-badge{background:var(--gold);color:var(--navy);padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;}
+
+/* LOGIN WALL */
+#loginWall{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;background:var(--navy);}
+.login-card{background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:48px 40px;max-width:440px;width:100%;text-align:center;}
+.login-card h1{font-family:"Playfair Display",serif;font-size:26px;color:var(--gold-light);margin-bottom:12px;}
+.login-card p{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:32px;line-height:1.7;}
+.login-input{width:100%;padding:12px 16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;font-size:15px;font-family:"DM Sans",sans-serif;margin-bottom:12px;outline:none;}
+.login-input:focus{border-color:var(--gold);}
+.login-btn{width:100%;padding:14px;background:var(--gold);color:var(--navy);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:"Playfair Display",serif;transition:all .2s;}
+.login-btn:hover{background:var(--gold-light);}
+.login-error{color:#FF6B6B;font-size:13px;margin-top:8px;display:none;}
+.login-divider{color:rgba(255,255,255,.3);font-size:12px;margin:20px 0;}
+.subscribe-link{color:var(--gold);text-decoration:none;font-size:13px;}
+
+/* MEMBERS AREA */
+#membersArea{display:none;}
+
+/* HEADER */
+.members-header{background:var(--navy);padding:24px 32px;border-bottom:1px solid rgba(201,168,76,.15);}
+.members-header h2{font-family:"Playfair Display",serif;font-size:22px;color:var(--gold-light);}
+.members-header p{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px;}
+
+/* LAYOUT */
+.members-layout{max-width:1100px;margin:0 auto;padding:32px 24px;display:grid;grid-template-columns:1fr 320px;gap:28px;}
+@media(max-width:768px){.members-layout{grid-template-columns:1fr;}}
+
+/* CONTENT FEED */
+.feed-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.content-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;}
+.content-card .tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:12px;letter-spacing:1px;}
+.tag-analisis{background:#E3F2FD;color:#1565C0;}
+.tag-senal{background:var(--success-light);color:var(--success);}
+.tag-clase{background:#FFF3E0;color:#E65100;}
+.tag-news{background:#F3E5F5;color:#6A1B9A;}
+.content-card h3{font-family:"Playfair Display",serif;font-size:17px;color:var(--navy);margin-bottom:8px;}
+.content-card p{font-size:14px;color:var(--muted);line-height:1.7;}
+.content-card .meta{font-size:11px;color:#BBBBBB;margin-top:12px;}
+.content-video{margin-top:16px;border-radius:10px;overflow:hidden;aspect-ratio:16/9;}
+.content-video iframe{width:100%;height:100%;border:none;}
+.content-img{margin-top:16px;border-radius:10px;overflow:hidden;max-height:300px;}
+.content-img img{width:100%;object-fit:cover;}
+.empty-feed{text-align:center;padding:48px 24px;color:var(--muted);}
+.empty-feed h3{font-family:"Playfair Display",serif;font-size:20px;margin-bottom:8px;}
+
+/* SIDEBAR */
+.sidebar{}
+.sidebar-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;}
+.sidebar-card h3{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+
+/* CONSULTORIA CARD */
+.consult-card{background:var(--navy);border-radius:16px;padding:24px;}
+.consult-card h3{font-family:"Playfair Display",serif;font-size:18px;color:var(--gold-light);margin-bottom:8px;}
+.consult-card p{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.6;}
+.consult-price{font-family:"Playfair Display",serif;font-size:32px;color:var(--gold-light);margin-bottom:4px;}
+.consult-price-sub{font-size:11px;color:rgba(255,255,255,.35);margin-bottom:20px;}
+#paypal-consult-btn{min-height:46px;}
+
+/* CEO PANEL */
+#ceoPanel{display:none;background:var(--navy2);border:1px solid rgba(201,168,76,.3);border-radius:16px;padding:24px;margin-bottom:20px;}
+#ceoPanel h3{font-size:13px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;}
+.ceo-form-group{margin-bottom:14px;}
+.ceo-label{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:4px;display:block;letter-spacing:.5px;}
+.ceo-input{width:100%;padding:10px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:13px;font-family:"DM Sans",sans-serif;outline:none;}
+.ceo-input:focus{border-color:var(--gold);}
+.ceo-select{width:100%;padding:10px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:13px;font-family:"DM Sans",sans-serif;outline:none;}
+.ceo-publish-btn{width:100%;padding:12px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:"DM Sans",sans-serif;margin-top:8px;}
+.ceo-publish-btn:hover{background:var(--gold-light);}
+.ceo-success{color:var(--gold);font-size:12px;text-align:center;margin-top:8px;display:none;}
+
+/* WELCOME */
+.welcome-banner{background:linear-gradient(135deg,var(--navy),#1A3050);border-radius:16px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;border:1px solid rgba(201,168,76,.15);}
+.welcome-avatar{width:48px;height:48px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.welcome-text strong{color:#fff;font-size:15px;display:block;}
+.welcome-text span{color:rgba(255,255,255,.5);font-size:13px;}
+
+/* LOGOUT */
+.logout-btn{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:"DM Sans",sans-serif;}
+.logout-btn:hover{border-color:var(--gold);color:var(--gold);}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">DBE <span>Financial Club</span></div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span class="nav-badge">ÁREA DE MIEMBROS</span>
+    <button class="logout-btn" onclick="logout()" id="logoutBtn">Cerrar sesión</button>
+  </div>
+</nav>
+
+<!-- ── AUTH CHECK (redirect if not logged in) ── -->
+<div id="loginWall" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy);">
+  <div style="text-align:center;color:rgba(255,255,255,.5);">
+    <div style="width:32px;height:32px;border:2px solid rgba(255,255,255,.3);border-top-color:#C9A84C;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px;"></div>
+    <p style="font-size:14px;">Verificando tu sesión...</p>
+  </div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<!-- ── MEMBERS AREA ── -->
+<div id="membersArea">
+  <div class="members-header">
+    <h2>DBE Financial Club — Área Exclusiva</h2>
+    <p id="memberWelcomeMsg">Bienvenido. Aquí encontrarás todo el contenido exclusivo del club.</p>
+  </div>
+
+  <div class="members-layout">
+
+    <!-- FEED DE CONTENIDO -->
+    <div>
+      <div class="welcome-banner">
+        <div class="welcome-avatar">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="10" r="5.5" fill="#0D1B2A"/>
+            <path d="M6 24 Q6 17 14 17 Q22 17 22 24" fill="#0D1B2A" opacity="0.8"/>
+          </svg>
+        </div>
+        <div class="welcome-text">
+          <strong id="welcomeName">Bienvenido al club</strong>
+          <span>Tienes acceso a todo el contenido exclusivo de miembros</span>
+        </div>
+      </div>
+
+      <!-- CEO PUBLISH PANEL (solo visible para el CEO) -->
+      <div id="ceoPanel">
+        <h3>Panel CEO — Publicar contenido</h3>
+        <div class="ceo-form-group">
+          <label class="ceo-label">TIPO DE CONTENIDO</label>
+          <select class="ceo-select" id="ceoTipo">
+            <option value="analisis">Análisis de mercado</option>
+            <option value="senal">Señal de inversión</option>
+            <option value="clase">Clase grabada</option>
+            <option value="news">Newsletter</option>
+          </select>
+        </div>
+        <div class="ceo-form-group">
+          <label class="ceo-label">TÍTULO</label>
+          <input class="ceo-input" id="ceoTitulo" placeholder="Título del contenido">
+        </div>
+        <div class="ceo-form-group">
+          <label class="ceo-label">CONTENIDO (texto o descripción)</label>
+          <textarea class="ceo-input" id="ceoTexto" rows="4" placeholder="Escribe el contenido aquí..."></textarea>
+        </div>
+        <div class="ceo-form-group">
+          <label class="ceo-label">URL DE IMAGEN (opcional)</label>
+          <input class="ceo-input" id="ceoImagen" placeholder="https://imagen.com/foto.jpg">
+        </div>
+        <div class="ceo-form-group">
+          <label class="ceo-label">URL DE VIDEO YOUTUBE (opcional)</label>
+          <input class="ceo-input" id="ceoVideo" placeholder="https://youtube.com/watch?v=...">
+        </div>
+        <div class="ceo-form-group">
+          <label class="ceo-label">LINK EXTERNO (opcional)</label>
+          <input class="ceo-input" id="ceoLink" placeholder="https://...">
+        </div>
+        <button class="ceo-publish-btn" onclick="publicarContenido()">Publicar para los miembros →</button>
+        <p class="ceo-success" id="ceoSuccess">Publicado exitosamente</p>
+      </div>
+
+      <!-- FEED -->
+      <p class="feed-title">Contenido exclusivo del club</p>
+      <div id="contentFeed">
+        <div class="empty-feed">
+          <h3>Contenido llegando pronto</h3>
+          <p>El equipo DBE está preparando el primer análisis semanal para ti. Vuelve mañana.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- CONSULTORÍA CARD — solo para miembros -->
+      <div class="consult-card">
+        <h3>Consultoría 1:1</h3>
+        <p>Como miembro del club tienes acceso exclusivo a sesiones personalizadas de portafolio.</p>
+        <div class="consult-price">$49.99 USD</div>
+        <div class="consult-price-sub">por sesión · 60 min por Google Meet</div>
+        <div id="paypal-consult-btn"></div>
+        <p style="font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:8px;">Pago único · Sin permanencia</p>
+      </div>
+
+      <!-- INFO CARD -->
+      <div class="sidebar-card">
+        <h3>Tu membresía</h3>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;">
+          <span style="color:var(--muted);">Plan</span>
+          <span style="font-weight:500;">DBE Financial Club</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;">
+          <span style="color:var(--muted);">Precio</span>
+          <span style="font-weight:500;color:var(--teal);">$6.99 USD/mes</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;">
+          <span style="color:var(--muted);">Estado</span>
+          <span style="font-weight:600;color:var(--success);">Activo</span>
+        </div>
+      </div>
+
+      <!-- CONTACTO -->
+      <div class="sidebar-card">
+        <h3>Soporte</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">¿Tienes dudas sobre el contenido o tu membresía?</p>
+        <a href="chatbot_LISTO.html" style="display:block;background:var(--navy);color:var(--gold-light);padding:11px 16px;border-radius:8px;font-size:13px;font-weight:600;text-align:center;text-decoration:none;">Hablar con Dibie →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── FIREBASE CONFIG ────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyAybxQJFeFizBYZ5Y_pqBGONs_cErSXfJs",
+  authDomain: "dbe-financial-club.firebaseapp.com",
+  projectId: "dbe-financial-club",
+  storageBucket: "dbe-financial-club.firebasestorage.app",
+  messagingSenderId: "1001600683639",
+  appId: "1:1001600683639:web:f1a6645b6f24df09c50072",
+  measurementId: "G-2VP9M13EBY"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+const CEO_EMAIL = 'diegobernal2004@gmail.com';
+
+// ── AUTH CHECK ─────────────────────────────────────────────
+auth.onAuthStateChanged(async (user) => {
+  if (!user) {
+    window.location.href = 'auth.html';
+    return;
+  }
+  const isCEO = user.email === CEO_EMAIL;
+  let membershipActive = false;
+
+  try {
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    membershipActive = userDoc.data()?.membershipActive || false;
+  } catch(e) {
+    console.warn('Firestore no disponible:', e.message);
+    // If Firestore fails, allow CEO in, block others
+    if (!isCEO) {
+      window.location.href = 'auth.html';
+      return;
+    }
+  }
+
+  if (!membershipActive && !isCEO) {
+    // Not a member yet - send to PayPal
+    window.location.href = 'auth.html';
+    return;
+  }
+
+  showMembersArea({
+    email: user.email,
+    name: user.displayName || user.email.split('@')[0],
+    isCEO,
+    uid: user.uid
+  });
+});
+
+function logout() {
+  auth.signOut().then(() => window.location.href = 'auth.html');
+}
+
+// ── STORAGE KEY ────────────────────────────────────────────────
+const STORAGE_KEY = 'dbe_member_session';
+const CONTENT_KEY = 'dbe_club_content';
+
+// ── LOGIN ──────────────────────────────────────────────────────
+function showMembersArea(user) {
+  document.getElementById('loginWall').style.display = 'none';
+  document.getElementById('membersArea').style.display = 'block';
+  document.getElementById('logoutBtn').style.display = 'block';
+  document.getElementById('welcomeName').textContent =
+    (user.isCEO ? 'CEO · ' : '') + user.name;
+  document.getElementById('memberWelcomeMsg').textContent =
+    user.isCEO
+      ? 'Modo CEO activo — puedes publicar contenido para todos los miembros.'
+      : 'Bienvenido. Aquí está todo el contenido exclusivo del club.';
+  if (user.isCEO) document.getElementById('ceoPanel').style.display = 'block';
+  renderFeed();
+  renderPayPalConsult();
+}
+
+function logout() {
+  sessionStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+
+
+
+
+// ── CEO PUBLISH ────────────────────────────────────────────────
+function publicarContenido() {
+  const tipo    = document.getElementById('ceoTipo').value;
+  const titulo  = document.getElementById('ceoTitulo').value.trim();
+  const texto   = document.getElementById('ceoTexto').value.trim();
+  const imagen  = document.getElementById('ceoImagen').value.trim();
+  const video   = document.getElementById('ceoVideo').value.trim();
+  const link    = document.getElementById('ceoLink').value.trim();
+
+  if (!titulo || !texto) { alert('El título y el contenido son obligatorios.'); return; }
+
+  const items = JSON.parse(localStorage.getItem(CONTENT_KEY) || '[]');
+  items.unshift({
+    id: Date.now(),
+    tipo, titulo, texto, imagen, video, link,
+    fecha: new Date().toLocaleDateString('es-CO', { day:'numeric', month:'long', year:'numeric' })
+  });
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(items));
+
+  // Clear form
+  ['ceoTitulo','ceoTexto','ceoImagen','ceoVideo','ceoLink'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('ceoSuccess').style.display = 'block';
+  setTimeout(() => document.getElementById('ceoSuccess').style.display = 'none', 2000);
+  renderFeed();
+}
+
+// ── RENDER FEED ────────────────────────────────────────────────
+function renderFeed() {
+  const items = JSON.parse(localStorage.getItem(CONTENT_KEY) || '[]');
+  const feed  = document.getElementById('contentFeed');
+
+  if (items.length === 0) {
+    feed.innerHTML = `<div class="empty-feed">
+      <h3>Contenido llegando pronto</h3>
+      <p>El equipo DBE está preparando el primer análisis semanal para ti.</p>
+    </div>`;
+    return;
+  }
+
+  const tags = {
+    analisis: ['Análisis de mercado', 'tag-analisis'],
+    senal:    ['Señal de inversión',  'tag-senal'],
+    clase:    ['Clase grabada',       'tag-clase'],
+    news:     ['Newsletter',          'tag-news'],
+  };
+
+  feed.innerHTML = items.map(item => {
+    const [tagLabel, tagClass] = tags[item.tipo] || ['Contenido', 'tag-analisis'];
+    const videoId = item.video
+      ? item.video.replace('https://www.youtube.com/watch?v=','')
+               .replace('https://youtu.be/','')
+               .split('&')[0]
+      : null;
+
+    return `<div class="content-card">
+      <span class="tag ${tagClass}">${tagLabel}</span>
+      <h3>${item.titulo}</h3>
+      <p>${item.texto}</p>
+      ${item.imagen ? `<div class="content-img"><img src="${item.imagen}" alt="${item.titulo}"></div>` : ''}
+      ${videoId ? `<div class="content-video"><iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe></div>` : ''}
+      ${item.link ? `<a href="${item.link}" target="_blank" style="display:inline-block;margin-top:12px;font-size:13px;color:var(--teal);font-weight:500;">Ver más →</a>` : ''}
+      <p class="meta">${item.fecha}</p>
+    </div>`;
+  }).join('');
+}
+
+// ── PAYPAL CONSULTORÍA (pago único) ───────────────────────────
+function renderPayPalConsult() {
+  if (typeof paypal === 'undefined') return;
+  paypal.Buttons({
+    style: { shape: 'rect', color: 'gold', layout: 'vertical', label: 'pay' },
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          description: 'Consultoría 1:1 DBE Investment Trust — 60 min',
+          amount: { value: '49.99', currency_code: 'USD' }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        alert('Pago confirmado. En los próximos 5 minutos recibirás la confirmación de tu sesión por correo.');
+        window.location.href = 'chatbot_LISTO.html?from=consultoria_paypal';
+      });
+    }
+  }).render('#paypal-consult-btn');
+}
+</script>
+
+
+
+</body>
+</html>
