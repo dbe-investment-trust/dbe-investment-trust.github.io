@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comunidad DBE — Tu voz importa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<style>
+:root{
+  --navy:#0D1B2A; --navy2:#162234; --gold:#C9A84C; --gold-light:#F0D78C;
+  --green:#1A7A4A; --green-light:#E4F4EC; --blue:#1565C0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:#0A1520;color:#fff;min-height:100vh;}
+
+nav{background:rgba(13,27,42,.97);border-bottom:1px solid rgba(201,168,76,.15);
+  padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;}
+.nav-logo{font-family:'Playfair Display',serif;font-size:16px;color:#F0D78C;}
+.nav-logo span{font-family:'DM Sans',sans-serif;font-size:10px;color:rgba(255,255,255,.4);
+  display:block;letter-spacing:2px;text-transform:uppercase;}
+.nav-back{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.5);
+  font-size:13px;text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
+
+.hero{background:linear-gradient(135deg,#0D1B2A,#162234);
+  border-bottom:1px solid rgba(201,168,76,.15);padding:40px 32px 32px;}
+.hero-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,38px);
+  color:#fff;line-height:1.2;margin-bottom:10px;}
+.hero-title em{color:var(--gold-light);font-style:italic;}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.5);line-height:1.7;max-width:560px;}
+.hero-user{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.1);
+  border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:6px 14px;
+  font-size:12px;color:var(--gold);margin-top:14px;}
+
+.tabs-bar{background:#0A1520;border-bottom:1px solid rgba(255,255,255,.06);
+  padding:0 32px;display:flex;gap:4px;overflow-x:auto;}
+.tab-btn{padding:14px 20px;border:none;background:transparent;
+  color:rgba(255,255,255,.4);font-size:13px;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;border-bottom:2px solid transparent;
+  white-space:nowrap;transition:all .2s;}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-btn:hover{color:rgba(255,255,255,.8);}
+
+.tab-content{display:none;padding:32px;}
+.tab-content.active{display:block;}
+.section-max{max-width:800px;margin:0 auto;}
+
+/* Stars */
+.star-rating{display:flex;gap:8px;margin-bottom:18px;}
+.star-btn{font-size:32px;cursor:pointer;opacity:.3;transition:all .2s;
+  background:none;border:none;padding:0;line-height:1;}
+.star-btn.active{opacity:1;transform:scale(1.1);}
+
+/* Inputs */
+.dbeinput{width:100%;padding:12px 14px;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;
+  font-size:13px;font-family:'DM Sans',sans-serif;outline:none;
+  resize:vertical;min-height:100px;margin-bottom:14px;}
+.dbeinput-line{width:100%;padding:11px 14px;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;
+  font-size:13px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:10px;}
+.dbeinput:focus,.dbeinput-line:focus{border-color:var(--gold);}
+.input-label{font-size:11px;color:rgba(255,255,255,.45);display:block;
+  margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase;}
+
+/* DBE Button */
+.dbe-btn{display:inline-block;padding:13px 24px;background:linear-gradient(135deg,#C9A84C,#F0D78C);
+  color:#0D1B2A;border:none;border-radius:10px;font-size:14px;font-weight:700;
+  font-family:'Playfair Display',serif;cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 16px rgba(201,168,76,.25);}
+.dbe-btn:hover{background:linear-gradient(135deg,#F0D78C,#C9A84C);transform:translateY(-1px);}
+.dbe-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.dbe-btn-outline{padding:9px 18px;border:1px solid rgba(255,255,255,.15);
+  background:transparent;color:rgba(255,255,255,.6);border-radius:8px;
+  font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.dbe-btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+
+/* Success */
+.success-msg{background:rgba(26,122,74,.15);border:1px solid rgba(26,122,74,.3);
+  border-radius:10px;padding:12px 16px;font-size:13px;color:#7DFFB3;
+  text-align:center;margin-top:12px;display:none;}
+
+/* Review cards */
+.review-card{background:rgba(255,255,255,.04);border-left:3px solid var(--gold);
+  border-radius:0 10px 10px 0;padding:16px;margin-bottom:12px;}
+.review-stars{color:var(--gold);font-size:14px;margin-bottom:6px;}
+.review-text{font-size:13px;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:8px;}
+.review-author{font-size:11px;color:rgba(255,255,255,.35);}
+
+/* Vote cards */
+.vote-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;padding:14px 16px;margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;transition:border-color .2s;}
+.vote-card:hover{border-color:rgba(201,168,76,.3);}
+.vote-count{font-size:22px;font-weight:700;color:var(--gold);min-width:40px;text-align:center;}
+.vote-label{font-size:13px;color:rgba(255,255,255,.8);flex:1;}
+.vote-btn{padding:7px 16px;border-radius:8px;border:1px solid rgba(201,168,76,.3);
+  background:transparent;color:var(--gold);font-size:12px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;}
+.vote-btn:hover,.vote-btn.voted{background:var(--gold);color:var(--navy);font-weight:700;}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+@media(max-width:680px){.two-col{grid-template-columns:1fr;}}
+
+.col-title{font-size:11px;letter-spacing:1px;color:var(--gold);
+  text-transform:uppercase;margin-bottom:14px;}
+
+footer{background:#0D1B2A;border-top:1px solid rgba(201,168,76,.1);
+  padding:20px 32px;text-align:center;}
+footer p{font-size:11px;color:rgba(255,255,255,.25);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">DBE Investment Trust <span>Comunidad</span></div>
+  <a href="members.html" class="nav-back">← Volver al área de miembros</a>
+</nav>
+
+<div class="hero">
+  <p class="hero-eyebrow">Comunidad exclusiva · Miembros DBE</p>
+  <h1 class="hero-title">Tu voz <em>construye</em><br>el club</h1>
+  <p class="hero-sub">Cada reseña, sugerencia e idea que compartes hace que DBE sea mejor para todos los miembros. Diego lee cada mensaje personalmente.</p>
+  <div class="hero-user" id="heroUser">🔒 Cargando tu perfil...</div>
+</div>
+
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('resenas',this)">⭐ Reseñas</button>
+  <button class="tab-btn" onclick="switchTab('sugerencias',this)">💡 Sugerencias de contenido</button>
+  <button class="tab-btn" onclick="switchTab('ideas',this)">🧠 Buzón de ideas</button>
+</div>
+
+<!-- ── RESEÑAS ── -->
+<div class="tab-content active" id="tab-resenas">
+  <div class="section-max">
+    <div class="two-col">
+      <div>
+        <p class="col-title">Deja tu reseña</p>
+        <p style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:18px;line-height:1.6;">
+          Cuéntale a otros cómo DBE ha impactado tus finanzas. Tu reseña ayuda a que más personas tomen el control de su dinero.
+        </p>
+        <label class="input-label">Tu calificación</label>
+        <div class="star-rating" id="starRating">
+          <button class="star-btn" onclick="setStars(1)">⭐</button>
+          <button class="star-btn" onclick="setStars(2)">⭐</button>
+          <button class="star-btn" onclick="setStars(3)">⭐</button>
+          <button class="star-btn" onclick="setStars(4)">⭐</button>
+          <button class="star-btn" onclick="setStars(5)">⭐</button>
+        </div>
+        <label class="input-label">Tu experiencia</label>
+        <textarea class="dbeinput" id="resenaTexto"
+          placeholder="Ej: Desde que entré al club cambié mi relación con el dinero. Empecé a invertir y ya tengo mi fondo de emergencia completo..."></textarea>
+        <button class="dbe-btn" onclick="enviarResena()">Publicar mi reseña →</button>
+        <div class="success-msg" id="resenaSuccess">✅ ¡Gracias! Tu reseña fue enviada y será visible pronto tras aprobación.</div>
+      </div>
+      <div>
+        <p class="col-title">Reseñas recientes</p>
+        <div id="resenasList">
+          <div style="text-align:center;padding:32px;color:rgba(255,255,255,.3);font-size:13px;">
+            <div style="font-size:28px;margin-bottom:10px;">⭐</div>
+            Sé el primero en dejar tu reseña.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SUGERENCIAS ── -->
+<div class="tab-content" id="tab-sugerencias">
+  <div class="section-max">
+    <p style="font-size:14px;color:rgba(255,255,255,.6);margin-bottom:24px;line-height:1.7;">
+      Vota por el contenido que quieres ver primero en el club. Los temas con más votos se publican antes.
+    </p>
+    <div id="sugerenciasList">
+      <div class="vote-card"><div class="vote-count" id="votes-0">0</div><div class="vote-label">Análisis de ETFs accesibles desde Colombia</div><button class="vote-btn" onclick="votar(0,this)">▲ Votar</button></div>
+      <div class="vote-card"><div class="vote-count" id="votes-1">0</div><div class="vote-label">Guía de inversión en bienes raíces con poco capital</div><button class="vote-btn" onclick="votar(1,this)">▲ Votar</button></div>
+      <div class="vote-card"><div class="vote-count" id="votes-2">0</div><div class="vote-label">Cómo proteger el patrimonio de la inflación en Colombia</div><button class="vote-btn" onclick="votar(2,this)">▲ Votar</button></div>
+      <div class="vote-card"><div class="vote-count" id="votes-3">0</div><div class="vote-label">Análisis de acciones colombianas (BVC) para 2026</div><button class="vote-btn" onclick="votar(3,this)">▲ Votar</button></div>
+      <div class="vote-card"><div class="vote-count" id="votes-4">0</div><div class="vote-label">Estrategias de pensión privada vs. Colpensiones</div><button class="vote-btn" onclick="votar(4,this)">▲ Votar</button></div>
+      <div class="vote-card"><div class="vote-count" id="votes-5">0</div><div class="vote-label">Cómo construir un fondo de emergencia en 6 meses</div><button class="vote-btn" onclick="votar(5,this)">▲ Votar</button></div>
+    </div>
+    <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);">
+      <label class="input-label">Proponer nuevo tema</label>
+      <div style="display:flex;gap:10px;">
+        <input type="text" class="dbeinput-line" id="nuevaSugerencia"
+          placeholder="Ej: Análisis de criptomonedas reguladas en Colombia..." style="margin-bottom:0;flex:1;">
+        <button class="dbe-btn" onclick="enviarSugerencia()" style="white-space:nowrap;padding:11px 20px;font-size:13px;">Proponer →</button>
+      </div>
+      <div class="success-msg" id="sugerenciaSuccess">✅ ¡Propuesta enviada! La revisaremos pronto.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── IDEAS ── -->
+<div class="tab-content" id="tab-ideas">
+  <div class="section-max">
+    <p style="font-size:14px;color:rgba(255,255,255,.6);margin-bottom:24px;line-height:1.7;">
+      ¿Tienes una idea para mejorar DBE? ¿Algo que te gustaría que existiera? Diego lee cada mensaje personalmente.
+    </p>
+    <label class="input-label">Categoría de tu idea</label>
+    <select id="ideaCategoria" class="dbeinput-line" style="min-height:0;height:46px;background:#0D1B2A;cursor:pointer;margin-bottom:14px;">
+      <option value="contenido">📊 Nuevo contenido o tema</option>
+      <option value="producto">🛠️ Mejora del producto o plataforma</option>
+      <option value="comunidad">👥 Experiencia de comunidad</option>
+      <option value="herramienta">🧠 Nueva herramienta o simulador</option>
+      <option value="otro">💡 Otra idea</option>
+    </select>
+    <label class="input-label">Describe tu idea</label>
+    <textarea class="dbeinput" id="ideaTexto" style="min-height:130px;"
+      placeholder="Describe tu idea con el mayor detalle posible. Entre más contexto des, más fácil es implementarla..."></textarea>
+    <label class="input-label">Impacto esperado (opcional)</label>
+    <input type="text" class="dbeinput-line" id="ideaImpacto"
+      placeholder="Ej: Ayudaría a los miembros a entender mejor el riesgo de sus inversiones">
+    <button class="dbe-btn" onclick="enviarIdea()" style="width:100%;margin-top:4px;">Enviar mi idea →</button>
+    <div class="success-msg" id="ideaSuccess">✅ ¡Idea recibida! Diego la revisará personalmente. Gracias por ayudar a construir DBE.</div>
+  </div>
+</div>
+
+<footer>
+  <p>DBE Investment Trust · Área exclusiva de miembros · dbeinvestmenttrust@gmail.com</p>
+</footer>
+
+<script>
+const APPS_URL = 'https://script.google.com/macros/s/AKfycbz0NoIDgmyv2purrJy354OIq7AMEBiA06rW8wBpU3687FlXFb0grImJBN_NvIt5zSxljw/exec';
+
+// ── FIREBASE ──────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyAybxQJFeFizBYZ5Y_pqBGONs_cErSXfJs",
+  authDomain: "dbe-financial-club.firebaseapp.com",
+  projectId: "dbe-financial-club",
+  storageBucket: "dbe-financial-club.firebasestorage.app",
+  messagingSenderId: "1001600683639",
+  appId: "1:1001600683639:web:f1a6645b6f24df09c50072"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+auth.onAuthStateChanged(function(user) {
+  if (!user) { window.location.href = 'auth.html'; return; }
+  var nombre = user.displayName || user.email.split('@')[0];
+  document.getElementById('heroUser').textContent = '👤 ' + nombre + ' · Miembro activo';
+});
+
+// ── TAB SWITCH ────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── STARS ─────────────────────────────────────────────────────
+var _stars = 0;
+function setStars(n) {
+  _stars = n;
+  document.querySelectorAll('.star-btn').forEach(function(btn, i) {
+    btn.classList.toggle('active', i < n);
+    btn.style.opacity = i < n ? '1' : '0.3';
+  });
+}
+
+// ── RESEÑA ────────────────────────────────────────────────────
+function enviarResena() {
+  var user = auth.currentUser;
+  if (!user) return;
+  var texto = document.getElementById('resenaTexto').value.trim();
+  if (!texto || _stars === 0) {
+    alert('Por favor selecciona una calificación y escribe tu experiencia.'); return;
+  }
+  var btn = document.querySelector('[onclick="enviarResena()"]');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+
+  fetch(APPS_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      tipo: 'RESENA_MIEMBRO', email: user.email,
+      nombre: user.displayName || user.email.split('@')[0],
+      estrellas: _stars, texto: texto,
+      fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' }),
+      estado: 'pendiente'
+    })
+  });
+
+  document.getElementById('resenaSuccess').style.display = 'block';
+  document.getElementById('resenaTexto').value = '';
+  setStars(0);
+  btn.disabled = false; btn.textContent = 'Publicar mi reseña →';
+
+  var lista = document.getElementById('resenasList');
+  var card = document.createElement('div');
+  card.className = 'review-card';
+  card.innerHTML = '<div class="review-stars">' + '⭐'.repeat(_stars) + '</div>' +
+    '<div class="review-text">' + texto + '</div>' +
+    '<div class="review-author">Tú · ahora mismo · <span style="color:#FFC107;">⏳ Pendiente aprobación</span></div>';
+  lista.insertBefore(card, lista.firstChild);
+}
+
+// ── VOTAR ─────────────────────────────────────────────────────
+function votar(idx, btn) {
+  if (btn.classList.contains('voted')) return;
+  var user = auth.currentUser;
+  if (!user) return;
+  btn.classList.add('voted'); btn.textContent = '✓ Votado';
+  var el = document.getElementById('votes-' + idx);
+  el.textContent = (parseInt(el.textContent) || 0) + 1;
+  fetch(APPS_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      tipo: 'VOTO_SUGERENCIA', email: user.email,
+      nombre: user.displayName || user.email.split('@')[0],
+      sugerencia_idx: idx,
+      sugerencia_texto: btn.parentElement.querySelector('.vote-label').textContent,
+      fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
+    })
+  });
+}
+
+// ── SUGERENCIA ────────────────────────────────────────────────
+function enviarSugerencia() {
+  var user = auth.currentUser;
+  if (!user) return;
+  var texto = document.getElementById('nuevaSugerencia').value.trim();
+  if (!texto) return;
+  var btn = document.querySelector('[onclick="enviarSugerencia()"]');
+  btn.disabled = true;
+  fetch(APPS_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      tipo: 'SUGERENCIA_CONTENIDO', email: user.email,
+      nombre: user.displayName || user.email.split('@')[0],
+      texto: texto,
+      fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
+    })
+  });
+  document.getElementById('sugerenciaSuccess').style.display = 'block';
+  document.getElementById('nuevaSugerencia').value = '';
+  btn.disabled = false;
+  var lista = document.getElementById('sugerenciasList');
+  var idx = lista.children.length;
+  var card = document.createElement('div');
+  card.className = 'vote-card';
+  card.innerHTML = '<div class="vote-count" id="votes-'+idx+'">0</div>' +
+    '<div class="vote-label">' + texto + '</div>' +
+    '<button class="vote-btn voted" style="cursor:default;">✓ Tu propuesta</button>';
+  lista.appendChild(card);
+}
+
+// ── IDEA ──────────────────────────────────────────────────────
+function enviarIdea() {
+  var user = auth.currentUser;
+  if (!user) return;
+  var texto = document.getElementById('ideaTexto').value.trim();
+  if (!texto) { alert('Por favor describe tu idea.'); return; }
+  var btn = document.querySelector('[onclick="enviarIdea()"]');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  fetch(APPS_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      tipo: 'IDEA_MIEMBRO', email: user.email,
+      nombre: user.displayName || user.email.split('@')[0],
+      categoria: document.getElementById('ideaCategoria').value,
+      texto: texto,
+      impacto: document.getElementById('ideaImpacto').value.trim(),
+      fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
+    })
+  });
+  document.getElementById('ideaSuccess').style.display = 'block';
+  document.getElementById('ideaTexto').value = '';
+  document.getElementById('ideaImpacto').value = '';
+  btn.disabled = false; btn.textContent = 'Enviar mi idea →';
+}
+</script>
+</body>
+</html>
