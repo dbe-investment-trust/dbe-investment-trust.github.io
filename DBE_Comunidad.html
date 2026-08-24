@@ -161,7 +161,11 @@ footer p{font-size:11px;color:rgba(255,255,255,.25);}
       </div>
       <div>
         <p class="col-title">Reseñas recientes</p>
-        <div id="resenasList"><div class="review-card"><div class="review-stars">⭐⭐⭐⭐⭐</div><div class="review-text">Excelente pagina</div><div class="review-author">Diego B. · Miembro verificado</div></div><div class="review-card"><div class="review-stars">⭐⭐⭐⭐⭐</div><div class="review-text">El conocimiento e ideas estrategicas ha sido util y aplicable</div><div class="review-author">Diego B. · Miembro verificado</div></div><div class="review-card"><div class="review-stars">⭐⭐⭐⭐⭐</div><div class="review-text">Amo esta web!</div><div class="review-author">Diego B. · Miembro verificado</div></div><div class="review-card"><div class="review-stars">⭐⭐⭐⭐⭐</div><div class="review-text">es increible el formato</div><div class="review-author">Diego B. · Miembro verificado</div></div></div>
+        <div id="resenasList">
+          <div style="text-align:center;padding:20px;color:rgba(255,255,255,.3);font-size:13px;">
+            <div style="font-size:24px;margin-bottom:8px;">⏳</div>Cargando reseñas...
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -375,6 +379,47 @@ function enviarIdea() {
   document.getElementById('ideaImpacto').value = '';
   btn.disabled = false; btn.textContent = 'Enviar mi idea →';
 }
+
+// ── CARGAR RESEÑAS DESDE INDEX.HTML ──────────────────────────
+function cargarResenas() {
+  fetch('https://dbe-investment-trust.github.io/index.html?nocache=' + Date.now())
+    .then(function(r) { return r.text(); })
+    .then(function(html) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
+      var grid = doc.getElementById('testimoniosGrid');
+      var lista = document.getElementById('resenasList');
+      if (!grid || !lista) return;
+      
+      var cards = grid.querySelectorAll('.testimonio-card');
+      if (cards.length === 0) {
+        lista.innerHTML = '<div style="text-align:center;padding:32px;color:rgba(255,255,255,.3);font-size:13px;"><div style="font-size:28px;margin-bottom:10px;">⭐</div>Sé el primero en dejar tu reseña.</div>';
+        return;
+      }
+      
+      var html_cards = '';
+      cards.forEach(function(card) {
+        var stars  = card.querySelector('.testimonio-stars');
+        var text   = card.querySelector('.testimonio-text');
+        var author = card.querySelector('.testimonio-author');
+        if (stars && text && author) {
+          html_cards +=
+            '<div class="review-card">' +
+            '<div class="review-stars">' + stars.innerHTML + '</div>' +
+            '<div class="review-text">' + text.innerHTML + '</div>' +
+            '<div class="review-author">' + author.innerHTML + ' · Miembro verificado</div>' +
+            '</div>';
+        }
+      });
+      lista.innerHTML = html_cards;
+    })
+    .catch(function() {
+      document.getElementById('resenasList').innerHTML =
+        '<div style="text-align:center;padding:20px;color:rgba(255,255,255,.3);font-size:13px;">No se pudieron cargar las reseñas.</div>';
+    });
+}
+window.addEventListener('load', cargarResenas);
+
 </script>
 </body>
 </html>
