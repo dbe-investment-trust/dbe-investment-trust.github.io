@@ -208,7 +208,7 @@ const CEO_EMAILS = ['diegobernal2004@gmail.com', 'dbeinvestmenttrust@gmail.com']
 async function registrarEnSheets(tipo, user, extra = {}) {
   try {
     const nombre = extra.nombre || user.displayName || user.email.split('@')[0];
-    await fetch('https://script.google.com/macros/s/AKfycbz0NoIDgmyv2purrJy354OIq7AMEBiA06rW8wBpU3687FlXFb0grImJBN_NvIt5zSxljw/exec', {
+    await fetch('https://script.google.com/macros/s/AKfycbw_zESz7vsOMs8C8B2Ok4mLhxmFC6HUIwDfxyGHrzx1qY9_qsud8hakSpdTQ4HPUzEB4A/exec', {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
@@ -454,7 +454,7 @@ function enviarPerfilASheets(user) {
     const raw = sessionStorage.getItem('dbe_perfil_diagnostico');
     if (!raw) return;
     const perfil = JSON.parse(raw);
-    fetch('https://script.google.com/macros/s/AKfycbz0NoIDgmyv2purrJy354OIq7AMEBiA06rW8wBpU3687FlXFb0grImJBN_NvIt5zSxljw/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbw_zESz7vsOMs8C8B2Ok4mLhxmFC6HUIwDfxyGHrzx1qY9_qsud8hakSpdTQ4HPUzEB4A/exec', {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
