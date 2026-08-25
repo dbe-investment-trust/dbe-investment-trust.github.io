@@ -1091,7 +1091,9 @@ function mostrarAgendamiento(details, paypalData) {
 }
 
 function selectSlot(btn, hora) {
-  document.querySelectorAll('.slot-btn').forEach(function(b) { b.classList.remove('selected'); });
+  // Only deselect slots within the same modal
+  var modal = btn.closest('.modal-agenda') || btn.closest('[id^="modal"]') || document;
+  modal.querySelectorAll('.slot-btn').forEach(function(b) { b.classList.remove('selected'); });
   btn.classList.add('selected');
   _agendaSlotSelected = hora;
   checkAgendaReady();
