@@ -374,16 +374,6 @@ nav{background:var(--navy);padding:0 32px;height:64px;display:flex;align-items:c
         </div>
       </div>
 
-      <!-- CEO: PRUEBA AGENDAMIENTO (solo visible para CEO) -->
-      <div class="sidebar-card" id="ceoTestCard" style="display:none;border:1px solid rgba(201,168,76,.3);">
-        <h3>⚡ Prueba CEO</h3>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Probar agendamiento sin pasar por PayPal.</p>
-        <button onclick="abrirAgendamientoCEO()"
-          style="display:block;width:100%;background:linear-gradient(135deg,#C9A84C,#F0D78C);color:#0D1B2A;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:700;font-family:'Playfair Display',serif;cursor:pointer;">
-          Probar agendamiento →
-        </button>
-      </div>
-
       <!-- SOPORTE -->
       <div class="sidebar-card">
         <h3>💬 Soporte</h3>
@@ -446,7 +436,6 @@ auth.onAuthStateChanged(async (user) => {
     isCEO,
     uid: user.uid
   });
-  checkCEO(user.email);
 });
 
 function logout() {
@@ -597,22 +586,8 @@ function renderFeed() {
 
 
 
-// ── CEO: MOSTRAR BOTÓN DE PRUEBA ─────────────────────────────
-
-function checkCEO(email) {
-  if (CEO_EMAILS.includes(email)) {
-    var card = document.getElementById('ceoTestCard');
-    if (card) card.style.display = 'block';
-  }
 }
 
-function abrirAgendamientoCEO() {
-  var user = firebase.auth().currentUser;
-  if (!user) return;
-  // Pre-fill and open scheduling modal directly without payment
-  _agendaPaymentDetails = {
-    details: { id: 'CEO-TEST-' + Date.now() },
-    paypalData: { prueba_ceo: true }
   };
   var tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
