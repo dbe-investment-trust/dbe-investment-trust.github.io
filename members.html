@@ -1100,13 +1100,17 @@ function selectSlot(btn, hora) {
 }
 
 function checkAgendaReady() {
-  var fecha = document.getElementById('agendaFecha').value;
-  var btn = document.getElementById('agendaConfirmBtn');
-  btn.disabled = !(fecha && _agendaSlotSelected);
+  // Get the visible agendaFecha (the one inside the open modal)
+  var modal = document.getElementById('modalAgenda');
+  var fechaEl = modal ? modal.querySelector('[id="agendaFecha"]') : document.getElementById('agendaFecha');
+  var btnEl = modal ? modal.querySelector('[id="agendaConfirmBtn"]') : document.getElementById('agendaConfirmBtn');
+  if (!fechaEl || !btnEl) return;
+  btnEl.disabled = !(fechaEl.value && _agendaSlotSelected);
 }
 
 async function confirmarAgendamiento() {
-  var fecha    = document.getElementById('agendaFecha').value;
+  var modal = document.getElementById('modalAgenda');
+  var fecha    = (modal ? modal.querySelector('[id="agendaFecha"]') : document.getElementById('agendaFecha')).value;
   var hora     = _agendaSlotSelected;
   var objetivo = document.getElementById('agendaObjetivo').value;
   var btn      = document.getElementById('agendaConfirmBtn');
