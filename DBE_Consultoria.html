@@ -577,7 +577,7 @@ function enviarComprobante() {
   fetch(APPS_URL, {
     method: 'POST',
     mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify({
       tipo: 'COMPROBANTE_PAGO',
       email: email,
@@ -633,7 +633,7 @@ function confirmarAgendamiento() {
   fetch(APPS_URL, {
     method: 'POST',
     mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify({
       tipo: 'FINANCIAL_DIAGNOSTIC',
       email: email,
