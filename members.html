@@ -583,19 +583,6 @@ function renderFeed() {
 
 // ── PAYPAL CONSULTORÍA (pago único) ───────────────────────────
 
-
-
-
-}
-
-  };
-  var tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  var fechaEl = document.getElementById('agendaFecha');
-  if (fechaEl) fechaEl.min = tomorrow.toISOString().split('T')[0];
-  document.getElementById('modalAgenda').classList.add('show');
-}
-
 // ── PANELES COLAPSABLES ───────────────────────────────────────
 function abrirPanel(id) {
   var panel = document.getElementById(id);
