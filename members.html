@@ -1074,6 +1074,8 @@ function selectSlot(btn, hora) {
   checkAgendaReady();
 }
 
+function cerrarModalAgenda() { document.getElementById('modalAgenda').classList.remove('show'); }
+
 function checkAgendaReady() {
   // Get the visible agendaFecha (the one inside the open modal)
   var modal = document.getElementById('modalAgenda');
@@ -1117,7 +1119,7 @@ async function confirmarAgendamiento() {
       '<div style="font-size:48px;margin-bottom:16px;">🎉</div>' +
       '<h3 style="color:var(--gold-light);margin-bottom:12px;">¡Sesión agendada!</h3>' +
       '<p style="color:rgba(255,255,255,.65);line-height:1.7;">Tu sesión quedó programada para el <strong style="color:#fff;">' + fecha + '</strong> a las <strong style="color:#fff;">' + hora + '</strong> (Colombia).<br><br>Revisa tu correo — en los próximos minutos recibirás la invitación de Google Meet con todos los detalles.</p>' +
-      '<button onclick="document.getElementById('modalAgenda').classList.remove('show')" style="margin-top:20px;padding:12px 28px;background:var(--gold);color:var(--navy);border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">Entendido →</button>' +
+      '<button onclick="cerrarModalAgenda()" style="margin-top:20px;padding:12px 28px;background:var(--gold);color:var(--navy);border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;">Entendido →</button>' +
       '</div>';
   }, 2000);
 }
