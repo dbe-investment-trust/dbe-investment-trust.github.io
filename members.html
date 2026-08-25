@@ -1109,45 +1109,34 @@ async function confirmarAgendamiento() {
   var objetivo = document.getElementById('agendaObjetivo').value;
   var btn      = document.getElementById('agendaConfirmBtn');
   var user     = firebase.auth().currentUser;
-
   if (!fecha || !hora || !user) return;
-
   btn.disabled = true;
   btn.textContent = 'Confirmando...';
-
-  // Build GET URL with parameters — no CORS issues
-  var params = new URLSearchParams({
-    tipo: 'FINANCIAL_DIAGNOSTIC',
-    email: user.email,
-    nombre: user.displayName || user.email.split('@')[0],
-    fecha_reunion: fecha,
-    hora_reunion: hora,
-    objetivo: objetivo || '',
-    order_id: _agendaPaymentDetails?.details?.id || '',
-    monto: _agendaPaymentDetails?.paypalData?.prueba_ceo ? '0' : '49.99',
-    moneda: 'USD',
-    prueba_ceo: _agendaPaymentDetails?.paypalData?.prueba_ceo ? 'true' : 'false',
-    fuente: 'Area de Miembros',
-    fecha_registro: new Date().toLocaleString('es-CO', {timeZone:'America/Bogota'})
+  fetch(APPS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      tipo: 'FINANCIAL_DIAGNOSTIC',
+      email: user.email,
+      nombre: user.displayName || user.email.split('@')[0],
+      fecha_reunion: fecha,
+      hora_reunion: hora,
+      objetivo: objetivo || '',
+      order_id: (_agendaPaymentDetails && _agendaPaymentDetails.details) ? _agendaPaymentDetails.details.id : '',
+      monto: (_agendaPaymentDetails && _agendaPaymentDetails.paypalData && _agendaPaymentDetails.paypalData.prueba_ceo) ? '0' : '49.99',
+      moneda: 'USD',
+      fuente: 'Area de Miembros',
+      fecha_registro: new Date().toLocaleString('es-CO', {timeZone:'America/Bogota'})
+    })
   });
-
-  var getUrl = APPS_URL + '?' + params.toString();
-
-  // Use image tag trick — always works, no CORS
-  var img = new Image();
-  img.src = getUrl;
-
-  // Also try fetch
-  fetch(getUrl, { mode: 'no-cors' }).catch(function() {});
-
-  // Show success after 2 seconds
   setTimeout(function() {
     document.getElementById('modalAgenda').innerHTML =
       '<div class="agenda-box" style="text-align:center;">' +
       '<div style="font-size:48px;margin-bottom:16px;">🎉</div>' +
       '<h3 style="color:var(--gold-light);margin-bottom:12px;">¡Sesión agendada!</h3>' +
       '<p style="color:rgba(255,255,255,.65);line-height:1.7;">Tu sesión quedó programada para el <strong style="color:#fff;">' + fecha + '</strong> a las <strong style="color:#fff;">' + hora + '</strong> (Colombia).<br><br>Revisa tu correo — en los próximos minutos recibirás la invitación de Google Meet con todos los detalles.</p>' +
-      '<button onclick="document.getElementById(\'modalAgenda\').classList.remove(\'show\')" style="margin-top:20px;padding:12px 28px;background:var(--gold);color:var(--navy);border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;">Entendido →</button>' +
+      '<button onclick="document.getElementById('modalAgenda').classList.remove('show')" style="margin-top:20px;padding:12px 28px;background:var(--gold);color:var(--navy);border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">Entendido →</button>' +
       '</div>';
   }, 2000);
 }
