@@ -805,7 +805,7 @@ function enviarIdea() {
 }
 
 // ── APPS SCRIPT TRACKING ──────────────────────────────────
-const APPS_URL = 'https://script.google.com/macros/s/AKfycbw_zESz7vsOMs8C8B2Ok4mLhxmFC6HUIwDfxyGHrzx1qY9_qsud8hakSpdTQ4HPUzEB4A/exec';
+const APPS_URL = 'https://script.google.com/macros/s/AKfycbz0NoIDgmyv2purrJy354OIq7AMEBiA06rW8wBpU3687FlXFb0grImJBN_NvIt5zSxljw/exec';
 
 async function trackEvento(tipo, extra) {
   try {
@@ -1115,51 +1115,33 @@ async function confirmarAgendamiento() {
   btn.disabled = true;
   btn.textContent = 'Confirmando...';
 
-  var payload = JSON.stringify({
+  // Build GET URL with parameters — no CORS issues
+  var params = new URLSearchParams({
     tipo: 'FINANCIAL_DIAGNOSTIC',
     email: user.email,
     nombre: user.displayName || user.email.split('@')[0],
     fecha_reunion: fecha,
     hora_reunion: hora,
-    objetivo: objetivo,
+    objetivo: objetivo || '',
     order_id: _agendaPaymentDetails?.details?.id || '',
     monto: _agendaPaymentDetails?.paypalData?.prueba_ceo ? '0' : '49.99',
     moneda: 'USD',
-    notas: objetivo,
-    prueba_ceo: _agendaPaymentDetails?.paypalData?.prueba_ceo || false,
+    prueba_ceo: _agendaPaymentDetails?.paypalData?.prueba_ceo ? 'true' : 'false',
     fuente: 'Area de Miembros',
     fecha_registro: new Date().toLocaleString('es-CO', {timeZone:'America/Bogota'})
   });
 
-  // Usar iframe oculto para evitar CORS
-  var iframeId = 'appsScriptFrame';
-  var existingIframe = document.getElementById(iframeId);
-  if (existingIframe) existingIframe.remove();
+  var getUrl = APPS_URL + '?' + params.toString();
 
-  var iframe = document.createElement('iframe');
-  iframe.id = iframeId;
-  iframe.name = iframeId;
-  iframe.style.display = 'none';
-  document.body.appendChild(iframe);
+  // Use image tag trick — always works, no CORS
+  var img = new Image();
+  img.src = getUrl;
 
-  var form = document.createElement('form');
-  form.method = 'POST';
-  form.action = APPS_URL;
-  form.target = iframeId;
-  form.style.display = 'none';
+  // Also try fetch
+  fetch(getUrl, { mode: 'no-cors' }).catch(function() {});
 
-  var input = document.createElement('input');
-  input.type = 'hidden';
-  input.name = 'payload';
-  input.value = payload;
-  form.appendChild(input);
-
-  document.body.appendChild(form);
-  form.submit();
-
-  // Mostrar éxito después de 3 segundos
+  // Show success after 2 seconds
   setTimeout(function() {
-    form.remove();
     document.getElementById('modalAgenda').innerHTML =
       '<div class="agenda-box" style="text-align:center;">' +
       '<div style="font-size:48px;margin-bottom:16px;">🎉</div>' +
@@ -1167,7 +1149,7 @@ async function confirmarAgendamiento() {
       '<p style="color:rgba(255,255,255,.65);line-height:1.7;">Tu sesión quedó programada para el <strong style="color:#fff;">' + fecha + '</strong> a las <strong style="color:#fff;">' + hora + '</strong> (Colombia).<br><br>Revisa tu correo — en los próximos minutos recibirás la invitación de Google Meet con todos los detalles.</p>' +
       '<button onclick="document.getElementById(\'modalAgenda\').classList.remove(\'show\')" style="margin-top:20px;padding:12px 28px;background:var(--gold);color:var(--navy);border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;">Entendido →</button>' +
       '</div>';
-  }, 3000);
+  }, 2000);
 }
 </script>
 
