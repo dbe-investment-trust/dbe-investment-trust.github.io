@@ -632,7 +632,7 @@ window.addEventListener('load', function() {
 });
 (function() {
   try {
-    fetch('https://script.google.com/macros/s/AKfycbxENMC8Tf9p0XGss8uyT4QNgmvbDYFl1fUj79uFHOv1i39JttHKxniFALPmLTaYoSnukQ/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbyq_ePrj-G2lEepCe3ARO8OMg6tYiqksXTr6aV_ywhjZ7lJeZTGUeVPAPMMcTzagsUW8w/exec', {
       method: 'POST', mode: 'no-cors',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ tipo:'VISITANTE', fuente:document.referrer||'Directo', dispositivo:/iPhone|iPad|Android/.test(navigator.userAgent)?'Móvil':'Escritorio', fecha_registro:new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'}), pagina:'DBE Financial Club' })
