@@ -543,12 +543,11 @@ window.addEventListener('load', function() {
 // ── ACTIVAR MEMBRESÍA ───────────────────────────────────────
 function activarMembresia(btnId) {
   var customBtn = document.getElementById('custom-' + btnId);
-  if (customBtn) {
-    customBtn.textContent = 'Conectando...';
-    customBtn.disabled = true;
-    customBtn.style.opacity = '0.7';
-  }
   var ppDiv = document.getElementById(btnId);
+
+  if (customBtn) {
+    customBtn.style.display = 'none';
+  }
   if (ppDiv) {
     ppDiv.style.display = 'block';
     ppDiv.style.width = '100%';
@@ -556,9 +555,44 @@ function activarMembresia(btnId) {
     ppDiv.style.opacity = '1';
     ppDiv.style.pointerEvents = 'auto';
   }
+
+  // Add cancel button if not exists
+  var cancelId = 'cancel-' + btnId;
+  if (!document.getElementById(cancelId)) {
+    var cancelBtn = document.createElement('button');
+    cancelBtn.id = cancelId;
+    cancelBtn.textContent = '← Volver';
+    cancelBtn.style.cssText = 'display:block;width:100%;margin-top:8px;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:10px;color:rgba(255,255,255,.5);font-size:13px;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .2s;';
+    cancelBtn.onmouseover = function() { this.style.borderColor = 'rgba(255,255,255,.4)'; this.style.color = '#fff'; };
+    cancelBtn.onmouseout = function() { this.style.borderColor = 'rgba(255,255,255,.2)'; this.style.color = 'rgba(255,255,255,.5)'; };
+    cancelBtn.onclick = function() { cancelarMembresia(btnId); };
+    if (ppDiv && ppDiv.parentNode) {
+      ppDiv.parentNode.insertBefore(cancelBtn, ppDiv.nextSibling);
+    }
+  }
+
   setTimeout(function() {
     window.location.href = 'https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9PD78047TN589313HNJ4TYEQ';
-  }, 1500);
+  }, 800);
+}
+
+function cancelarMembresia(btnId) {
+  var customBtn = document.getElementById('custom-' + btnId);
+  var ppDiv = document.getElementById(btnId);
+  var cancelBtn = document.getElementById('cancel-' + btnId);
+
+  if (customBtn) {
+    customBtn.style.display = 'block';
+    customBtn.disabled = false;
+    customBtn.style.opacity = '1';
+    customBtn.textContent = 'Activar mi membresía →';
+  }
+  if (ppDiv) {
+    ppDiv.style.display = 'none';
+    ppDiv.style.opacity = '0';
+    ppDiv.style.pointerEvents = 'none';
+  }
+  if (cancelBtn) cancelBtn.remove();
 }
 
 // ── DIBIE ──────────────────────────────────────────────────
