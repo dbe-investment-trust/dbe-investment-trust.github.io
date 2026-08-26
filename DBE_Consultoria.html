@@ -411,10 +411,15 @@ nav {
       <p style="font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6;">
         Serás redirigido a Wompi · Vuelve aquí tras el pago para subir tu comprobante.
       </p>
-      <button onclick="window.location.href='https://checkout.wompi.co/l/SOXiPI'"
+      <button onclick="pagarWompi()"
         style="display:block;width:100%;margin-top:14px;padding:13px;background:linear-gradient(135deg,#C9A84C,#F0D78C);color:#0D1B2A;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:'Playfair Display',serif;cursor:pointer;text-align:center;transition:all .2s;">
         Pagar con Wompi →
       </button>
+      <div id="wompi-instruccion" style="display:none;margin-top:12px;padding:14px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:10px;font-size:13px;color:rgba(255,255,255,.7);line-height:1.7;text-align:center;">
+        <strong style="color:var(--gold-light);">Paso 1:</strong> Completa tu pago en Wompi<br>
+        <strong style="color:var(--gold-light);">Paso 2:</strong> Vuelve a esta pagina<br>
+        <strong style="color:var(--gold-light);">Paso 3:</strong> Sube tu comprobante y agenda tu sesion
+      </div>
     </div>
   </div>
 
@@ -531,6 +536,14 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 // ── MÉTODO DE PAGO ────────────────────────────────────────────
+function pagarWompi() {
+  document.getElementById('wompi-instruccion').style.display = 'block';
+  document.getElementById('formulario').style.display = 'block';
+  setTimeout(function() {
+    window.open('https://checkout.wompi.co/l/SOXiPI', '_blank');
+  }, 300);
+}
+
 function selectPago(metodo) {
   _metodo = metodo;
   document.querySelectorAll('.pago-card').forEach(function(c) { c.classList.remove('selected'); });
