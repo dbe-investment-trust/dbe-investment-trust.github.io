@@ -586,32 +586,41 @@ function activarMembresia(btnId) {
   var customBtn = document.getElementById('custom-' + btnId);
   var ppDiv = document.getElementById(btnId);
 
-  if (customBtn) {
-    customBtn.style.display = 'none';
-  }
+  if (customBtn) customBtn.style.display = 'none';
+
+  // Clear and recreate PayPal container to avoid frozen state
   if (ppDiv) {
-    ppDiv.style.display = 'block';
-    ppDiv.style.width = '100%';
-    ppDiv.style.height = 'auto';
-    ppDiv.style.opacity = '1';
-    ppDiv.style.pointerEvents = 'auto';
+    ppDiv.innerHTML = '';
+    ppDiv.style.cssText = 'display:block;width:100%;min-height:50px;';
+    paypal.Buttons({
+      style: { layout:'vertical', color:'gold', shape:'pill', label:'subscribe' },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({ plan_id: 'P-9PD78047TN589313HNJ4TYEQ' });
+      },
+      onApprove: function(data) {
+        window.location.href = 'auth.html?sub=' + data.subscriptionID;
+      },
+      onCancel: function() {
+        cancelarMembresia(btnId);
+      },
+      onError: function() {
+        cancelarMembresia(btnId);
+      }
+    }).render('#' + btnId);
   }
 
-  // Add cancel button if not exists
+  // Add cancel button
   var cancelId = 'cancel-' + btnId;
   if (!document.getElementById(cancelId)) {
     var cancelBtn = document.createElement('button');
     cancelBtn.id = cancelId;
     cancelBtn.textContent = '← Volver';
-    cancelBtn.style.cssText = 'display:block;width:100%;margin-top:8px;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:10px;color:rgba(255,255,255,.5);font-size:13px;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .2s;';
-    cancelBtn.onmouseover = function() { this.style.borderColor = 'rgba(255,255,255,.4)'; this.style.color = '#fff'; };
-    cancelBtn.onmouseout = function() { this.style.borderColor = 'rgba(255,255,255,.2)'; this.style.color = 'rgba(255,255,255,.5)'; };
+    cancelBtn.style.cssText = 'display:block;width:100%;margin-top:8px;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:10px;color:rgba(255,255,255,.5);font-size:13px;cursor:pointer;font-family:DM Sans,sans-serif;';
     cancelBtn.onclick = function() { cancelarMembresia(btnId); };
     if (ppDiv && ppDiv.parentNode) {
       ppDiv.parentNode.insertBefore(cancelBtn, ppDiv.nextSibling);
     }
   }
-
 }
 
 function cancelarMembresia(btnId) {
@@ -623,12 +632,10 @@ function cancelarMembresia(btnId) {
     customBtn.style.display = 'block';
     customBtn.disabled = false;
     customBtn.style.opacity = '1';
-    customBtn.textContent = 'Activar mi membresía →';
   }
   if (ppDiv) {
+    ppDiv.innerHTML = '';
     ppDiv.style.display = 'none';
-    ppDiv.style.opacity = '0';
-    ppDiv.style.pointerEvents = 'none';
   }
   if (cancelBtn) cancelBtn.remove();
 }
