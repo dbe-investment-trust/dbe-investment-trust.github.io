@@ -236,7 +236,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;d
  <div style="font-weight:600;font-size:14px;color:var(--navy);">Dibie <span style="font-size:11px;color:var(--gold);font-weight:500;margin-left:4px;">· Agente IA</span></div>
  <div style="font-size:12px;color:var(--muted);margin-top:2px;">Experto en finanzas personales · ecosistema DBE Investment Trust</div>
  <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
- <span style="font-size:10px;background:var(--success-light);color:var(--success);padding:2px 8px;border-radius:20px;font-weight:500;">Club $6.99 USD/mes</span>
+ <span style="font-size:10px;background:var(--success-light);color:var(--success);padding:2px 8px;border-radius:20px;font-weight:500;">Club $5.99 USD/mes</span>
  <span style="font-size:10px;background:#F0EDE8;color:var(--navy);padding:2px 8px;border-radius:20px;font-weight:500;">Consultoría 1:1</span>
  <span style="font-size:10px;background:var(--teal-light);color:var(--teal);padding:2px 8px;border-radius:20px;font-weight:500;">Soporte miembros</span>
  </div>
@@ -320,13 +320,13 @@ const conversationHistory = [];
 // ═══════════════════════════════════════════
 const SYSTEM_PROMPT = `Eres Dibie, el agente financiero inteligente del ecosistema DBE Investment Trust. Tienes personalidad propia: eres experto en finanzas pero hablas como un amigo de confianza — directo, cálido, sin tecnicismos innecesarios. Nunca dices "soy una IA" ni cosas robóticas. Eres Dibie, punto. Cuándo te pregunten quién eres, dices que eres Dibie, el agente financiero del ecosistema DBE. Tienes tres roles según lo que necesite el usuario:
 
-1. ASESOR DEL CLUB: Responder dudas sobre el DBE Financial Club ($6.99 USD/mes) y guiar hacia la suscripción
-2. ASESOR DE CONSULTORÍA: Diagnosticar la situación financiera y guiar PRIMERO hacia la suscripción al club ($6.99 USD/mes). El DBE Financial Club ($49.99 USD) es exclusiva para miembros activos
+1. ASESOR DEL CLUB: Responder dudas sobre el DBE Financial Club ($5.99 USD/mes) y guiar hacia la suscripción
+2. ASESOR DE CONSULTORÍA: Diagnosticar la situación financiera y guiar PRIMERO hacia la suscripción al club ($5.99 USD/mes). El DBE Financial Club ($49.99 USD) es exclusiva para miembros activos
 3. SOPORTE DE MIEMBRO: Ayudar a miembros activos del club con dudas sobre contenido, señales y estrategia
 
 CONTEXTO COMPLETO DEL ECOSISTEMA:
 
-DBE FINANCIAL CLUB — $6.99 USD/mes (débito automático, cancela cuando quieras):
+DBE FINANCIAL CLUB — $5.99 USD/mes (débito automático, cancela cuando quieras):
 - Análisis de mercado semanal (cada lunes)
 - Señales de inversión 2-3 veces por semana (acciónes, ETFs, finca raíz)
 - Clases grabadas de finanzas (nuevas cada semana)
@@ -553,7 +553,7 @@ async function handleScriptedReply(choice) {
   if (choice === '💡 Quiero saber más del DBE Financial Club') {
     await addMessage('user', choice);
     await showTyping(1000);
-    await addMessage('bot', '¡Genial! El **DBE Financial Club** es tu membresía de finanzas personales de alto valor por **$6.99 USD/mes**.\n\nCada semana recibes análisis de mercado, señales de inversión concretas, clases grabadas y acceso al área privada de miembros. ¿Quieres que hagamos un diagnóstico rápido para ver si es lo que necesitas?');
+    await addMessage('bot', '¡Genial! El **DBE Financial Club** es tu membresía de finanzas personales de alto valor por **$5.99 USD/mes**.\n\nCada semana recibes análisis de mercado, señales de inversión concretas, clases grabadas y acceso al área privada de miembros. ¿Quieres que hagamos un diagnóstico rápido para ver si es lo que necesitas?');
     setQuickReplies(['Sí, hagamos el diagnóstico', '¿Qué incluye exactamente?', '¿Cómo me suscribo?']);
     return;
   }
@@ -599,7 +599,7 @@ async function handleScriptedReply(choice) {
   if (choice === '¿Qué incluye exactamente?') {
     await addMessage('user', choice);
     await showTyping(800);
-    await addMessage('bot', 'El DBE Financial Club incluye:\n\n**📊 Análisis de mercado** — cada lunes\n**🎯 Señales de inversión** — 2-3/semana\n**🎓 Clases grabadas** — nuevas cada semana\n**📰 Newsletter quincenal** exclusivo\n**🧠 Juegos mentales** de inversión\n**💬 Área privada** de miembros\n**⭐ Consultoría 1:1** exclusiva para miembros\n\nTodo por **$6.99 USD/mes**. Sin permanencia.');
+    await addMessage('bot', 'El DBE Financial Club incluye:\n\n**📊 Análisis de mercado** — cada lunes\n**🎯 Señales de inversión** — 2-3/semana\n**🎓 Clases grabadas** — nuevas cada semana\n**📰 Newsletter quincenal** exclusivo\n**🧠 Juegos mentales** de inversión\n**💬 Área privada** de miembros\n**⭐ Consultoría 1:1** exclusiva para miembros\n\nTodo por **$5.99 USD/mes**. Sin permanencia.');
     setQuickReplies(['¿Cómo me suscribo?', 'Hagamos el diagnóstico primero', '¿Puedo cancelar cuando quiera?']);
     return;
   }
@@ -607,7 +607,7 @@ async function handleScriptedReply(choice) {
   if (choice === '¿Cómo me suscribo?') {
     await addMessage('user', choice);
     await showTyping(700);
-    await addMessage('bot', 'Es muy fácil:\n\n1️⃣ Crea tu cuenta en **auth.html**\n2️⃣ Activa tu membresía con **PayPal** ($6.99 USD/mes)\n3️⃣ Accede inmediatamente al área de miembros\n\n¿Quieres que te lleve al registro ahora?');
+    await addMessage('bot', 'Es muy fácil:\n\n1️⃣ Crea tu cuenta en **auth.html**\n2️⃣ Activa tu membresía con **PayPal** ($5.99 USD/mes)\n3️⃣ Accede inmediatamente al área de miembros\n\n¿Quieres que te lleve al registro ahora?');
     setQuickReplies(['✅ Sí, quiero registrarme', 'Primero hagamos el diagnóstico', '¿Puedo cancelar cuando quiera?']);
     return;
   }
@@ -676,22 +676,22 @@ function buildFreeResponse(text) {
  // ── PREGUNTAS DEL CLUB ───────────────────────────────────────
   if (t.includes('club') || t.includes('suscri') || t.includes('membresia') || t.includes('membresía')) {
  return {
-      text: `El **DBE Financial Club** es nuestra membresía de contenido financiero de alto valor por **$6.99 USD/mes** con débito automático.\n\nIncluyeanálisis de mercado semanal, señales de inversión 2-3 veces por semana, clases grabadas, newsletter quincenal y área privada de miembros. Cómo miembro tienes un **20% de descuento** en tu primera consultoría personalizada.\n\nPuedes suscribirte ahora en: https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9PD78047TN589313HNJ4TYEQ`,
-      qr: ['🔗 Ir al pago — $6.99 USD/mes', '¿Qué incluye el club?', '¿Cómo funciona la consultoría?']
+      text: `El **DBE Financial Club** es nuestra membresía de contenido financiero de alto valor por **$5.99 USD/mes** con débito automático.\n\nIncluyeanálisis de mercado semanal, señales de inversión 2-3 veces por semana, clases grabadas, newsletter quincenal y área privada de miembros. Cómo miembro tienes un **20% de descuento** en tu primera consultoría personalizada.\n\nPuedes suscribirte ahora en: https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9PD78047TN589313HNJ4TYEQ`,
+      qr: ['🔗 Ir al pago — $5.99 USD/mes', '¿Qué incluye el club?', '¿Cómo funciona la consultoría?']
  };
   }
 
-  if (t.includes('6.99 USD') || t.includes('precio del club') || t.includes('cuánto cuesta el club')) {
+  if (t.includes('5.99 USD') || t.includes('precio del club') || t.includes('cuánto cuesta el club')) {
  return {
-      text: `El club cuesta **$6.99 USD al mes**, con débito automático a través de PayPal. Sin permanencia mínima — cancelas cuando quieras con un simple mensaje.\n\nPuedes suscribirte directamente aquí: https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9PD78047TN589313HNJ4TYEQ`,
-      qr: ['🔗 Ir al pago — $6.99 USD/mes', '¿Qué incluye?', 'Tengo otra pregunta']
+      text: `El club cuesta **$5.99 USD al mes**, con débito automático a través de PayPal. Sin permanencia mínima — cancelas cuando quieras con un simple mensaje.\n\nPuedes suscribirte directamente aquí: https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9PD78047TN589313HNJ4TYEQ`,
+      qr: ['🔗 Ir al pago — $5.99 USD/mes', '¿Qué incluye?', 'Tengo otra pregunta']
  };
   }
 
   if (t.includes('cancelar') || t.includes('baja') || t.includes('permanencia')) {
  return {
       text: `Puedes **cancelar en cualquier momento** sin penalizaciones. Solo envías un mensaje al correo dbeinvestmenttrust@gmail.com y cancelamos de inmediato. Mantienes el acceso hasta el final del período ya pagado.\n\nEs exactamente como Netflix — tú tienes el control total.`,
-      qr: ['🔗 Ir al pago — $6.99 USD/mes', 'Tengo otra pregunta']
+      qr: ['🔗 Ir al pago — $5.99 USD/mes', 'Tengo otra pregunta']
  };
   }
 
@@ -749,7 +749,7 @@ function buildFreeResponse(text) {
  if (scriptIndex < script.length) {
       return { text: '__INICIAR_DIAGNOSTICO__', qr: [] };
  }
-    return { text: '¡Perfecto! El DBE Financial Club es exactamente lo que necesitas. Por solo **$6.99 USD/mes** tienes acceso a análisis, señales de inversión, clases y el DBE Financial Club exclusiva para miembros. ¿Te gustaría unirte ahora?', qr: ['✅ Sí, quiero unirme al club', '¿Qué incluye exactamente?', 'Tengo otra pregunta'] };
+    return { text: '¡Perfecto! El DBE Financial Club es exactamente lo que necesitas. Por solo **$5.99 USD/mes** tienes acceso a análisis, señales de inversión, clases y el DBE Financial Club exclusiva para miembros. ¿Te gustaría unirte ahora?', qr: ['✅ Sí, quiero unirme al club', '¿Qué incluye exactamente?', 'Tengo otra pregunta'] };
  }
 
   // Respuesta genérica
@@ -764,7 +764,7 @@ async function handleFreeMessage(text) {
   await addMessage('user', text);
 
   // Si el usuario quiere ir al registro
-  if (text === '🔗 Ir al pago — $6.99 USD/mes' || text === '✅ Sí, quiero registrarme' || text === '✅ Quiero unirme al club') {
+  if (text === '🔗 Ir al pago — $5.99 USD/mes' || text === '✅ Sí, quiero registrarme' || text === '✅ Quiero unirme al club') {
     await showTyping(700);
     await addMessage('bot', '¡Excelente decisión! 🎯 Te llevo al registro ahora mismo.');
     setTimeout(() => { pasarPerfilAAuth(); }, 1200);
@@ -859,7 +859,7 @@ async function triggerAIAnalysis() {
   else if (freno.includes('No tengo tiempo')) pitch += 'El club está diseñado para personas ocupadas — análisis digeribles en minutos, señales directas al punto. ';
   else if (freno.includes('No confío')) pitch += 'Total transparencia: no gestionamos tu dinero. Tú mantienes el control total. Solo te damos la información para que decidas. ';
   else pitch += 'El primer paso es siempre el más importante — y el club está diseñado para acompañarte desde donde estás. ';
-  pitch += '\n\nPor solo **$6.99 USD/mes** tienes acceso a todo el ecosistema. ¿Creamos tu cuenta ahora?';
+  pitch += '\n\nPor solo **$5.99 USD/mes** tienes acceso a todo el ecosistema. ¿Creamos tu cuenta ahora?';
 
   await addMessage('bot', pitch);
   setQuickReplies(['✅ Sí, crear mi cuenta', '¿Qué incluye exactamente?', '¿Cuánto puedo ganar realmente?', '¿Puedo cancelar cuando quiera?']);
