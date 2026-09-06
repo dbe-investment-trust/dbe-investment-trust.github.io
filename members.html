@@ -588,6 +588,37 @@ function crearCardContenido(item) {
     '<h4 style="font-size:15px;font-weight:700;color:#fff;margin:0 0 8px;">' + item.titulo + '</h4>' +
     '<p style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.7;margin:0;">' + item.resumen + '</p>' +
     contenidoHtml + linkBtn;
+  // Botón eliminar solo para CEO
+  if (window._isCEO && item.id) {
+    var delBtn = document.createElement('button');
+    delBtn.textContent = 'Eliminar';
+    delBtn.style.cssText = 'display:inline-block;margin-top:10px;padding:6px 14px;background:rgba(192,57,43,.15);color:#EF9A9A;border:1px solid rgba(192,57,43,.3);border-radius:8px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;';
+    delBtn.onclick = (function(id, cardEl) {
+      return function() {
+        if (!confirm('Eliminar este contenido permanentemente?')) return;
+        fetch(APPS_URL + '?tipo=ELIMINAR_CONTENIDO&id=' + encodeURIComponent(id))
+          .then(function(r) { return r.json(); })
+          .then(function(d) {
+            if (d.status === 'ok') {
+              cardEl.style.opacity = '0';
+              cardEl.style.transition = 'opacity 0.3s';
+              setTimeout(function() { cardEl.remove(); }, 300);
+            }
+          })
+          .catch(function() {
+            // Fallback: remove from DOM and send via POST
+            fetch(APPS_URL, {
+              method: 'POST', mode: 'no-cors',
+              headers: { 'Content-Type': 'text/plain' },
+              body: JSON.stringify({ tipo_evento: 'ELIMINAR_CONTENIDO', id: id })
+            });
+            cardEl.remove();
+          });
+      };
+    })(item.id, card);
+    card.appendChild(delBtn);
+  }
+
   return card;
 }
 
