@@ -516,47 +516,52 @@ function logout() {
 function publicarContenido() {
   var user = firebase.auth().currentUser;
   if (!user) return;
-  var titulo   = document.getElementById('ceoTitulo').value.trim();
-  var resumen  = document.getElementById('ceoResumen').value.trim();
-  var contenido= document.getElementById('ceoContenido').value.trim();
-  var tipo     = document.getElementById('ceoTipo').value;
-  var link     = document.getElementById('ceoLink').value.trim();
+  var titulo    = document.getElementById('ceoTitulo').value.trim();
+  var resumen   = document.getElementById('ceoResumen').value.trim();
+  var contenido = document.getElementById('ceoContenido').value.trim();
+  var tipo      = document.getElementById('ceoTipo').value;
+  var link      = document.getElementById('ceoLink').value.trim();
   if (!titulo || !resumen) { alert('Ingresa al menos el titulo y el resumen.'); return; }
 
-  fetch(APPS_URL, {
-    method: 'POST', mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify({
-      tipo: 'GUARDAR_CONTENIDO',
-      tipo_contenido: tipo, titulo: titulo, resumen: resumen,
-      contenido: contenido, link: link,
-      autor: user.displayName || 'Diego Bernal',
-      visibilidad: 'todos',
-      fecha_registro: new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'})
-    })
-  });
-
-  // Agregar al feed inmediatamente
-  var card = crearCardContenido({
+  var id = 'dbe-' + Date.now();
+  var item = {
+    id: id,
     fecha: new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'}),
-    tipo: tipo, titulo: titulo, resumen: resumen,
-    contenido: contenido, link: link,
-    autor: user.displayName || 'Diego Bernal'
-  });
-  var feed = document.getElementById('contentFeed');
-  if (feed.querySelector('[style*="Cargando"]') || feed.querySelector('.empty-feed')) {
-    feed.innerHTML = '';
-  }
-  feed.insertBefore(card, feed.firstChild);
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    tipo: tipo,
+    titulo: titulo,
+    resumen: resumen,
+    contenido: contenido,
+    link: link,
+    autor: user.displayName || 'Diego Bernal',
+    visibilidad: 'todos'
+  };
 
-  // Limpiar formulario
-  document.getElementById('ceoTitulo').value = '';
-  document.getElementById('ceoResumen').value = '';
-  document.getElementById('ceoContenido').value = '';
-  document.getElementById('ceoLink').value = '';
-  var ok = document.getElementById('ceoSuccess');
-  ok.style.display = 'block';
-  setTimeout(function(){ ok.style.display = 'none'; }, 3000);
+  db.collection('contenido_club').doc(id).set(item)
+    .then(function() {
+      var feed = document.getElementById('contentFeed');
+      var emptyMsg = feed.querySelector('[style*="padding:40px"]') || feed.querySelector('[style*="Cargando"]');
+      if (emptyMsg) feed.innerHTML = '';
+      feed.insertBefore(crearCardContenido(item), feed.firstChild);
+      document.getElementById('ceoTitulo').value = '';
+      document.getElementById('ceoResumen').value = '';
+      document.getElementById('ceoContenido').value = '';
+      document.getElementById('ceoLink').value = '';
+      var ok = document.getElementById('ceoSuccess');
+      ok.style.display = 'block';
+      setTimeout(function(){ ok.style.display = 'none'; }, 3000);
+
+      // Also save to Sheets via Apps Script
+      fetch(APPS_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ tipo: 'GUARDAR_CONTENIDO', tipo_contenido: tipo,
+          titulo: titulo, resumen: resumen, contenido: contenido,
+          link: link, autor: user.displayName || 'Diego Bernal', id: id,
+          fecha_registro: item.fecha })
+      });
+    })
+    .catch(function(err) { alert('Error al publicar: ' + err.message); });
 }
 
 function crearCardContenido(item) {
@@ -596,24 +601,13 @@ function crearCardContenido(item) {
     delBtn.onclick = (function(id, cardEl) {
       return function() {
         if (!confirm('Eliminar este contenido permanentemente?')) return;
-        fetch(APPS_URL + '?tipo=ELIMINAR_CONTENIDO&id=' + encodeURIComponent(id))
-          .then(function(r) { return r.json(); })
-          .then(function(d) {
-            if (d.status === 'ok') {
-              cardEl.style.opacity = '0';
-              cardEl.style.transition = 'opacity 0.3s';
-              setTimeout(function() { cardEl.remove(); }, 300);
-            }
+        db.collection('contenido_club').doc(id).delete()
+          .then(function() {
+            cardEl.style.opacity = '0';
+            cardEl.style.transition = 'opacity 0.3s';
+            setTimeout(function() { cardEl.remove(); }, 300);
           })
-          .catch(function() {
-            // Fallback: remove from DOM and send via POST
-            fetch(APPS_URL, {
-              method: 'POST', mode: 'no-cors',
-              headers: { 'Content-Type': 'text/plain' },
-              body: JSON.stringify({ tipo_evento: 'ELIMINAR_CONTENIDO', id: id })
-            });
-            cardEl.remove();
-          });
+          .catch(function(err) { alert('Error al eliminar: ' + err.message); });
       };
     })(item.id, card);
     card.appendChild(delBtn);
@@ -624,38 +618,24 @@ function crearCardContenido(item) {
 
 function cargarFeed() {
   var feed = document.getElementById('contentFeed');
-  // Use JSONP-style with script tag to avoid CORS
-  var callbackName = 'dbeCallback_' + Date.now();
-  window[callbackName] = function(data) {
-    if (!feed) return;
-    if (!data.items || data.items.length === 0) {
-      feed.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,.25);"><p style="font-size:14px;">Contenido llegando pronto.</p><p style="font-size:12px;margin-top:4px;">El equipo DBE esta preparando material exclusivo para ti.</p></div>';
-      return;
-    }
-    feed.innerHTML = '';
-    data.items.forEach(function(item) {
-      feed.appendChild(crearCardContenido(item));
-    });
-    delete window[callbackName];
-  };
+  if (!feed) return;
 
-  // Try fetch first
-  fetch(APPS_URL + '?tipo=LEER_CONTENIDO&t=' + Date.now())
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (!feed) return;
-      if (!data.items || data.items.length === 0) {
+  db.collection('contenido_club')
+    .orderBy('timestamp', 'desc')
+    .get()
+    .then(function(snapshot) {
+      if (snapshot.empty) {
         feed.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,.25);"><p style="font-size:14px;">Contenido llegando pronto.</p><p style="font-size:12px;margin-top:4px;">El equipo DBE esta preparando material exclusivo para ti.</p></div>';
         return;
       }
       feed.innerHTML = '';
-      data.items.forEach(function(item) {
-        feed.appendChild(crearCardContenido(item));
+      snapshot.forEach(function(doc) {
+        feed.appendChild(crearCardContenido(doc.data()));
       });
     })
     .catch(function(err) {
-      console.log('Feed error:', err);
-      if (feed) feed.innerHTML = '<div style="text-align:center;padding:32px;color:rgba(255,255,255,.25);font-size:13px;">Recarga la pagina para ver el contenido.</div>';
+      console.log('Error cargando feed:', err);
+      feed.innerHTML = '<div style="text-align:center;padding:32px;color:rgba(255,255,255,.25);font-size:13px;">Recarga la pagina para ver el contenido.</div>';
     });
 }
 
