@@ -248,46 +248,48 @@ nav{background:var(--navy);padding:0 32px;height:64px;display:flex;align-items:c
 
       <!-- CEO PUBLISH PANEL (solo visible para el CEO) -->
       <div id="ceoPanel">
-        <h3>Panel CEO — Publicar contenido</h3>
+        <h3 style="font-size:15px;font-weight:700;color:var(--gold-light);margin-bottom:16px;">Panel CEO — Publicar contenido</h3>
         <div class="ceo-form-group">
-          <label class="ceo-label">TIPO DE CONTENIDO</label>
+          <label class="ceo-label">Tipo de contenido</label>
           <select class="ceo-select" id="ceoTipo">
-            <option value="análisis">Análisis de mercado</option>
-            <option value="senal">Señal de inversión</option>
+            <option value="analisis">Analisis de mercado</option>
+            <option value="senal">Senal de inversion</option>
             <option value="clase">Clase grabada</option>
             <option value="news">Newsletter</option>
           </select>
         </div>
         <div class="ceo-form-group">
-          <label class="ceo-label">TÍTULO</label>
-          <input class="ceo-input" id="ceoTítulo" placeholder="Título del contenido">
+          <label class="ceo-label">Titulo</label>
+          <input class="ceo-input" id="ceoTitulo" placeholder="Titulo del contenido">
         </div>
         <div class="ceo-form-group">
-          <label class="ceo-label">CONTENIDO (texto o descripción)</label>
-          <textarea class="ceo-input" id="ceoTexto" rows="4" placeholder="Escribe el contenido aquí..."></textarea>
+          <label class="ceo-label">Resumen (lo que ve el miembro en el feed)</label>
+          <textarea class="ceo-input" id="ceoResumen" rows="2" placeholder="2-3 lineas que generen interes..."></textarea>
         </div>
         <div class="ceo-form-group">
-          <label class="ceo-label">URL DE IMAGEN (opcional)</label>
-          <input class="ceo-input" id="ceoImagen" placeholder="https://imagen.com/foto.jpg">
+          <label class="ceo-label">Contenido completo</label>
+          <textarea class="ceo-input" id="ceoContenido" rows="5" placeholder="Escribe el analisis, clase o newsletter completo..."></textarea>
         </div>
         <div class="ceo-form-group">
-          <label class="ceo-label">URL DE VIDEO YOUTUBE (opcional)</label>
-          <input class="ceo-input" id="ceoVideo" placeholder="https://youtube.com/watch?v=...">
+          <label class="ceo-label">Link externo (opcional)</label>
+          <input class="ceo-input" id="ceoLink" placeholder="https://... video, PDF o articulo">
         </div>
-        <div class="ceo-form-group">
-          <label class="ceo-label">LINK EXTERNO (opcional)</label>
-          <input class="ceo-input" id="ceoLink" placeholder="https://...">
+        <div class="ceo-form-group" style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="ceoNotificar" checked style="width:16px;height:16px;">
+          <label for="ceoNotificar" style="font-size:12px;color:var(--muted);">Notificar miembros por correo</label>
         </div>
-        <button class="ceo-publish-btn" onclick="publicarContenido()">Publicar para los miembros →</button>
-        <p class="ceo-success" id="ceoSuccess">Publicado éxitosamente</p>
+        <button onclick="publicarContenido()" style="width:100%;padding:12px;background:linear-gradient(135deg,#C9A84C,#F0D78C);color:#0D1B2A;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:'Playfair Display',serif;cursor:pointer;margin-top:8px;">
+          Publicar para los miembros
+        </button>
+        <p class="ceo-success" id="ceoSuccess" style="display:none;color:#7DFFB3;font-size:12px;text-align:center;margin-top:8px;">Publicado exitosamente</p>
       </div>
 
       <!-- FEED -->
       <p class="feed-title">Contenido exclusivo del club</p>
       <div id="contentFeed">
-        <div class="empty-feed">
-          <h3>Contenido llegando pronto</h3>
-          <p>El equipo DBE está preparando el primer análisis semanal para ti. Vuelve mañana.</p>
+        <div style="text-align:center;padding:32px;color:rgba(255,255,255,.3);">
+          <div style="font-size:24px;margin-bottom:8px;">⏳</div>
+          <p style="font-size:13px;">Cargando contenido...</p>
         </div>
       </div>
     </div>
