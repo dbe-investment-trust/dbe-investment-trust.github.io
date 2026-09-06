@@ -527,8 +527,8 @@ function publicarContenido() {
     method: 'POST', mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify({
-      tipo_evento: 'GUARDAR_CONTENIDO',
-      tipo: tipo, titulo: titulo, resumen: resumen,
+      tipo: 'GUARDAR_CONTENIDO',
+      tipo_contenido: tipo, titulo: titulo, resumen: resumen,
       contenido: contenido, link: link,
       autor: user.displayName || 'Diego Bernal',
       visibilidad: 'todos',
