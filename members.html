@@ -570,75 +570,67 @@ function publicarContenido() {
 }
 
 function crearCardContenido(item) {
-  var config = {
-    analisis: { color:'#7C6FCD', bg:'rgba(124,111,205,.08)', border:'rgba(124,111,205,.25)', icon:'📊', label:'Análisis' },
-    senal:    { color:'#E74C6F', bg:'rgba(231,76,111,.08)',  border:'rgba(231,76,111,.25)',  icon:'🎯', label:'Señal' },
-    clase:    { color:'#F0A500', bg:'rgba(240,165,0,.08)',   border:'rgba(240,165,0,.25)',   icon:'🎓', label:'Clase' },
-    news:     { color:'#2ECC8A', bg:'rgba(46,204,138,.08)',  border:'rgba(46,204,138,.25)',  icon:'📰', label:'Newsletter' }
+  var configs = {
+    analisis: ['#7C6FCD','rgba(124,111,205,.08)','rgba(124,111,205,.25)','Analisis'],
+    senal:    ['#E74C6F','rgba(231,76,111,.08)', 'rgba(231,76,111,.25)', 'Senal'],
+    clase:    ['#F0A500','rgba(240,165,0,.08)',  'rgba(240,165,0,.25)',  'Clase'],
+    news:     ['#2ECC8A','rgba(46,204,138,.08)', 'rgba(46,204,138,.25)', 'Newsletter']
   };
-  var cfg = config[item.tipo] || config.analisis;
+  var c = configs[item.tipo] || configs.analisis;
+  var color = c[0], bg = c[1], border = c[2], label = c[3];
 
   var card = document.createElement('div');
-  card.style.cssText = 'background:linear-gradient(135deg,rgba(16,28,44,.95),rgba(22,36,54,.95));border:1px solid rgba(201,168,76,.1);border-radius:18px;padding:0;margin-bottom:16px;overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:default;';
+  card.style.cssText = 'background:linear-gradient(135deg,rgba(16,28,44,.95),rgba(22,36,54,.95));border:1px solid rgba(201,168,76,.1);border-radius:18px;overflow:hidden;margin-bottom:16px;transition:transform .2s,box-shadow .2s;';
   card.onmouseover = function(){ this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 40px rgba(0,0,0,.4)'; };
   card.onmouseout  = function(){ this.style.transform='translateY(0)';    this.style.boxShadow='none'; };
 
-  // Top accent bar
-  var accent = '<div style="height:3px;background:linear-gradient(90deg,' + cfg.color + ',transparent);"></div>';
+  var html = '';
+
+  // Top bar
+  html += '<div style="height:3px;background:linear-gradient(90deg,' + color + ',transparent);"></div>';
 
   // Header
-  var header =
-    '<div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 0;">' +
-    '<div style="display:flex;align-items:center;gap:10px;">' +
-    '<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,rgba(201,168,76,.2),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#F0D78C;">DB</div>' +
-    '<div><p style="font-size:13px;font-weight:600;margin:0;color:#fff;">Diego Bernal</p>' +
-    '<p style="font-size:11px;color:rgba(255,255,255,.3);margin:0;">' + (item.fecha || 'Reciente') + '</p></div>' +
-    '</div>' +
-    '<span style="display:inline-flex;align-items:center;gap:5px;background:' + cfg.bg + ';border:1px solid ' + cfg.border + ';color:' + cfg.color + ';font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;">' + cfg.icon + ' ' + cfg.label + '</span>' +
-    '</div>';
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 0;">';
+  html += '<div style="display:flex;align-items:center;gap:10px;">';
+  html += '<div style="width:38px;height:38px;border-radius:50%;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#F0D78C;">DB</div>';
+  html += '<div><p style="font-size:13px;font-weight:600;margin:0;color:#fff;">Diego Bernal</p>';
+  html += '<p style="font-size:11px;color:rgba(255,255,255,.3);margin:0;">' + (item.fecha || 'Reciente') + '</p></div>';
+  html += '</div>';
+  html += '<span style="background:' + bg + ';border:1px solid ' + border + ';color:' + color + ';font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;">' + label + '</span>';
+  html += '</div>';
 
   // Body
-  var body =
-    '<div style="padding:14px 20px 20px;">' +
-    '<h4 style="font-family:Playfair Display,serif;font-size:17px;font-weight:700;color:#fff;margin:0 0 10px;line-height:1.35;">' + item.titulo + '</h4>' +
-    '<p style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.75;margin:0;">' + item.resumen + '</p>';
+  html += '<div style="padding:14px 20px 20px;">';
+  html += '<h4 style="font-family:Playfair Display,serif;font-size:17px;font-weight:700;color:#fff;margin:0 0 10px;line-height:1.35;">' + item.titulo + '</h4>';
+  html += '<p style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.75;margin:0;">' + item.resumen + '</p>';
 
-  // Full content if available
   if (item.contenido) {
-    body +=
-      '<div style="margin-top:14px;padding:14px 16px;background:rgba(255,255,255,.03);border-left:3px solid ' + cfg.color + ';border-radius:0 8px 8px 0;">' +
-      '<p style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.75;margin:0;white-space:pre-line;">' + item.contenido + '</p>' +
-      '</div>';
+    html += '<div style="margin-top:14px;padding:14px 16px;background:rgba(255,255,255,.03);border-left:3px solid ' + color + ';border-radius:0 8px 8px 0;">';
+    html += '<p style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.75;margin:0;white-space:pre-line;">' + item.contenido + '</p>';
+    html += '</div>';
   }
 
-  // Link button
   if (item.link) {
-    body +=
-      '<a href="' + item.link + '" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:9px 18px;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));color:#F0D78C;border:1px solid rgba(201,168,76,.25);border-radius:10px;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Ver contenido completo →</a>';
+    html += '<a href="' + item.link + '" target="_blank" style="display:inline-block;margin-top:14px;padding:9px 18px;background:rgba(201,168,76,.12);color:#F0D78C;border:1px solid rgba(201,168,76,.25);border-radius:10px;font-size:12px;font-weight:700;text-decoration:none;">Ver contenido completo</a>';
   }
 
-  body += '</div>';
+  html += '</div>';
+  card.innerHTML = html;
 
-  card.innerHTML = accent + header + body;
-
-  // Botón eliminar solo para CEO
   if (window._isCEO && item.id) {
     var delBtn = document.createElement('button');
-    delBtn.textContent = 'Eliminar publicación';
-    delBtn.style.cssText = 'display:block;width:calc(100% - 40px);margin:0 20px 16px;padding:8px;background:rgba(192,57,43,.08);color:rgba(239,154,154,.7);border:1px solid rgba(192,57,43,.2);border-radius:8px;font-size:11px;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .2s;';
-    delBtn.onmouseover = function(){ this.style.background='rgba(192,57,43,.2)'; this.style.color='#EF9A9A'; };
-    delBtn.onmouseout  = function(){ this.style.background='rgba(192,57,43,.08)'; this.style.color='rgba(239,154,154,.7)'; };
+    delBtn.textContent = 'Eliminar publicacion';
+    delBtn.style.cssText = 'display:block;width:calc(100% - 40px);margin:0 20px 16px;padding:8px;background:rgba(192,57,43,.08);color:rgba(239,154,154,.7);border:1px solid rgba(192,57,43,.2);border-radius:8px;font-size:11px;cursor:pointer;font-family:sans-serif;';
     delBtn.onclick = (function(id, cardEl) {
       return function() {
-        if (!confirm('Eliminar esta publicación permanentemente?')) return;
+        if (!confirm('Eliminar esta publicacion?')) return;
         db.collection('contenido_club').doc(id).delete()
           .then(function() {
             cardEl.style.opacity = '0';
-            cardEl.style.transform = 'translateY(-10px)';
-            cardEl.style.transition = 'all 0.3s';
+            cardEl.style.transition = 'opacity 0.3s';
             setTimeout(function() { cardEl.remove(); }, 300);
           })
-          .catch(function(err) { alert('Error al eliminar: ' + err.message); });
+          .catch(function(err) { alert('Error: ' + err.message); });
       };
     })(item.id, card);
     card.appendChild(delBtn);
