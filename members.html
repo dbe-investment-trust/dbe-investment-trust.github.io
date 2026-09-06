@@ -514,29 +514,102 @@ function logout() {
 
 // ── CEO PUBLISH ────────────────────────────────────────────────
 function publicarContenido() {
-  const tipo    = document.getElementById('ceoTipo').value;
-  const título  = document.getElementById('ceoTítulo').value.trim();
-  const texto   = document.getElementById('ceoTexto').value.trim();
-  const imagen  = document.getElementById('ceoImagen').value.trim();
-  const video   = document.getElementById('ceoVideo').value.trim();
-  const link    = document.getElementById('ceoLink').value.trim();
+  var user = firebase.auth().currentUser;
+  if (!user) return;
+  var titulo   = document.getElementById('ceoTitulo').value.trim();
+  var resumen  = document.getElementById('ceoResumen').value.trim();
+  var contenido= document.getElementById('ceoContenido').value.trim();
+  var tipo     = document.getElementById('ceoTipo').value;
+  var link     = document.getElementById('ceoLink').value.trim();
+  if (!titulo || !resumen) { alert('Ingresa al menos el titulo y el resumen.'); return; }
 
-  if (!título || !texto) { alert('El título y el contenido son obligatorios.'); return; }
-
-  const items = JSON.parse(localStorage.getItem(CONTENT_KEY) || '[]');
-  items.unshift({
-    id: Date.now(),
-    tipo, título, texto, imagen, video, link,
-    fecha: new Date().toLocaleDateString('es-CO', { day:'numeric', month:'long', year:'numeric' })
+  fetch(APPS_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      tipo_evento: 'GUARDAR_CONTENIDO',
+      tipo: tipo, titulo: titulo, resumen: resumen,
+      contenido: contenido, link: link,
+      autor: user.displayName || 'Diego Bernal',
+      visibilidad: 'todos',
+      fecha_registro: new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'})
+    })
   });
-  localStorage.setItem(CONTENT_KEY, JSON.stringify(items));
-  trackEvento('ENGAGEMENT', { etapa: 'ENGAGEMENT', acción: 'Publicacion CEO: ' + título });
 
-  // Clear form
-  ['ceoTítulo','ceoTexto','ceoImagen','ceoVideo','ceoLink'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('ceoSuccess').style.display = 'block';
-  setTimeout(() => document.getElementById('ceoSuccess').style.display = 'none', 2000);
-  renderFeed();
+  // Agregar al feed inmediatamente
+  var card = crearCardContenido({
+    fecha: new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'}),
+    tipo: tipo, titulo: titulo, resumen: resumen,
+    contenido: contenido, link: link,
+    autor: user.displayName || 'Diego Bernal'
+  });
+  var feed = document.getElementById('contentFeed');
+  if (feed.querySelector('[style*="Cargando"]') || feed.querySelector('.empty-feed')) {
+    feed.innerHTML = '';
+  }
+  feed.insertBefore(card, feed.firstChild);
+
+  // Limpiar formulario
+  document.getElementById('ceoTitulo').value = '';
+  document.getElementById('ceoResumen').value = '';
+  document.getElementById('ceoContenido').value = '';
+  document.getElementById('ceoLink').value = '';
+  var ok = document.getElementById('ceoSuccess');
+  ok.style.display = 'block';
+  setTimeout(function(){ ok.style.display = 'none'; }, 3000);
+}
+
+function crearCardContenido(item) {
+  var colores = {
+    analisis: '#534AB7', senal: '#C0392B', clase: '#BA7517', news: '#1A7A4A'
+  };
+  var etiquetas = {
+    analisis: 'Analisis', senal: 'Senal', clase: 'Clase', news: 'Newsletter'
+  };
+  var color = colores[item.tipo] || '#534AB7';
+  var etiqueta = etiquetas[item.tipo] || item.tipo;
+
+  var card = document.createElement('div');
+  card.className = 'content-card';
+  card.style.cssText = 'background:rgba(22,34,52,.8);border:1px solid rgba(201,168,76,.12);border-radius:14px;padding:20px;margin-bottom:14px;';
+
+  var linkBtn = item.link ? '<a href="' + item.link + '" target="_blank" style="display:inline-block;margin-top:8px;padding:8px 16px;background:rgba(201,168,76,.15);color:#F0D78C;border:1px solid rgba(201,168,76,.3);border-radius:8px;font-size:12px;text-decoration:none;font-weight:600;">Ver contenido completo</a>' : '';
+  var contenidoHtml = item.contenido ? '<p style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.7;margin:8px 0 0;border-top:1px solid rgba(255,255,255,.06);padding-top:10px;">' + item.contenido + '</p>' : '';
+
+  card.innerHTML =
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">' +
+    '<div style="width:34px;height:34px;border-radius:50%;background:rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#F0D78C;">DB</div>' +
+    '<div style="flex:1;">' +
+    '<p style="font-size:13px;font-weight:600;margin:0;color:#fff;">' + (item.autor || 'Diego Bernal') + '</p>' +
+    '<p style="font-size:11px;color:rgba(255,255,255,.3);margin:0;">' + (item.fecha || 'Ahora') + '</p>' +
+    '</div>' +
+    '<span style="background:' + color + '33;color:' + color + ';font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid ' + color + '55;">' + etiqueta + '</span>' +
+    '</div>' +
+    '<h4 style="font-size:15px;font-weight:700;color:#fff;margin:0 0 8px;">' + item.titulo + '</h4>' +
+    '<p style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.7;margin:0;">' + item.resumen + '</p>' +
+    contenidoHtml + linkBtn;
+  return card;
+}
+
+function cargarFeed() {
+  fetch(APPS_URL + '?tipo=LEER_CONTENIDO')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var feed = document.getElementById('contentFeed');
+      if (!feed) return;
+      if (!data.items || data.items.length === 0) {
+        feed.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,.25);"><p style="font-size:14px;">Contenido llegando pronto.</p><p style="font-size:12px;margin-top:4px;">El equipo DBE esta preparando material exclusivo para ti.</p></div>';
+        return;
+      }
+      feed.innerHTML = '';
+      data.items.forEach(function(item) {
+        feed.appendChild(crearCardContenido(item));
+      });
+    })
+    .catch(function() {
+      var feed = document.getElementById('contentFeed');
+      if (feed) feed.innerHTML = '<div style="text-align:center;padding:32px;color:rgba(255,255,255,.25);font-size:13px;">No se pudo cargar el contenido. Recarga la pagina.</div>';
+    });
 }
 
 // ── RENDER FEED ────────────────────────────────────────────────
