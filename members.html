@@ -439,8 +439,10 @@ auth.onAuthStateChanged(async (user) => {
     uid: user.uid
   });
   window._isCEO = isCEO;
-  checkCEO(user.email);
-  cargarFeed();
+  setTimeout(function() {
+    if (typeof checkCEO === 'function') checkCEO(user.email);
+    cargarFeed();
+  }, 500);
 });
 
 function logout() {
