@@ -1092,8 +1092,8 @@ function renderFrases() {
       '<div style="font-size:17px;font-style:italic;color:#fff;line-height:1.7;margin-bottom:16px;padding:0 8px;">'+f.frase+'</div>' +
       '<div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:20px;">— '+f.autor+'</div>' +
       '<div style="display:flex;gap:10px;justify-content:center;">' +
-      '<button onclick="window.prevF()" style="padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;font-family:\'DM Sans\',sans-serif;">← Anterior</button>' +
-      '<button onclick="window.nextF()" style="padding:8px 18px;border-radius:8px;background:var(--gold);color:var(--navy);border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;">Siguiente →</button>' +
+      '<button onclick="window.prevF()" style="padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;font-family:DM Sans,sans-serif;">← Anterior</button>' +
+      '<button onclick="window.nextF()" style="padding:8px 18px;border-radius:8px;background:var(--gold);color:var(--navy);border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;">Siguiente →</button>' +
       '</div>' +
       '<div style="margin-top:16px;padding:12px 16px;background:rgba(255,255,255,.04);border-radius:10px;text-align:left;font-size:12px;color:rgba(255,255,255,.6);line-height:1.6;"><strong style="color:'+f.color+';">Reflexión DBE: </strong>'+getReflexion(f.categoria)+'</div>' +
       '<div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.25);">'+(idx%frases.length+1)+' de '+frases.length+' frases</div></div>';
