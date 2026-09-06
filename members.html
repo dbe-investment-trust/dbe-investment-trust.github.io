@@ -614,7 +614,7 @@ function crearCardContenido(item) {
   // Link button
   if (item.link) {
     body +=
-      '<a href="' + item.link + '" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:9px 18px;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));color:#F0D78C;border:1px solid rgba(201,168,76,.25);border-radius:10px;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;" onmouseover="this.style.background='rgba(201,168,76,.25)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05))'">Ver contenido completo →</a>';
+      '<a href="' + item.link + '" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:9px 18px;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));color:#F0D78C;border:1px solid rgba(201,168,76,.25);border-radius:10px;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Ver contenido completo →</a>';
   }
 
   body += '</div>';
