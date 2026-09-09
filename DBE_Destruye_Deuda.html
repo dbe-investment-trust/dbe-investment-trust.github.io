@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destruye la Deuda — DBE Financial Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#070E18;color:#fff;font-family:'DM Sans',sans-serif;overflow:hidden;height:100vh;user-select:none;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(7,14,24,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(201,168,76,.1);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:52px;}
+.nav-logo{font-family:'Playfair Display',serif;font-size:14px;color:#F0D78C;}
+.nav-back{font-size:12px;color:rgba(255,255,255,.4);text-decoration:none;}
+#gameWrapper{position:fixed;top:52px;left:0;right:0;bottom:0;display:flex;flex-direction:column;}
+#hud{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:rgba(13,27,42,.8);border-bottom:1px solid rgba(201,168,76,.1);flex-shrink:0;}
+.hud-item{text-align:center;}
+.hud-label{font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;display:block;}
+.hud-value{font-family:'Playfair Display',serif;font-size:20px;color:#F0D78C;}
+#gameCanvas{flex:1;display:block;width:100%;}
+.overlay{position:absolute;top:52px;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(7,14,24,.92);backdrop-filter:blur(8px);z-index:50;padding:24px;}
+.overlay h1{font-family:'Playfair Display',serif;font-size:clamp(22px,5vw,38px);color:#F0D78C;margin-bottom:8px;text-align:center;}
+.overlay p{font-size:14px;color:rgba(255,255,255,.5);text-align:center;line-height:1.7;max-width:340px;margin-bottom:24px;}
+.big-score{font-family:'Playfair Display',serif;font-size:64px;color:#F0D78C;margin-bottom:4px;}
+.big-label{font-size:12px;color:rgba(255,255,255,.3);margin-bottom:24px;letter-spacing:2px;}
+.btn-gold{padding:14px 36px;background:linear-gradient(135deg,#C9A84C,#F0D78C);color:#0D1B2A;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'Playfair Display',serif;cursor:pointer;transition:all .2s;box-shadow:0 6px 24px rgba(201,168,76,.3);}
+.btn-ghost{padding:12px 28px;background:transparent;border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;transition:all .2s;}
+#mobileControls{display:none;position:fixed;bottom:0;left:0;right:0;height:80px;background:rgba(7,14,24,.95);border-top:1px solid rgba(201,168,76,.1);z-index:60;}
+#btnLeft,#btnRight{position:absolute;bottom:10px;width:120px;height:60px;border:none;border-radius:12px;font-size:24px;cursor:pointer;background:rgba(201,168,76,.1);color:#F0D78C;border:1px solid rgba(201,168,76,.2);}
+#btnLeft{left:20px;}#btnRight{right:20px;}
+@media(max-width:600px){#mobileControls{display:block;}#gameWrapper{bottom:80px;}}
+</style>
+</head>
+<body>
+<nav><div class="nav-logo">DBE Financial Club</div><a href="DBE_Juegos_Mentales.html" class="nav-back">← Juegos</a></nav>
+
+<div class="overlay" id="startScreen">
+  <h1>Destruye la Deuda</h1>
+  <p>Estilo Space Invaders. Elimina las deudas antes de que lleguen a ti. ¡Protege tu libertad financiera!</p>
+  <p style="font-size:12px;color:rgba(255,255,255,.3);">← → mover · Espacio disparar</p>
+  <button class="btn-gold" onclick="startGame()">Jugar ahora</button>
+</div>
+
+<div class="overlay" id="gameOverScreen" style="display:none;">
+  <h1 id="goTitle">Game Over</h1>
+  <div class="big-score" id="finalScore">0</div>
+  <div class="big-label">DEUDAS ELIMINADAS</div>
+  <p id="finalMsg"></p>
+  <button class="btn-gold" onclick="startGame()">Jugar de nuevo</button>
+  <button class="btn-ghost" onclick="window.location.href='DBE_Juegos_Mentales.html'">Ver otros juegos</button>
+</div>
+
+<div id="gameWrapper">
+  <div id="hud">
+    <div class="hud-item"><span class="hud-label">Score</span><span class="hud-value" id="hudScore">0</span></div>
+    <div class="hud-item"><span class="hud-label">Nivel</span><span class="hud-value" id="hudLevel">1</span></div>
+    <div class="hud-item"><span class="hud-label">Vidas</span><span class="hud-value" id="hudLives">❤️❤️❤️</span></div>
+    <div class="hud-item"><span class="hud-label">Balas</span><span class="hud-value" id="hudBullets">∞</span></div>
+  </div>
+  <canvas id="gameCanvas"></canvas>
+</div>
+
+<div id="mobileControls">
+  <button id="btnLeft">◀</button>
+  <button id="btnRight">▶</button>
+</div>
+
+<script>
+const APPS_URL='https://script.google.com/macros/s/AKfycbyq_ePrj-G2lEepCe3ARO8OMg6tYiqksXTr6aV_ywhjZ7lJeZTGUeVPAPMMcTzagsUW8w/exec';
+firebase.initializeApp({apiKey:"AIzaSyAybxQJFeFizBYZ5Y_pqBGONs_cErSXfJs",authDomain:"dbe-financial-club.firebaseapp.com",projectId:"dbe-financial-club",storageBucket:"dbe-financial-club.firebasestorage.app",messagingSenderId:"1001600683639",appId:"1:1001600683639:web:f1a6645b6f24df09c50072"});
+var _user=null;firebase.auth().onAuthStateChanged(function(u){_user=u;});
+
+var canvas=document.getElementById('gameCanvas');
+var ctx=canvas.getContext('2d');
+function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+window.addEventListener('resize',resize);
+
+var ENEMIES=[
+  {label:'💳',name:'Tarjeta',color:'#E74C6F',pts:10,hp:1},
+  {label:'🏦',name:'Préstamo',color:'#E67E22',pts:20,hp:2},
+  {label:'📉',name:'Crisis',color:'#C0392B',pts:30,hp:3},
+];
+
+var state={};var animId=null;var keys={};var lastShot=0;
+
+document.addEventListener('keydown',function(e){keys[e.key]=true;if(e.key===' ')shoot();});
+document.addEventListener('keyup',function(e){keys[e.key]=false;});
+document.getElementById('btnLeft').addEventListener('touchstart',function(e){e.preventDefault();keys['ArrowLeft']=true;},{passive:false});
+document.getElementById('btnLeft').addEventListener('touchend',function(e){e.preventDefault();keys['ArrowLeft']=false;},{passive:false});
+document.getElementById('btnRight').addEventListener('touchstart',function(e){e.preventDefault();keys['ArrowRight']=true;},{passive:false});
+document.getElementById('btnRight').addEventListener('touchend',function(e){e.preventDefault();keys['ArrowRight']=false;},{passive:false});
+
+// Auto-shoot on mobile
+var touchShooting=false;
+document.getElementById('gameCanvas').addEventListener('touchstart',function(e){e.preventDefault();touchShooting=true;},{passive:false});
+document.getElementById('gameCanvas').addEventListener('touchend',function(){touchShooting=false;});
+
+function startGame(){
+  resize();
+  document.getElementById('startScreen').style.display='none';
+  document.getElementById('gameOverScreen').style.display='none';
+  var W=canvas.width,H=canvas.height;
+  state={
+    score:0,lives:3,level:1,running:true,
+    player:{x:W/2-25,y:H-60,w:50,h:20,speed:W*0.012},
+    bullets:[],enemies:[],particles:[],
+    enemyDir:1,enemySpeed:1.2,enemyDropped:false,
+    shootCooldown:0
+  };
+  spawnEnemies();
+  if(animId)cancelAnimationFrame(animId);
+  loop();
+}
+
+function spawnEnemies(){
+  var W=canvas.width;
+  state.enemies=[];
+  var cols=Math.min(8,Math.floor(W/70));
+  var rows=2+state.level;
+  var types=ENEMIES.slice(0,Math.min(state.level,3));
+  for(var r=0;r<rows;r++){
+    for(var c=0;c<cols;c++){
+      var t=types[r%types.length];
+      state.enemies.push({
+        x:40+c*(Math.floor((W-80)/cols)),
+        y:80+r*55,
+        w:44,h:44,
+        label:t.label,color:t.color,pts:t.pts,
+        hp:t.hp,maxHp:t.hp,
+        alive:true
+      });
+    }
+  }
+}
+
+function shoot(){
+  var now=Date.now();
+  if(now-lastShot<300)return;
+  lastShot=now;
+  var p=state.player;
+  state.bullets.push({x:p.x+p.w/2-3,y:p.y,w:6,h:16,speed:10,friendly:true});
+}
+
+function loop(){
+  if(!state.running)return;
+  if(touchShooting){
+    var now=Date.now();
+    if(now-lastShot>350){lastShot=now;shoot();}
+  }
+  update();draw();
+  animId=requestAnimationFrame(loop);
+}
+
+function update(){
+  var W=canvas.width,H=canvas.height;
+  var p=state.player;
+  state.shootCooldown--;
+  if(keys['ArrowLeft']||keys['a'])p.x-=p.speed;
+  if(keys['ArrowRight']||keys['d'])p.x+=p.speed;
+  p.x=Math.max(0,Math.min(W-p.w,p.x));
+
+  // Move enemies
+  var alive=state.enemies.filter(function(e){return e.alive;});
+  if(alive.length===0){state.level++;document.getElementById('hudLevel').textContent=state.level;state.enemySpeed+=0.4;spawnEnemies();return;}
+
+  var minX=Math.min.apply(null,alive.map(function(e){return e.x;}));
+  var maxX=Math.max.apply(null,alive.map(function(e){return e.x+e.w;}));
+  if(maxX>=W-10||minX<=10){state.enemyDir*=-1;alive.forEach(function(e){e.y+=20;});}
+  alive.forEach(function(e){e.x+=state.enemySpeed*state.enemyDir;});
+
+  // Enemy shoots back randomly
+  if(Math.random()<0.008&&alive.length>0){
+    var shooter=alive[Math.floor(Math.random()*alive.length)];
+    state.bullets.push({x:shooter.x+shooter.w/2-3,y:shooter.y+shooter.h,w:6,h:12,speed:4,friendly:false});
+  }
+
+  // Update bullets
+  for(var i=state.bullets.length-1;i>=0;i--){
+    var b=state.bullets[i];
+    b.y+=b.friendly?-b.speed:b.speed;
+    if(b.y<-20||b.y>H+20){state.bullets.splice(i,1);continue;}
+
+    if(b.friendly){
+      var hit=false;
+      for(var j=0;j<state.enemies.length;j++){
+        var e=state.enemies[j];
+        if(!e.alive)continue;
+        if(b.x<e.x+e.w&&b.x+b.w>e.x&&b.y<e.y+e.h&&b.y+b.h>e.y){
+          e.hp--;
+          if(e.hp<=0){
+            e.alive=false;
+            state.score+=e.pts;
+            document.getElementById('hudScore').textContent=state.score;
+            for(var k=0;k<8;k++)state.particles.push({x:e.x+e.w/2,y:e.y+e.h/2,vx:(Math.random()-.5)*6,vy:(Math.random()-1)*5,alpha:1,color:e.color,size:3});
+            state.particles.push({x:e.x+e.w/2,y:e.y,vx:0,vy:-2,alpha:1,color:'#F0D78C',size:3,text:'+'+e.pts});
+          }
+          hit=true;break;
+        }
+      }
+      if(hit){state.bullets.splice(i,1);}
+    } else {
+      if(b.x<p.x+p.w&&b.x+b.w>p.x&&b.y<p.y+p.h&&b.y+b.h>p.y){
+        state.lives--;updateLives();
+        state.bullets.splice(i,1);
+        if(state.lives<=0){endGame(false);return;}
+      }
+    }
+  }
+
+  // Enemy reaches player
+  alive.forEach(function(e){if(e.y+e.h>=p.y){endGame(false);}});
+
+  // Particles
+  for(var j=state.particles.length-1;j>=0;j--){
+    var pt=state.particles[j];
+    pt.x+=pt.vx;pt.y+=pt.vy;pt.alpha-=0.03;
+    if(pt.alpha<=0)state.particles.splice(j,1);
+  }
+}
+
+function updateLives(){
+  var h='';
+  for(var i=0;i<state.lives;i++)h+='❤️';
+  for(var i=0;i<3-state.lives;i++)h+='🖤';
+  document.getElementById('hudLives').textContent=h;
+}
+
+function draw(){
+  var W=canvas.width,H=canvas.height;
+  ctx.fillStyle='#070E18';ctx.fillRect(0,0,W,H);
+  // Grid
+  ctx.strokeStyle='rgba(201,168,76,.04)';ctx.lineWidth=1;
+  for(var x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(var y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // Enemies
+  state.enemies.forEach(function(e){
+    if(!e.alive)return;
+    ctx.shadowColor=e.color;ctx.shadowBlur=12;
+    ctx.font=Math.round(e.w*.7)+'px sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(e.label,e.x+e.w/2,e.y+e.h/2);
+    // HP bar
+    if(e.maxHp>1){
+      ctx.shadowBlur=0;
+      ctx.fillStyle='rgba(255,255,255,.1)';ctx.fillRect(e.x,e.y+e.h+4,e.w,4);
+      ctx.fillStyle=e.color;ctx.fillRect(e.x,e.y+e.h+4,e.w*(e.hp/e.maxHp),4);
+    }
+    ctx.shadowBlur=0;
+  });
+
+  // Bullets
+  state.bullets.forEach(function(b){
+    ctx.fillStyle=b.friendly?'#F0D78C':'#E74C6F';
+    ctx.shadowColor=b.friendly?'rgba(201,168,76,.8)':'rgba(231,76,111,.8)';
+    ctx.shadowBlur=8;
+    ctx.fillRect(b.x,b.y,b.w,b.h);
+    ctx.shadowBlur=0;
+  });
+
+  // Player ship
+  var p=state.player;
+  var grd=ctx.createLinearGradient(p.x,p.y,p.x+p.w,p.y+p.h);
+  grd.addColorStop(0,'#C9A84C');grd.addColorStop(1,'#F0D78C');
+  ctx.shadowColor='rgba(201,168,76,.6)';ctx.shadowBlur=16;
+  ctx.fillStyle=grd;
+  ctx.beginPath();ctx.roundRect(p.x,p.y,p.w,p.h,6);ctx.fill();
+  // Cannon
+  ctx.fillStyle='#0D1B2A';
+  ctx.fillRect(p.x+p.w/2-4,p.y-10,8,12);
+  ctx.shadowBlur=0;
+  ctx.font='bold 9px DM Sans';ctx.fillStyle='#0D1B2A';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('DBE',p.x+p.w/2,p.y+p.h/2);
+
+  // Particles
+  state.particles.forEach(function(pt){
+    ctx.globalAlpha=pt.alpha;
+    if(pt.text){
+      ctx.font='bold 13px DM Sans';ctx.fillStyle=pt.color;
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(pt.text,pt.x,pt.y);
+    } else {
+      ctx.beginPath();ctx.arc(pt.x,pt.y,pt.size,0,Math.PI*2);
+      ctx.fillStyle=pt.color;ctx.fill();
+    }
+    ctx.globalAlpha=1;
+  });
+
+  // Ground line
+  ctx.strokeStyle='rgba(201,168,76,.15)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,H-50);ctx.lineTo(W,H-50);ctx.stroke();
+}
+
+function endGame(won){
+  state.running=false;
+  cancelAnimationFrame(animId);
+  var score=state.score;
+  document.getElementById('goTitle').textContent=won?'¡Victoria!':'Game Over';
+  document.getElementById('finalScore').textContent=score;
+  document.getElementById('finalMsg').textContent=score>=200?'¡Eliminaste todas las deudas! Eres libre financieramente.':score>=100?'Buen progreso. Sigue atacando tus deudas.':'Las deudas te alcanzaron. ¡Inténtalo de nuevo!';
+  document.getElementById('gameOverScreen').style.display='flex';
+  if(_user){fetch(APPS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({tipo:'ENGAGEMENT',email:_user.email,nombre:_user.displayName||_user.email.split('@')[0],notas:'Juego: Destruye la Deuda — Score: '+score,fuente:'Mental Gym',fecha_registro:new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'})})});}
+}
+</script>
+</body>
+</html>
